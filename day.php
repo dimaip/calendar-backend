@@ -216,7 +216,7 @@ class Day
 						if ($r = $this->zachala[$reading]) {
 							$flag = true;
 							$fl = true;
-							$str .= '&nbsp;<a class="reading" href="https://bible.psmb.ru/bible/book/' . $reading . '/">' . $r . '</a>&nbsp;&nbsp;';
+							$str .= '&nbsp;<a class="reading" href="https://bible.psmb.ru/bible/book/' . urlencode($r) . '/">' . $r . '</a>&nbsp;&nbsp;';
 						}
 					}
 					if ($flag)
@@ -703,6 +703,7 @@ class Day
 				$serviceType = $serviceType == 'Лит' ? 'Литургия' : $serviceType;
 				$readings .= $serviceType . ": <ul>";
 				foreach ($readingGroup as $readingType => $reading) {
+					// TODO: check if this needs to be urlencoded
 					$readingStr = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $reading);
 					$readingType = $readingType == 'Рядовое' ? '' : $readingType . ": ";
 					$readings .= "<li>" . $readingType . str_replace('*', '', $readingStr) . "</li>";
