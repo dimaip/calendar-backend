@@ -9,6 +9,6 @@ Run `install.sh`.
 ## Usage
 
 ```
-php day.php
-php bible.php
+GET /day.php?date=20180318
+GET /bible.php?[translation=1Aver&]zachalo=%D0%91%D1%8B%D1%82.+XVII%2C+1-9.
 ```

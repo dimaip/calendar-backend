@@ -1,5 +1,4 @@
 <?php
-// header('Access-Control-Allow-Origin: https://c.psmb.ru');
 
 function arabic($roman) {
 	$result = 0;
@@ -229,4 +228,6 @@ class Bible {
 }
 
 $bible = new Bible;
-echo $bible->run();
+$zachalo = $_GET['zachalo'] ?? null;
+$translation = $_GET['translation'] ?? null;
+echo $bible->run($zachalo, $translation);

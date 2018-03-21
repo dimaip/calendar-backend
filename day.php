@@ -735,4 +735,5 @@ class Day
 }
 
 $day = new Day;
-echo $day->run();
+$date = $_GET['date'] ?? null;
+echo $day->run($date);
