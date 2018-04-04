@@ -97,13 +97,13 @@ class Bible {
 	 * @param integer $prevChapter - chapter from previous versePart
 	 * @return array
 	 *
-						[
-						'chapter_begin' => 8,
-						'verse_begin' => 7,
-						'chapter_end' => 9,
-						'verse_end' => 2,
-						'verse_end_optional' => 3,
-						]
+	 * [
+	 * 'chapter_begin' => 8,
+	 * 'verse_begin' => 7,
+	 * 'chapter_end' => 9,
+	 * 'verse_end' => 2,
+	 * 'verse_end_optional' => 3,
+	 * ]
 	 *
 	 */
 	static function parseVersePart($versePart, $prevChapter) {
