@@ -271,8 +271,8 @@ class Bible
                 if (!$verseNoEnd)
                     $verseNoEnd = $verseNoBegin;
 
-                if ($prevVerseNo && ($verseNoBegin != $prevVerseNo + 1))
-                    trigger_error("Verse Number is wrong. Expected " . ($prevVerseNo + 1) . ", {$verseNoBegin} is given: {$trans}, {$chapIdx}:{$verseNo}."); //TODO send mail on error?
+                //if ($prevVerseNo && ($verseNoBegin != $prevVerseNo + 1))
+                //    trigger_error("Verse Number is wrong. Expected " . ($prevVerseNo + 1) . ", {$verseNoBegin} is given: {$trans}, {$chapIdx}:{$verseNo}."); //TODO send mail on error?
 
                 $prevVerseNo = $verseNoEnd;
 
@@ -301,7 +301,7 @@ class Bible
                     $chapter['verses'][] = [
                         'verse' => $verseNo,
                         'type' => $verseType,
-                        'text' => trim($line)
+                        'text' => trim(strip_tags($line))
                     ];
                 }
 
@@ -347,4 +347,6 @@ class Bible
 $bible = new Bible;
 $zachalo = $_GET['zachalo'] ?? null;
 $translation = $_GET['translation'] ?? null;
+if($translation === 'default')
+  $translation = null;
 echo $bible->run($zachalo, $translation);

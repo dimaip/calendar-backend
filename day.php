@@ -723,6 +723,7 @@ class Day
 		$jsonArray = array(
 			"title" => $staticData['title'] ?? $assignArray['title'] ?? null,
 			"readings" => $staticData['readings'] ?? $assignArray['reading'] ?? null,
+			//"saints" => $staticData['saints'] ?? $assignArray['saints'] ?? null,
 			"saints" => $assignArray['saints'] ?? null,
 			"prayers" => $assignArray['prayers'] ?? null,
 			"seromns" => $assignArray['sermons'] ?? null,
