@@ -1,7 +1,6 @@
 const lib = require('./lib.js');
 const scrape = require('./scrape.js');
 const parse = require('./parse.js');
-const FS = require('q-io/fs');
 
 const dates = lib.generateDatesArray();
 
