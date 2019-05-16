@@ -195,18 +195,16 @@ class Day
 			//unset sunday saint's matins?
 		}
 
-		$readingStrRes = '';
+        $resultArray = [];
 		foreach ($nr_or as $serviceKey => $nr2) {
 			$fl = false;
 			if ($this->noLiturgy && $serviceKey == 'Литургия')
 			continue;
-			$reading_str = $serviceKey . ": ";
 			if ($nr2) {
 				foreach ($nr2 as $rtitle => $readings) {
 					if ($rtitle == 'Рядовое' && $this->skipRjadovoe && $serviceKey == 'Литургия')
 						continue;
-					$str  = "<li>" . $rtitle . ": ";
-					$flag = false;
+                    $fragments = [];
 					foreach (explode(";", $readings) as $reading) {
 						$reading_ex = explode("/", $reading);
 						if ($weekend && $reading_ex[1])
@@ -214,22 +212,20 @@ class Day
 						else
 							$reading = $reading_ex[0];
 						if ($r = $this->zachala[$reading]) {
-							$flag = true;
 							$fl = true;
-							$str .= '&nbsp;<a class="reading" href="https://bible.psmb.ru/bible/book/' . urlencode($r) . '/">' . $r . '</a>&nbsp;&nbsp;';
+                            $fragments[] = $r;
 						}
 					}
-					if ($flag)
-						$reading_str .= "<ul>" . $str . "</ul>";
 				}
 			}
 			if ($fl) {
-				$readingStrRes .= $reading_str;
+                if(!isset($resultArray[$serviceKey]))
+                    $resultArray[$serviceKey] = [];
+                $resultArray[$serviceKey][$rtitle] = $fragments;
 			}
 		}
-		$readingStrRes = str_replace('Рядовое: ', '', $readingStrRes);
 
-		return $readingStrRes;
+        return $resultArray;
 	}
 	protected function check_skipRjadovoe($saints)
 	{
@@ -597,7 +593,7 @@ class Day
 
 
 
-		//skip rjad on sochelnik HACK HACK HACK 
+		//skip rjad on sochelnik HACK HACK HACK
 		if ($this->dayOfWeekNumber == 5 && ($date == $year . '1222'))
 			$this->noLiturgy = true;
 		$debug .= '<br/>пропуск рядового чтения:' . $this->skipRjadovoe;
@@ -619,6 +615,7 @@ class Day
 		if ($this->dayOfWeekNumber == 0 || $this->dayOfWeekNumber == 6) {
 			$weekend = true;
 		}
+
 		$reading_str = $this->formatReading($arrayz, $weekend);
 
 
