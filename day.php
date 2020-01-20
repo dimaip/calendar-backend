@@ -14,7 +14,7 @@ class Day
     protected $noLiturgy;
     protected $dayOfWeekNumber;
 
-    protected $dayOfWeekNames = array('воскресение', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу');
+    protected $dayOfWeekNames = ['воскресение', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу'];
 
     protected function getStaticData($datestamp)
     {
@@ -25,6 +25,16 @@ class Day
         } else {
             return null;
         }
+    }
+
+    protected function normalizeDayOfWeek($dayOfWeekNumber) {
+        if ($dayOfWeekNumber < 0) {
+            return $dayOfWeekNumber + 7;
+        }
+        if ($dayOfWeekNumber > 6) {
+            return $dayOfWeekNumber - 7;
+        }
+        return $dayOfWeekNumber;
     }
 
     protected function getDayAfter($date, $dayNumber = 1, $shTimes = 0, $noJumpIfSameDay = 0)
@@ -191,7 +201,7 @@ class Day
             $nr_or['На освящении воды'] = $nr['На освящении воды'] ?? null;
 
         }
-        if ((count($nr_or['Утреня']) > 1) && $nr_or['Утреня']['Воскресное евангелие']) {
+        if ((count($nr_or['Утреня'] ?? []) > 1) && $nr_or['Утреня']['Воскресное евангелие']) {
             //unset sunday saint's matins?
         }
 
@@ -537,15 +547,15 @@ class Day
 
             //combine saints
             $t = $this->getNeperehod($next_dateStamp);
-            $next_saints = $t['0']['saints'];
-            $r = $this->process_perehods($week, $this->dayOfWeekNumber + 1, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
-            $next_saints .= $r['0']['saints'];
+            $next_saints = $t['0']['saints'] ?? '';
+            $r = $this->process_perehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber + 1), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+            $next_saints .= $r['0']['saints'] ?? '';
             $next_saints .= $this->saints[date('d/m', $next_dateStampO)];
 
             if ($this->check_skipRjadovoe($next_saints)) {
                 $debug .= "<br>something holy is around";
 
-                $r['0']['reading_title'] = 'За ' . $this->dayOfWeekNames[$this->dayOfWeekNumber + 1];
+                $r['0']['reading_title'] = 'За ' . $this->dayOfWeekNames[$this->normalizeDayOfWeek($this->dayOfWeekNumber + 1)];
                 $arrayz = array_merge($arrayz, $r);
             }
         }
@@ -557,9 +567,9 @@ class Day
 
             //combine saints
             $t = $this->getNeperehod($next_dateStamp);
-            $next_saints = $t['0']['saints'] ?? null;
-            $r = $this->process_perehods($week, $this->dayOfWeekNumber - 1, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
-            $next_saints .= $r['0']['saints'] ?? null;
+            $next_saints = $t['0']['saints'] ?? '';
+            $r = $this->process_perehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber - 1), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+            $next_saints .= $r['0']['saints'] ?? '';
             $next_saints .= $this->saints[date('d/m', $next_dateStampO)];
 
             if ($first_check = $this->check_skipRjadovoe($next_saints)) {
@@ -568,14 +578,14 @@ class Day
 
                 //combine saints
                 $t = $this->getNeperehod($next_dateStamp);
-                $next_saints = $t['0']['saints'];
-                $r2 = $this->process_perehods($week, $this->dayOfWeekNumber - 2, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
-                $next_saints .= $r2['0']['saints'];
+                $next_saints = $t['0']['saints'] ?? '';
+                $r2 = $this->process_perehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber - 2), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+                $next_saints .= $r2['0']['saints'] ?? '';
                 $next_saints .= $this->saints[date('d/m', $next_dateStampO)];
                 if ($this->check_skipRjadovoe($next_saints) || ($this->dayOfWeekNumber == 2)) {
                     $debug .= "<br>something very holy is around!";
 
-                    $r['0']['reading_title'] = 'За ' . $this->dayOfWeekNames[$this->dayOfWeekNumber - 1];
+                    $r['0']['reading_title'] = 'За ' . $this->dayOfWeekNames[$this->normalizeDayOfWeek($this->dayOfWeekNumber - 1)];
                     $arrayz = array_merge($r, $arrayz);
                 }
             }
@@ -691,13 +701,14 @@ class Day
             if ($staticData['saints']) {
                 // $assignArray['saints'] = $staticData['saints'];
             }
+            $readings = '';
             foreach ($staticData['readings'] as $serviceType => $readingGroup) {
                 $serviceType = $serviceType == 'Утр' ? 'Утреня' : $serviceType;
                 $serviceType = $serviceType == 'Лит' ? 'Литургия' : $serviceType;
                 $readings .= $serviceType . ": <ul>";
                 foreach ($readingGroup as $readingType => $reading) {
                     // TODO: check if this needs to be urlencoded
-                    $readingStr = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $reading);
+                    $readingStr = join(' ', preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $reading));
                     $readingType = $readingType == 'Рядовое' ? '' : $readingType . ": ";
                     $readings .= "<li>" . $readingType . str_replace('*', '', $readingStr) . "</li>";
                 }
@@ -710,7 +721,7 @@ class Day
             if ($staticData['title']) {
                 $assignArray['week'] = $staticData['title'];
             }
-            $assignArray['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment']);
+            $assignArray['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
         }
 
         $jsonArray = array(
@@ -724,6 +735,7 @@ class Day
             "comment" => $assignArray['comment'] ?? null
         );
 
+        header('Content-Type: application/json');
         return json_encode($jsonArray, JSON_PRETTY_PRINT);
     }
 }
