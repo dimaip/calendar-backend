@@ -4,4 +4,4 @@ const FS = require('q-io/fs');
 
 const dates = lib.generateDatesArray();
 
-dates.map(dateString => parse(dateString))
+dates.map(dateString => parse(dateString));

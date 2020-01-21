@@ -27,7 +27,8 @@ class Day
         }
     }
 
-    protected function normalizeDayOfWeek($dayOfWeekNumber) {
+    protected function normalizeDayOfWeek($dayOfWeekNumber)
+    {
         if ($dayOfWeekNumber < 0) {
             return $dayOfWeekNumber + 7;
         }
@@ -59,7 +60,7 @@ class Day
     protected function getDayBefore($date, $dayNumber = 1, $shTimes = 0)
     {
         $day_stamp = strtotime($date);
-        $currentDayNumber = (int)date('N', $day_stamp);
+        $currentDayNumber = (int) date('N', $day_stamp);
         if ($currentDayNumber == 7) {
             $currentDayNumber = 0;
         }
@@ -199,7 +200,6 @@ class Day
             $nr_or['Литургия'] = $nr['Литургия'] ?? null;
             $nr_or['Вечерня'] = $nr['Вечерня'] ?? null;
             $nr_or['На освящении воды'] = $nr['На освящении воды'] ?? null;
-
         }
         if ((count($nr_or['Утреня'] ?? []) > 1) && $nr_or['Утреня']['Воскресное евангелие']) {
             //unset sunday saint's matins?
@@ -217,7 +217,7 @@ class Day
                     $fragments = [];
                     foreach (explode(";", $readings) as $reading) {
                         $reading_ex = explode("/", $reading);
-                        if ($weekend && $reading_ex[1])
+                        if ($weekend && isset($reading_ex[1]))
                             $reading = $reading_ex[1];
                         else
                             $reading = $reading_ex[0];
@@ -683,7 +683,7 @@ class Day
         $assignArray['bu_day'] = date('Y-m-d', $dateStamp);
         $assignArray['date_prev'] = $date_prev;
         $assignArray['date_next'] = $date_next;
-        $assignArray['week'] = $week_title;
+        $assignArray['title'] = $week_title;
         $assignArray['glas'] = $glas;
         $assignArray['reading'] = $reading_str;
         $assignArray['lent'] = $fast;
@@ -718,9 +718,6 @@ class Day
                 $assignArray['reading'] = $readings;
             }
 
-            if ($staticData['title']) {
-                $assignArray['week'] = $staticData['title'];
-            }
             $assignArray['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
         }
 
@@ -732,6 +729,7 @@ class Day
             "prayers" => $assignArray['prayers'] ?? null,
             "seromns" => $assignArray['sermons'] ?? null,
             "lent" => $assignArray['lent'] ?? null,
+            "glas" => $assignArray['glas'] ?? null,
             "comment" => $assignArray['comment'] ?? null
         );
 

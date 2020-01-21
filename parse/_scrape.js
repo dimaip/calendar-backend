@@ -7,4 +7,4 @@ const dates = lib.generateDatesArray();
 const RateLimiter = require('limiter').RateLimiter;
 const limiter = new RateLimiter(1, 1000);
 
-dates.map(dateString => limiter.removeTokens(1, () => scrape(dateString)))
+dates.map(dateString => limiter.removeTokens(1, () => scrape(dateString)));
