@@ -61,7 +61,6 @@ class Bible
                     }
                 }
             }
-
         }
         return $avail_trans;
     }
@@ -72,6 +71,7 @@ class Bible
             case "ALL":
                 //$text = preg_replace('/<p>([0-9]{1,2})/','<p><sup>$1</sup>', $text);
                 $text = preg_replace('/<a.*?<\/a>/i', '', $text);
+                $text = html_entity_decode($text);
                 break;
             case "RST":
                 $text = preg_replace('/Глава\s*([0-9]{1,2})/', 'Глава$1', $text);
@@ -284,7 +284,8 @@ class Bible
                         $startPrintOptional = true;
                 }
 
-                if ($chtenije[$chtenijeIdx]['chapter_begin'] == $chapIdx
+                if (
+                    $chtenije[$chtenijeIdx]['chapter_begin'] == $chapIdx
                     && isset($chtenije[$chtenijeIdx]['verse_begin_optional'])
                     && $chtenije[$chtenijeIdx]['verse_begin_optional'] == $verseNo
                 ) {
@@ -307,6 +308,7 @@ class Bible
 
                 if ($chtenije[$chtenijeIdx]['chapter_end'] == $chapIdx && $chtenije[$chtenijeIdx]['verse_end'] == $verseNo) {
                     $startPrintRegular = false;
+                    $chapIdxsChapterRegular = true;
                     if (!isset($chtenije[$chtenijeIdx]['verse_end_optional']))
                         $startPrintOptional = false;
 
@@ -315,7 +317,8 @@ class Bible
                         break;
                 }
 
-                if ($chtenije[$chtenijeIdx]['chapter_end'] == $chapIdx
+                if (
+                    $chtenije[$chtenijeIdx]['chapter_end'] == $chapIdx
                     && isset($chtenije[$chtenijeIdx]['verse_end_optional'])
                     && $chtenije[$chtenijeIdx]['verse_end_optional'] == $verseNo
                 ) {
@@ -347,6 +350,6 @@ class Bible
 $bible = new Bible;
 $zachalo = $_GET['zachalo'] ?? null;
 $translation = $_GET['translation'] ?? null;
-if($translation === 'default')
-  $translation = null;
+if ($translation === 'default')
+    $translation = null;
 echo $bible->run($zachalo, $translation);
