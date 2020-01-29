@@ -221,9 +221,9 @@ class Day
                             $reading = $reading_ex[1];
                         else
                             $reading = $reading_ex[0];
-                        if ($r = $this->zachala[$reading]) {
+                        if (isset($this->zachala[$reading])) {
                             $fl = true;
-                            $fragments[] = $r;
+                            $fragments[] = $this->zachala[$reading];
                         }
                     }
                 }
@@ -456,6 +456,7 @@ class Day
 
         //matins sunday
         $matinsZachalo = null;
+        $matins_key = null;
         if ($this->dayOfWeekNumber == 0) {
             if ($weekOld >= 9) {
                 $matins_key = ($weekOld - 9) % 11 + 1;
@@ -463,7 +464,7 @@ class Day
                 $matins_pre50 = explode(",", "1,3,4,7,8,10,9");
                 $matins_key = $matins_pre50[$weekOld - 2];
             }
-            $matinsZachalo = $this->sundayMatinsGospels[$matins_key];
+            $matinsZachalo = $matins_key ? $this->sundayMatinsGospels[$matins_key] : null;
         }
 
         //glass
@@ -592,7 +593,7 @@ class Day
         }
 
 
-        if ($this->dayOfWeekNumber == 0 && $week != 8) {
+        if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             require('Data/static_sunday_troparion.php');
             if ($prayers && $sunday_troparion[$glas])
                 $prayers .= "<br/>";
