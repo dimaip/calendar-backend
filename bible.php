@@ -30,6 +30,48 @@ class Bible
 {
     protected $activeTransName = null;
 
+    protected function getFragments($title)
+    {
+        $text = '';
+        $googleUrl = 'https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=0AnIrRiVoiOUSdENKckd0Vm1RbVhUMGVOQWNIZUNBUmc&single=true&output=csv&gid=';
+
+        $filename = 'Data/cache_texts.csv';
+        $gid = 134408876;
+        // if ($this->isDebug) {
+        //     unlink($filename);
+        // }
+        if (!file_exists($filename)) {
+            file_put_contents($filename, file_get_contents($googleUrl . $gid));
+        }
+        $file = fopen($filename, 'r');
+        while (($line = fgetcsv($file)) !== FALSE) {
+            if ($line[0] === $title) {
+                $text = $line[1];
+            }
+        }
+        fclose($file);
+
+        $verses = explode(PHP_EOL, $text);
+        $verses = array_values(array_filter($verses, function ($i) {
+            return strlen(trim($i)) > 0;
+        }));
+        $index = 0;
+        $verses = array_map(function ($item) use (&$index) {
+            $index++;
+            return [
+                'verse' => strval($index),
+                'type' => 'regular',
+                'text' => $item
+            ];
+        }, $verses);
+
+        return [[
+            'chapter' => '1',
+            'verses' => $verses,
+            'type' => 'regular'
+        ]];
+    }
+
     protected function availTrans($booKey, $activeTrans = null)
     {
         $i = 0;
@@ -147,6 +189,21 @@ class Bible
      */
     public function run($zachalo = 'Притч. XV, 20 - XVI, 9.', $trans = null)
     {
+        if (strpos($zachalo, '@') !== false) {
+            $z = str_replace("@", "", $zachalo);
+            $jsonArray = [
+                'translationList' => [],
+                'translationCurrent' => '',
+                'bookName' => $z,
+                'verseKey' => $z,
+                'zachaloTitle' => $z,
+                'bookKey' => $z,
+                'chapCount' => 1,
+                'fragments' => $this->getFragments($z)
+            ];
+
+            return json_encode($jsonArray, JSON_PRETTY_PRINT);
+        }
         //supported $zachalo:
         //spaces ignored
         //Притч. XV, 20 - XVI, 9.

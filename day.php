@@ -6,6 +6,7 @@ class Day
     protected $isDebug = false;
     protected $perehod;
     protected $neperehod;
+    protected $bReadings;
     protected $sundayMatinsGospels;
     protected $zachala;
     protected $saints;
@@ -154,6 +155,18 @@ class Day
             }
         }
         return $reading_array;
+    }
+
+    protected function getBReadings($dateStamp)
+    {
+        foreach ($this->bReadings as $key => $value) {
+            if ($key === date('j/n/Y', $dateStamp)) {
+                foreach ($value as $v) {
+                    return $v;
+                }
+            }
+        }
+        return [];
     }
 
     protected function process_perehods($week, $dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp)
@@ -346,6 +359,23 @@ class Day
         }
         fclose($file);
 
+        $filename = 'Data/cache_bReadings.csv';
+        $gid = 19;
+        if ($this->isDebug) {
+            unlink($filename);
+        }
+        if (!file_exists($filename)) {
+            file_put_contents($filename, file_get_contents($googleUrl . $gid));
+        }
+        $file = fopen($filename, 'r');
+        while (($line = fgetcsv($file)) !== FALSE) {
+            $date = $line[0];
+            $bReadingsArray['Утром'] = ['unnamed' => [$line[1]]];
+            $bReadingsArray['Вечером'] = ['unnamed' => [$line[2]]];
+            $this->bReadings[$date][] = $bReadingsArray;
+        }
+        fclose($file);
+
         $file = fopen('Data/static_sunday_matins_gospels.csv', 'r');
         while (($line = fgetcsv($file)) !== FALSE) {
             $this->sundayMatinsGospels[$line[0]] = $line[1];
@@ -427,17 +457,17 @@ class Day
 
         $weekOld = $week; //save old week number, neccessary for matins order
         if ($week > 40 || $dateStamp >= $mondayAfterProsv) {
-            /*if (
-            ($weekToEaster == -12 && $this->dayOfWeekNumber != 0)
-            ||
-            ($weekToEaster == -11 && $this->dayOfWeekNumber == 0)
+            if (
+                ($weekToEaster == -12 && $this->dayOfWeekNumber != 0)
+                ||
+                ($weekToEaster == -11 && $this->dayOfWeekNumber == 0)
             ) {
-            $debug .= "weekToEaster-14!";
-            //$weekToEaster = $weekToEaster - 14;
+                $debug .= "weekToEaster-14!";
+                $weekToEaster = $weekToEaster - 14;
             } else if ($weekToEaster <= -12) {
-            $debug .= "weekToEaster+0!";
-            $weekToEaster = $weekToEaster;
-            }*/
+                $debug .= "weekToEaster+0!";
+                $weekToEaster = $weekToEaster;
+            }
             $debug .= "week season!";
             $week = 50 + $weekToEaster;
         }
@@ -650,34 +680,6 @@ class Day
 
         $dayweek = ($week + $gospelShift) . ";" . $this->dayOfWeekNumber;
 
-        $sermons = [];
-        /*
-        //sermons
-        if ($this->isDebug) {
-            $debug .= "<br><br>Код для вставки проповеди:<span style='color:red'>" . ($week + $gospelShift) . ";" . $this->dayOfWeekNumber . "</span>";
-        }
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query('tx_news_domain_model_news.uid as uid, tx_news_domain_model_news.title as title, teaser, author, author_email,  bodytext', 'tx_news_domain_model_news', 'tx_news_domain_model_news_category_mm', 'tx_news_domain_model_category', 'AND tx_news_domain_model_news.deleted=0 AND tx_news_domain_model_news.hidden=0 AND tx_news_domain_model_category.uid=24', '', 'datetime DESC');
-        $today_date_slashy = date('d/m', $dateStampO);
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $dd			  = $row['author_email'];
-            $srm['uid']	  = $row['uid'];
-            $srm['title']	= $row['title'];
-            $srm['teaser']   = $row['teaser'];
-            $srm['author']   = $row['author'];
-            $srm['bodytext'] = $row['bodytext'];
-            if (strstr($dd, ";")) {
-                if ($dayweek == $dd) {
-                    $sermons[] = $srm;
-                }
-            } else {
-                $dd = $this->getKey($dd, $dateStampO);
-                if ($today_date_slashy == $dd) {
-                    $sermons[] = $srm;
-                }
-            }
-        }
-        */
-
         $assignArray['date_o'] = strftime('%d %b %Y', $dateStampO);
         $assignArray['date'] = strftime('%d %b %Y', $dateStamp);
         $assignArray['day'] = strftime('%A', $dateStamp);
@@ -690,7 +692,6 @@ class Day
         $assignArray['lent'] = $fast;
         $assignArray['saints'] = $saints;
         $assignArray['prayers'] = $prayers;
-        $assignArray['sermons'] = $sermons;
         if ($this->isDebug) {
             $assignArray['debug'] = $debug;
             $assignArray['debug_r'] = $debug_r;
@@ -725,10 +726,10 @@ class Day
         $jsonArray = array(
             "title" => $staticData['title'] ?? $assignArray['title'] ?? null,
             "readings" => $staticData['readings'] ?? $assignArray['reading'] ?? null,
+            'bReadings' => $this->getBReadings($dateStamp),
             //"saints" => $staticData['saints'] ?? $assignArray['saints'] ?? null,
             "saints" => $assignArray['saints'] ?? null,
             "prayers" => $assignArray['prayers'] ?? null,
-            "seromns" => $assignArray['sermons'] ?? null,
             "lent" => $assignArray['lent'] ?? null,
             "glas" => $assignArray['glas'] ?? null,
             "comment" => $assignArray['comment'] ?? null

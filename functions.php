@@ -1,6 +1,6 @@
 <?php
 setlocale(LC_ALL, 'ru_RU.utf8');
- 
+
 function datediff($interval, $datefrom, $dateto, $using_timestamps = false) {
 	/*
 	$interval can be:
@@ -16,15 +16,15 @@ function datediff($interval, $datefrom, $dateto, $using_timestamps = false) {
 	n - Number of full minutes
 	s - Number of full seconds (default)
 	*/
-	
+
 	if (!$using_timestamps) {
 		$datefrom = strtotime($datefrom, 0);
 		$dateto = strtotime($dateto, 0);
 	}
 	$difference = $dateto - $datefrom; // Difference in seconds
-	 
+
 	switch($interval) {
-	 
+
 	case 'yyyy': // Number of full years
 
 		$years_difference = floor($difference / 31536000);
@@ -102,19 +102,19 @@ function datediff($interval, $datefrom, $dateto, $using_timestamps = false) {
 
 		$datediff = $difference;
 		break;
-	}	
+	}
 
 	return $datediff;
 
 }
 
 function easter($year){
-	$a = $year % 19; 
-	$b = $year % 4; 
-	$c = $year % 7; 
+	$a = $year % 19;
+	$b = $year % 4;
+	$c = $year % 7;
 	$d = (19 * $a + 15) % 30;
 	$e = (2 * $b + 4 * $c + 6 * $d + 6) % 7;
-	
+
 	if(($d + $e) > 10)
 		$easter_o = ($d + $e - 9) . "-4-" . $year;
 	else
@@ -123,4 +123,3 @@ function easter($year){
 	$easter_stamp = strtotime("+13 days", $easter_o_stamp);
 	return $easter_stamp;
 }
-?>
