@@ -214,9 +214,9 @@ class Day
             $nr_or['Вечерня'] = $nr['Вечерня'] ?? null;
             $nr_or['На освящении воды'] = $nr['На освящении воды'] ?? null;
         }
-        if ((count($nr_or['Утреня'] ?? []) > 1) && $nr_or['Утреня']['Воскресное евангелие']) {
-            //unset sunday saint's matins?
-        }
+        // if ((count($nr_or['Утреня'] ?? []) > 1) && $nr_or['Утреня']['Воскресное евангелие']) {
+        //unset sunday saint's matins?
+        // }
 
         $resultArray = [];
         foreach ($nr_or as $serviceKey => $nr2) {
