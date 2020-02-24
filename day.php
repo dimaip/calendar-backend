@@ -680,6 +680,13 @@ class Day
 
         $dayweek = ($week + $gospelShift) . ";" . $this->dayOfWeekNumber;
 
+        $saints = preg_replace_callback('#href="https://www.holytrinityorthodox.com/ru/calendar/los/(.*?).htm"#i', function ($matches) {
+            $key = $matches[1];
+            $key = str_replace("/", "-", $key);
+            $key = strtolower($key);
+            return 'data-saint="' . $key . '"';
+        }, $saints);
+
         $assignArray['date_o'] = strftime('%d %b %Y', $dateStampO);
         $assignArray['date'] = strftime('%d %b %Y', $dateStamp);
         $assignArray['day'] = strftime('%A', $dateStamp);
