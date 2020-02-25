@@ -198,8 +198,12 @@ class Day
             //	$this->prazdnikTitle .= $array['prazdnikTitle'].'<br/>';
             foreach ($array['reading'] as $serviceKey => $readings) {
                 //if(!$nr[$serviceKey][$reading_title])
-                if ($readings)
-                    $nr[$serviceKey][$reading_title] = $readings;
+                if ($readings) {
+                    if (!isset($nr[$serviceKey][$reading_title])) {
+                        $nr[$serviceKey][$reading_title] = [];
+                    }
+                    $nr[$serviceKey][$reading_title][] = $readings;
+                }
                 //else
                 //	die("<span style='color:red'>Two readings with same title!</span>");
             }
@@ -217,34 +221,37 @@ class Day
         // if ((count($nr_or['Утреня'] ?? []) > 1) && $nr_or['Утреня']['Воскресное евангелие']) {
         //unset sunday saint's matins?
         // }
-
         $resultArray = [];
         foreach ($nr_or as $serviceKey => $nr2) {
             $fl = false;
             if ($this->noLiturgy && $serviceKey == 'Литургия')
                 continue;
             if ($nr2) {
-                foreach ($nr2 as $rtitle => $readings) {
-                    if ($rtitle == 'Рядовое' && $this->skipRjadovoe && $serviceKey == 'Литургия')
-                        continue;
-                    $fragments = [];
-                    foreach (explode(";", $readings) as $reading) {
-                        $reading_ex = explode("/", $reading);
-                        if ($weekend && isset($reading_ex[1]))
-                            $reading = $reading_ex[1];
-                        else
-                            $reading = $reading_ex[0];
-                        if (isset($this->zachala[$reading])) {
-                            $fl = true;
-                            $fragments[] = $this->zachala[$reading];
+                foreach ($nr2 as $rtitle => $_readings) {
+                    foreach ($_readings as $readings) {
+                        $readings = str_replace('–', '-', $readings);
+                        if ($rtitle == 'Рядовое' && $this->skipRjadovoe && $serviceKey == 'Литургия')
+                            continue;
+                        $fragments = [];
+                        foreach (explode(";", $readings) as $reading) {
+                            $reading_ex = explode("/", $reading);
+                            if ($weekend && isset($reading_ex[1]))
+                                $reading = $reading_ex[1];
+                            else
+                                $reading = $reading_ex[0];
+                            if (isset($this->zachala[$reading])) {
+                                $fl = true;
+                                $fragments[] = $this->zachala[$reading];
+                            }
                         }
+                        if (!$fl) {
+                            $fragments[] = $readings;
+                        }
+                        if (!isset($resultArray[$serviceKey]))
+                            $resultArray[$serviceKey] = [];
+                        $resultArray[$serviceKey][$rtitle] = array_merge($resultArray[$serviceKey][$rtitle] ?? [], $fragments);
                     }
                 }
-            }
-            if ($fl) {
-                if (!isset($resultArray[$serviceKey]))
-                    $resultArray[$serviceKey] = [];
-                $resultArray[$serviceKey][$rtitle] = $fragments;
             }
         }
 
