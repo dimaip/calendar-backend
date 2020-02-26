@@ -560,20 +560,28 @@ class Day
         //Saints
         foreach ($arrayz as $ar) {
             if (isset($ar['saints'])) {
-                $saints .= $ar['saints'];
+                if ($saints && $ar['saints']) {
+                    $saints .= "<br/>";
+                }
+                $saints .= trim($ar['saints']);
             }
             if (isset($ar['prayers'])) {
-                $prayers .= $ar['prayers'];
+                if ($prayers && $ar['prayers']) {
+                    $prayers .= '<br/>';
+                }
+                $prayers .= trim($ar['prayers']);
             }
             if (isset($ar['week_title'])) {
-                $week_title .= $ar['week_title'];
+                $week_title .= trim($ar['week_title']);
             }
         }
 
-        if ($saints) {
+        $saintsThisDay = trim($this->saints[date('d/m', $dateStampO)]);
+
+        if ($saints && $saintsThisDay) {
             $saints .= "<br/>";
         }
-        $saints .= $this->saints[date('d/m', $dateStampO)];
+        $saints .= $saintsThisDay;
 
 
         $this->skipRjadovoe = $this->check_skipRjadovoe($saints);
@@ -645,7 +653,8 @@ class Day
 
         $saints = str_replace("#SR", "", $saints);
         $saints = str_replace("#NSR", "", $saints);
-        $saints = preg_replace('/#TP(.)/', '<img src="/typo3conf/ext/orthodox/Resources/Public/Icons/$1.gif"/>', $saints);
+        $saints = preg_replace('/(?:\r\n|\r|\n)/', '<br>', $saints);
+        $saints = preg_replace('/#TP(.)/', '<img src="/static/icons/$1.svg"/>', $saints);
         $saints = str_replace('1.gif"', '1.gif" title="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
         $saints = str_replace('2.gif"', '2.gif" title="Совершается служба на шесть"', $saints);
         $saints = str_replace('3.gif"', '3.gif" title="Совершается служба со славословием"', $saints);
