@@ -1,5 +1,6 @@
 <?php
 require('functions.php');
+require('bible.php');
 
 class Day
 {
@@ -241,11 +242,11 @@ class Day
                                 $reading = $reading_ex[0];
                             if (isset($this->zachala[$reading])) {
                                 $fl = true;
-                                $fragments[] = $this->zachala[$reading];
+                                $fragments[] = trim($this->zachala[$reading]);
                             }
                         }
                         if (!$fl) {
-                            $fragments[] = $readings;
+                            $fragments[] = trim($readings);
                         }
                         if (!isset($resultArray[$serviceKey]))
                             $resultArray[$serviceKey] = [];
@@ -758,11 +759,25 @@ class Day
             "comment" => $assignArray['comment'] ?? null
         );
 
-        header('Content-Type: application/json');
-        return json_encode($jsonArray, JSON_PRETTY_PRINT);
+
+        return $jsonArray;
     }
 }
 
 $day = new Day;
 $date = $_GET['date'] ?? null;
-echo $day->run($date);
+$data = $day->run($date);
+
+$readings = $_GET['readings'] ?? null;
+header('Content-Type: application/json');
+if ($readings) {
+    $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($data['readings']));
+    $result = [];
+    foreach ($it as $v) {
+        $bible = new Bible;
+        $result[$v] = $bible->run($v, null);
+    }
+    echo json_encode($result, JSON_PRETTY_PRINT);
+} else {
+    echo json_encode($data, JSON_PRETTY_PRINT);
+}

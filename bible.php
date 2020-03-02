@@ -400,7 +400,7 @@ class Bible
 
         ];
 
-        return json_encode($jsonArray, JSON_PRETTY_PRINT);
+        return $jsonArray;
     }
 }
 
@@ -409,4 +409,8 @@ $zachalo = $_GET['zachalo'] ?? null;
 $translation = $_GET['translation'] ?? null;
 if ($translation === 'default')
     $translation = null;
-echo $bible->run($zachalo, $translation);
+if ($zachalo) {
+    $data = $bible->run($zachalo, $translation);
+    header('Content-Type: application/json');
+    echo json_encode($data, JSON_PRETTY_PRINT);
+}
