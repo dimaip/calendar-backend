@@ -378,8 +378,13 @@ class Day
         $file = fopen($filename, 'r');
         while (($line = fgetcsv($file)) !== FALSE) {
             $date = $line[0];
-            $bReadingsArray['Утром'] = ['unnamed' => [$line[1]]];
-            $bReadingsArray['Вечером'] = ['unnamed' => [$line[2]]];
+            $bReadingsArray = [];
+            if ($line[1]) {
+                $bReadingsArray['Утром'] = ['unnamed' => [$line[1]]];
+            }
+            if ($line[2]) {
+                $bReadingsArray['Вечером'] = ['unnamed' => [$line[2]]];
+            }
             $this->bReadings[$date][] = $bReadingsArray;
         }
         fclose($file);
