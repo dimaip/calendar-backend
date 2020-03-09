@@ -194,7 +194,7 @@ class Bible
         $zachalo = str_replace('–', '-', $zachalo);
         if (strpos($zachalo, '@') !== false) {
             $z = str_replace("@", "", $zachalo);
-            $jsonArray = [
+            return [
                 'translationList' => [],
                 'translationCurrent' => '',
                 'bookName' => $z,
@@ -204,8 +204,6 @@ class Bible
                 'chapCount' => 1,
                 'fragments' => $this->getFragments($z)
             ];
-
-            return json_encode($jsonArray, JSON_PRETTY_PRINT);
         }
         //supported $zachalo:
         //spaces ignored
