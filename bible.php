@@ -134,12 +134,14 @@ class Bible
     static function RomanReplaceArabic($text)
     {
         // "XV," => "15:"
-        preg_match_all('/[MDCLXVI]+,/', $text, $matches);
-        if (isset($matches[0]) && count($matches[0]) > 0)
-            foreach ($matches[0] as $romNum) {
-                $text = str_replace($romNum, arabic($romNum) . ":", $text);
-            }
-        return $text;
+        $res = preg_replace_callback(
+            '/([MDCLXVI]+),/',
+            function ($matches) {
+                return arabic($matches[1]) . ":";
+            },
+            $text
+        );
+        return $res;
     }
 
     /**
