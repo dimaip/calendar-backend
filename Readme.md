@@ -1,14 +1,16 @@
-# WIP!!!
-
 ## Installation
 
-Run `install.sh`.
+```
+git clone https://github.com/dimaip/calendar-backend
+cd calendar-backend
+./install.sh
+```
 
 **Requires PHP 7.x+**
 
 ## Usage
 
-Run `start.sh` or put inside proper PHP web server.
+Run `./start.sh` or put inside proper PHP web server.
 
 ```
 GET /day.php?date=20180318
