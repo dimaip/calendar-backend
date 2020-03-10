@@ -660,7 +660,7 @@ class Day
         $saints = str_replace("#SR", "", $saints);
         $saints = str_replace("#NSR", "", $saints);
         $saints = preg_replace('/(?:\r\n|\r|\n)/', '<br>', $saints);
-        $saints = preg_replace('/#TP(.)/', '<img src="/static/icons/$1.svg"/>', $saints);
+        $saints = preg_replace('/#TP(.)/', '<img src="https://d.psmb.ru/static/icons/$1.svg"/>', $saints);
         $saints = str_replace('1.gif"', '1.gif" title="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
         $saints = str_replace('2.gif"', '2.gif" title="Совершается служба на шесть"', $saints);
         $saints = str_replace('3.gif"', '3.gif" title="Совершается служба со славословием"', $saints);
