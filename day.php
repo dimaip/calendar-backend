@@ -762,8 +762,6 @@ class Day
             "glas" => $assignArray['glas'] ?? null,
             "comment" => $assignArray['comment'] ?? null
         );
-        $a = [];
-        var_dump($a['asf']);
 
         return $jsonArray;
     }
