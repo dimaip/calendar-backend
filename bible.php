@@ -240,7 +240,7 @@ class Bible
         $ver = preg_replace('#(\d{1,3}-\d{1,3}\(\d{1,3}\)?)-(w{1,4})#u', '$1,$2', $ver); //VII, (36)37-51(52) - VIII,12 : 37-51(52) - VIII => 37-51(52); VIII ? what is it?
         $verse = explode('.', $ver); //Евр | V, 11 - VI, 8 split book from verse
         $v_parts = explode(',', $verse['1']); //V, 11 - VI, 8 split verse on parts(if multipart verse)
-        $v_parts = array_filter($v_parts);
+        $v_parts = array_values(array_filter($v_parts));
         $printChapterBegin = 1000;
         $printChapterEnd = 0;
         $chtenije = [];
