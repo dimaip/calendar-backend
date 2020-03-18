@@ -179,7 +179,7 @@ class Bible
                     break;
             }
             if (!isset($matches[1])) {
-                die("Invalid verse: $verse");
+                throw new Exception("Invalid verse: $verse");
             }
             $result["verse_$word"] = $matches[1];
             if (isset($matches[2]))
@@ -316,7 +316,7 @@ class Bible
         $startPrintHidden = false;
         $startPrintOptional = false;
         if (trim($printChapterBegin) > trim($printChapterEnd)) {
-            die("printChapterBegin ($printChapterBegin) is bigger than printChapterEnd($printChapterEnd)");
+            throw new Exception("printChapterBegin ($printChapterBegin) is bigger than printChapterEnd($printChapterEnd)");
         }
 
         for ($chapIdx = trim($printChapterBegin); $chapIdx <= $printChapterEnd; $chapIdx++) {
