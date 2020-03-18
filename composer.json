@@ -1,0 +1,12 @@
+{
+    "name": "dimaip/calendar-backend",
+    "authors": [
+        {
+            "name": "Dmitri Pisarev",
+            "email": "dimaip@gmail.com"
+        }
+    ],
+    "require": {
+        "sentry/sdk": "2.1.0"
+    }
+}

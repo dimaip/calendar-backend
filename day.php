@@ -1,4 +1,5 @@
 <?php
+require_once('init.php');
 require('functions.php');
 require('bible.php');
 
@@ -205,8 +206,6 @@ class Day
                     }
                     $nr[$serviceKey][$reading_title][] = $readings;
                 }
-                //else
-                //	die("<span style='color:red'>Two readings with same title!</span>");
             }
 
             //order services
@@ -763,7 +762,8 @@ class Day
             "glas" => $assignArray['glas'] ?? null,
             "comment" => $assignArray['comment'] ?? null
         );
-
+        $a = [];
+        var_dump($a['asf']);
 
         return $jsonArray;
     }

@@ -1,3 +1,5 @@
 Data/cache_*
 Data/processed
 bible
+
+/vendor/

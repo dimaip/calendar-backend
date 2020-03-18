@@ -1,12 +1,14 @@
 ## Installation
 
+**Make sure you have PHP 7.x+ and composer installed**
+
+Then run:
+
 ```
 git clone https://github.com/dimaip/calendar-backend
 cd calendar-backend
 ./install.sh
 ```
-
-**Requires PHP 7.x+**
 
 ## Usage
 
