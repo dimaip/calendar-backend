@@ -176,6 +176,9 @@ class Bible
                     $result["chapter_$word"] = $chapter ?: $result["chapter_begin"];
                     break;
             }
+            if (!isset($matches[1])) {
+                die("Invalid verse: $verse");
+            }
             $result["verse_$word"] = $matches[1];
             if (isset($matches[2]))
                 $result["verse_{$word}_optional"] = $matches[2];
@@ -227,13 +230,14 @@ class Bible
 
         $orig_ver = $ver;
         $ver = str_replace(' ', '', $ver); //remove spaces;
+        $ver = str_replace(' ', '', $ver); //remove unicode spaces;
         $ver = self::RomanReplaceArabic($ver);
         $ver = preg_replace('/,.*зач.*?,/', '', $ver); //Евр. V, 11 - VI, 8.  Remove zach
         $ver = preg_replace('/(\.$)/', '', $ver); //Евр. V, 11 - VI, 8 remove last dot
-        $ver = preg_replace('#(\d{1,3}\(\d{1,3}\)?),(\(\d{1,3}\)?\d{1,3})#u', '$1;$2', $ver); //7:37-51(52),(11)12-15 :  "51(52),(11)12"  => "51(52);(11)12"
-        //$ver = preg_replace('#(\d{1,3}-\d{1,3}\(\d{1,3}\)?)-(w{1,4})#u','$1;$2',$ver); //VII, (36)37-51(52) - VIII,12 : 37-51(52) - VIII => 37-51(52); VIII ? what is it?
+        $ver = preg_replace('#(\d{1,3}\(\d{1,3}\)?),(\(\d{1,3}\)?\d{1,3})#u', '$1,$2', $ver); //7:37-51(52),(11)12-15 :  "51(52),(11)12"  => "51(52);(11)12"
+        $ver = preg_replace('#(\d{1,3}-\d{1,3}\(\d{1,3}\)?)-(w{1,4})#u', '$1,$2', $ver); //VII, (36)37-51(52) - VIII,12 : 37-51(52) - VIII => 37-51(52); VIII ? what is it?
         $verse = explode('.', $ver); //Евр | V, 11 - VI, 8 split book from verse
-        $v_parts = explode(';', $verse['1']); //V, 11 - VI, 8 split verse on parts(if multipart verse)
+        $v_parts = explode(',', $verse['1']); //V, 11 - VI, 8 split verse on parts(if multipart verse)
         $printChapterBegin = 1000;
         $printChapterEnd = 0;
         $chtenije = [];
@@ -309,8 +313,11 @@ class Bible
         $startPrintRegular = false;
         $startPrintHidden = false;
         $startPrintOptional = false;
+        if (trim($printChapterBegin) > trim($printChapterEnd)) {
+            die("printChapterBegin ($printChapterBegin) is bigger than printChapterEnd($printChapterEnd)");
+        }
 
-        for ($chapIdx = $printChapterBegin; $chapIdx <= $printChapterEnd; $chapIdx++) {
+        for ($chapIdx = trim($printChapterBegin); $chapIdx <= $printChapterEnd; $chapIdx++) {
             $chapIdxsChapterRegular = false;
             $chapter = [
                 'chapter' => $chapIdx,
