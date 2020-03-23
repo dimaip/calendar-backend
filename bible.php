@@ -126,6 +126,11 @@ class Bible
                 $text = preg_replace('/<sup>([0-9]{1,2})<\/sup>/', '<p>$1', $text);
                 $text = preg_replace('/<sup>([0-9]{1,2})[-\x{2013}]([0-9]{1,2})<\/sup>/u', '<p>$1-$2', $text); // unicode minus
                 break;
+            case "NET":
+                $text = str_replace("<br>\n", ' ', $text);
+                $text = preg_replace('/<bqverse ([0-9]{1,2})>([0-9]{1,2})/', '<p>$1', $text);
+                $text = preg_replace('/<bqchapter ([0-9]{1,2})>/', '<bqchapter $1>Chapter $1', $text);
+                break;
         }
     }
 
