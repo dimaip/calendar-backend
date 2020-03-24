@@ -128,8 +128,8 @@ class Bible
                 break;
             case "NET":
                 $text = str_replace("<br>\n", ' ', $text);
-                $text = preg_replace('/<bqverse ([0-9]{1,2})>([0-9]{1,2})/', '<p>$1', $text);
-                $text = preg_replace('/<bqchapter ([0-9]{1,2})>/', '<bqchapter $1>Chapter $1', $text);
+                $text = preg_replace('/<bqverse ([0-9]{1,3})>([0-9]{1,3})/', '<p>$1', $text);
+                $text = preg_replace('/<bqchapter ([0-9]{1,3})>/', '<bqchapter $1>Chapter $1', $text);
                 break;
         }
     }
