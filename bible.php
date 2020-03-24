@@ -113,23 +113,23 @@ class Bible
     {
         switch ($translation) {
             case "ALL":
-                //$text = preg_replace('/<p>([0-9]{1,2})/','<p><sup>$1</sup>', $text);
+                //$text = preg_replace('/<p>([0-9]{1,3})/','<p><sup>$1</sup>', $text);
                 $text = preg_replace('/<a.*?<\/a>/i', '', $text);
                 $text = html_entity_decode($text);
                 break;
             case "RST":
-                $text = preg_replace('/Глава\s*([0-9]{1,2})/', 'Глава$1', $text);
+                $text = preg_replace('/Глава\s*([0-9]{1,3})/', 'Глава$1', $text);
                 $text = preg_replace('/\s+[0-9]{1,6}/', '', $text);
-                $text = preg_replace('/Глава([0-9]{1,2})/', 'Глава $1', $text);
+                $text = preg_replace('/Глава([0-9]{1,3})/', 'Глава $1', $text);
                 break;
             case "RBO2011":
-                $text = preg_replace('/<sup>([0-9]{1,2})<\/sup>/', '<p>$1', $text);
-                $text = preg_replace('/<sup>([0-9]{1,2})[-\x{2013}]([0-9]{1,2})<\/sup>/u', '<p>$1-$2', $text); // unicode minus
+                $text = preg_replace('/<sup>([0-9]{1,3})<\/sup>/', '<p>$1', $text);
+                $text = preg_replace('/<sup>([0-9]{1,3})[-\x{2013}]([0-9]{1,3})<\/sup>/u', '<p>$1-$2', $text); // unicode minus
                 break;
             case "NET":
                 $text = str_replace("<br>\n", ' ', $text);
-                $text = preg_replace('/<bqverse ([0-9]{1,2})>([0-9]{1,2})/', '<p>$1', $text);
-                $text = preg_replace('/<bqchapter ([0-9]{1,2})>/', '<bqchapter $1>Chapter $1', $text);
+                $text = preg_replace('/<bqverse ([0-9]{1,3})>([0-9]{1,3})/', '<p>$1', $text);
+                $text = preg_replace('/<bqchapter ([0-9]{1,3})>/', '<bqchapter $1>Chapter $1', $text);
                 break;
         }
     }
@@ -246,7 +246,7 @@ class Bible
         $ver = str_replace(';', ',', $ver); // "11:24-26;32-12:2" => "11:24-26,32-12:2"
         $verse = explode('.', $ver); //Евр | V, 11 - VI, 8 split book from verse
         $v_parts = explode(',', $verse['1']); //V, 11 - VI, 8 split verse on parts(if multipart verse)
-        $v_parts = array_filter($v_parts);
+        $v_parts = array_values(array_filter($v_parts));
         $printChapterBegin = 1000;
         $printChapterEnd = 0;
         $chtenije = [];
