@@ -778,7 +778,9 @@ if ($readings) {
     $result = [];
     foreach ($it as $v) {
         $bible = new Bible;
-        $result[$v] = $bible->run($v, null);
+        if ($v) {
+            $result[$v] = $bible->run($v, null);
+        }
     }
     echo json_encode($result, JSON_PRETTY_PRINT);
 } else {
