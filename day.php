@@ -539,7 +539,7 @@ class Day
             $ap = explode(";", $processedPerehodForPraotez[0]['reading']['Литургия']);
             $ap = $ap[0];
             $gs = explode(";", $perehods[0]['reading']['Литургия']);
-            $manyReads = $gs[2];
+            $manyReads = isset($gs[2]);
             $gs = $gs[1];
             if (($ap || $gs) && !$manyReads)
                 $perehods[0]['reading']['Литургия'] = $ap . ";" . $gs;
