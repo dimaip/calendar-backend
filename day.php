@@ -523,7 +523,7 @@ class Day
             $praotecStamp = strtotime(str_replace('/', '-', $this->getKey('25/12-0#1', $dateStampO) . "/" . $year));
 
             $ap = explode(";", $perehods[0]['reading']['Литургия']);
-            $manyReads = $ap[2];
+            $manyReads = isset($ap[2]);
             $ap = $ap[0];
             $processedPerehodForPraotez = $this->process_perehods(datediff('ww', $easterStamp, $praotecStamp, true) + 3, "0", $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
             $gs = explode(";", $processedPerehodForPraotez[0]['reading']['Литургия']);
