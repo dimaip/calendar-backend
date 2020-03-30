@@ -1,5 +1,6 @@
 {
     "name": "dimaip/calendar-backend",
+    "description": "Our internal package, nothing much to see here, just a bunch of scary PHP code",
     "authors": [
         {
             "name": "Dmitri Pisarev",
