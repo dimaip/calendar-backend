@@ -19,9 +19,10 @@ GET /day.php?date=20180318
 GET /bible.php?[translation=1Aver&]zachalo=%D0%91%D1%8B%D1%82.+XVII%2C+1-9.
 ```
 
-
 ## Run tests
-Run from project root folder: 
+
+Run from project root folder:
+
 ```
-vendor\bin\phpunit tests
+vendor/bin/phpunit tests
 ```

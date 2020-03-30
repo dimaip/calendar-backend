@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "./start.sh",
-    "install": "./install.sh"
+    "install": "./install.sh",
+    "test": "vendor/bin/phpunit tests"
   },
   "author": "",
   "license": "ISC"
