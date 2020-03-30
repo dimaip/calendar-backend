@@ -385,7 +385,12 @@ class Bible
                     $chapIdxsChapterRegular = true;
                     if (!isset($chtenije[$chtenijeIdx]['verse_end_optional']))
                         $startPrintOptional = false;
+                }
 
+                if ($chtenije[$chtenijeIdx]['chapter_end'] == $chapIdx
+                    && $verseNo == (isset($chtenije[$chtenijeIdx]['verse_end_optional'])
+                            ?$chtenije[$chtenijeIdx]['verse_end_optional']
+                            :$chtenije[$chtenijeIdx]['verse_end'])) {
                     $chtenijeIdx++;
                     if (!isset($chtenije[$chtenijeIdx])) //last chtenie
                         break;
@@ -429,5 +434,7 @@ if ($translation === 'default')
 if ($zachalo) {
     $data = $bible->run($zachalo, $translation);
     header('Content-Type: application/json');
+    //echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); //for get locale test (without unicode decode) for test.json
     echo json_encode($data, JSON_PRETTY_PRINT);
+
 }
