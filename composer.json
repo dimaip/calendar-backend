@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "post-install-cmd": [
-            "./install.sh"
+            "git clone https://github.com/dimaip/bible-translations bible"
         ]
     },
     "require": {

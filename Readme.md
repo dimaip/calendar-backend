@@ -7,7 +7,7 @@ Then run:
 ```
 git clone https://github.com/dimaip/calendar-backend
 cd calendar-backend
-./install.sh
+composer install
 ```
 
 ## Usage
