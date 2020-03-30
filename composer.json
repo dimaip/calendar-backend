@@ -7,6 +7,11 @@
             "email": "dimaip@gmail.com"
         }
     ],
+    "scripts": {
+        "post-install-cmd": [
+            "./install.sh"
+        ]
+    },
     "require": {
         "sentry/sdk": "^2.1.0"
     },
