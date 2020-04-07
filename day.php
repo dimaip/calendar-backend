@@ -335,6 +335,9 @@ class Day
             $perehod_array['reading']['9-й час'] = $line[10];
             $perehod_array['reading']['На освящении воды'] = $line[11];
             $perehod_array['prayers'] = $line[12];
+            $perehod_array['prokimen'] = $line[13];
+            $perehod_array['aliluja'] = $line[14];
+            $perehod_array['prichasten'] = $line[15];
             $this->perehod[$weekday][] = $perehod_array;
         }
         fclose($file);
@@ -362,6 +365,9 @@ class Day
             $neperehodArray['reading']['9-й час'] = $line[10];
             $neperehodArray['reading']['На освящении воды'] = $line[11];
             $neperehodArray['prayers'] = $line[12];
+            $neperehodArray['prokimen'] = $line[13];
+            $neperehodArray['aliluja'] = $line[14];
+            $neperehodArray['prichasten'] = $line[15];
             $this->neperehod[$date][] = $neperehodArray;
         }
         fclose($file);
@@ -562,6 +568,9 @@ class Day
         $saints = '';
         $prayers = '';
         $week_title = '';
+        $prokimen = [];
+        $aliluja = [];
+        $prichasten = [];
         //Saints
         foreach ($arrayz as $ar) {
             if (isset($ar['saints'])) {
@@ -579,7 +588,20 @@ class Day
             if (isset($ar['week_title'])) {
                 $week_title .= trim($ar['week_title']);
             }
+            if (isset($ar['prokimen']) && $ar['prokimen']) {
+                $prokimen[] = json_decode($ar['prokimen'], true);
+            }
+            if (isset($ar['aliluja']) && $ar['aliluja']) {
+                $aliluja[] = json_decode($ar['aliluja'], true);
+            }
+            if (isset($ar['prichasten']) && $ar['prichasten']) {
+                $prichasten[] = json_decode($ar['prichasten'], true);
+            }
         }
+
+        $prokimen = array_values(array_filter($prokimen));
+        $aliluja = array_values(array_filter($aliluja));
+        $prichasten = array_values(array_filter($prichasten));
 
         $saintsThisDay = trim($this->saints[date('d/m', $dateStampO)]);
 
@@ -720,6 +742,9 @@ class Day
         $assignArray['lent'] = $fast;
         $assignArray['saints'] = $saints;
         $assignArray['prayers'] = $prayers;
+        $assignArray['prokimen'] = $prokimen;
+        $assignArray['aliluja'] = $aliluja;
+        $assignArray['prichasten'] = $prichasten;
         if ($this->isDebug) {
             $assignArray['debug'] = $debug;
             $assignArray['debug_r'] = $debug_r;
@@ -758,6 +783,9 @@ class Day
             //"saints" => $staticData['saints'] ?? $assignArray['saints'] ?? null,
             "saints" => $assignArray['saints'] ?? null,
             "prayers" => $assignArray['prayers'] ?? null,
+            "prokimen" => $assignArray['prokimen'] ?? null,
+            "aliluja" => $assignArray['aliluja'] ?? null,
+            "prichasten" => $assignArray['prichasten'] ?? null,
             "lent" => $assignArray['lent'] ?? null,
             "glas" => $assignArray['glas'] ?? null,
             "comment" => $assignArray['comment'] ?? null
