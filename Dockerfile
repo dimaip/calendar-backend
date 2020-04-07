@@ -1,4 +1,4 @@
-FROM dimaip/docker-neos-alpine:latest
+FROM dimaip/docker-neos-alpine:php74
 ENV PHP_TIMEZONE=Europe/Moscow
 WORKDIR /data/www/Web
 USER root
