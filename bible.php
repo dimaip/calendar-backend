@@ -74,7 +74,7 @@ class Bible
         ]];
     }
 
-    protected function availTrans($booKey, $activeTrans = null)
+    protected function availTrans($bookKey, $activeTrans = null)
     {
         $i = 0;
         $dir = scandir('bible');
@@ -91,7 +91,7 @@ class Bible
                             $bi = trim($matches['1']);
                         }
 
-                        $reg = '{^\s*ShortName\s*=.*(\s+' . $booKey . '\s+).*$}';
+                        $reg = '{^\s*ShortName\s*=.*(\s+' . $bookKey . '\s+).*$}';
                         $short_name = preg_match($reg, $setting);
                         if ($short_name) {
                             $avail_trans[$i]['id'] = trim($folder);
@@ -245,7 +245,10 @@ class Bible
         $ver = preg_replace('#(\d{1,3}-\d{1,3}\(\d{1,3}\)?)-(w{1,4})#u', '$1,$2', $ver); //VII, (36)37-51(52) - VIII,12 : 37-51(52) - VIII => 37-51(52); VIII ? what is it?
         $ver = str_replace(';', ',', $ver); // "11:24-26;32-12:2" => "11:24-26,32-12:2"
         $verse = explode('.', $ver); //Евр | V, 11 - VI, 8 split book from verse
-        $v_parts = explode(',', $verse['1']); //V, 11 - VI, 8 split verse on parts(if multipart verse)
+        $bookCoord = array_pop($verse);
+        $bookKey = implode('.', $verse);
+        $bookKey = str_replace(' ', '', $bookKey);
+        $v_parts = explode(',', $bookCoord); //V, 11 - VI, 8 split verse on parts(if multipart verse)
         $v_parts = array_values(array_filter($v_parts));
         $printChapterBegin = 1000;
         $printChapterEnd = 0;
@@ -258,10 +261,7 @@ class Bible
             $printChapterEnd = max($printChapterEnd, $chtenije[$i]['chapter_end']);
         }
 
-        $booKey = $verse['0'];
-        $booKey = str_replace(' ', '', $booKey);
-
-        $avail_trans = $this->availTrans($booKey, $trans);
+        $avail_trans = $this->availTrans($bookKey, $trans);
 
         $trans = $trans ? $trans : $avail_trans['0']['id'];
         $this->activeTransName = $this->activeTransName ? $this->activeTransName : $avail_trans['0']['name'];
@@ -286,7 +286,7 @@ class Bible
                     $fn = $matches['1'];
                 }
 
-                $reg = '{^\s*ShortName\s*=.*(\s+' . $booKey . '\s+).*$}';
+                $reg = '{^\s*ShortName\s*=.*(\s+' . $bookKey . '\s+).*$}';
                 $sn = preg_match($reg, $setting);
                 if ($sn) {
                     $short_name = $sn;
@@ -416,7 +416,7 @@ class Bible
             'bookName' => $full_name,
             'verseKey' => $versekey,
             'zachaloTitle' => $orig_ver,
-            'bookKey' => $booKey,
+            'bookKey' => $bookKey,
             'chapCount' => $chap_count,
             'fragments' => $fragments
 
@@ -436,5 +436,4 @@ if ($zachalo) {
     header('Content-Type: application/json');
     //echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); //for get locale test (without unicode decode) for test.json
     echo json_encode($data, JSON_PRETTY_PRINT);
-
 }
