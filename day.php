@@ -233,16 +233,20 @@ class Day
                         if ($rtitle == 'Рядовое' && $this->skipRjadovoe && $serviceKey == 'Литургия')
                             continue;
                         $fragments = [];
-                        foreach (explode(";", $readings) as $reading) {
-                            $reading_ex = explode("/", $reading);
-                            if ($weekend && isset($reading_ex[1]))
-                                $reading = $reading_ex[1];
-                            else
-                                $reading = $reading_ex[0];
-                            if (isset($this->zachala[$reading])) {
-                                $fl = true;
-                                $fragments[] = trim($this->zachala[$reading]);
+                        if (strpos($readings,' ') === false) { // this is zachalo arrays: 25;Jh25
+                            foreach (explode(";", $readings) as $reading) {
+                                $reading_ex = explode("/", $reading);
+                                if ($weekend && isset($reading_ex[1]))
+                                    $reading = $reading_ex[1];
+                                else
+                                    $reading = $reading_ex[0];
+                                if (isset($this->zachala[$reading])) {
+                                    $fl = true;
+                                    $fragments[] = trim($this->zachala[$reading]);
+                                }
                             }
+                        } else { //this is verse: Мих. IV, 2-3; 5; VI, 2-5; 8; V, 4
+                            $fragments[] = $readings;
                         }
                         if (!$fl) {
                             $fragments[] = trim($readings);
@@ -675,7 +679,6 @@ class Day
         }
 
         $reading_str = $this->formatReading($arrayz, $weekend);
-
 
         //title
         if ($this->dayOfWeekNumber == 0) {
