@@ -799,26 +799,3 @@ class Day
         return $jsonArray;
     }
 }
-
-$day = new Day;
-$date = $_GET['date'] ?? null;
-$data = $day->run($date);
-
-$readings = $_GET['readings'] ?? null;
-header('Content-Type: application/json');
-if ($readings) {
-    $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($data['readings']));
-    $result = [];
-    foreach ($it as $complexVerse) {
-        $bible = new Bible;
-        if ($complexVerse) {
-            $simpleVerses = explode('~', $complexVerse);
-            foreach ($simpleVerses as $verse) {
-                $result[$v] = $bible->run($simpleVerse, null);
-            }
-        }
-    }
-    echo json_encode($result, JSON_PRETTY_PRINT);
-} else {
-    echo json_encode($data, JSON_PRETTY_PRINT);
-}

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-php -S 0.0.0.0:9999
+php -S 0.0.0.0:9999 routing.php

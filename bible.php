@@ -387,10 +387,12 @@ class Bible
                         $startPrintOptional = false;
                 }
 
-                if ($chtenije[$chtenijeIdx]['chapter_end'] == $chapIdx
+                if (
+                    $chtenije[$chtenijeIdx]['chapter_end'] == $chapIdx
                     && $verseNo == (isset($chtenije[$chtenijeIdx]['verse_end_optional'])
-                            ?$chtenije[$chtenijeIdx]['verse_end_optional']
-                            :$chtenije[$chtenijeIdx]['verse_end'])) {
+                        ? $chtenije[$chtenijeIdx]['verse_end_optional']
+                        : $chtenije[$chtenijeIdx]['verse_end'])
+                ) {
                     $chtenijeIdx++;
                     if (!isset($chtenije[$chtenijeIdx])) //last chtenie
                         break;
@@ -424,16 +426,4 @@ class Bible
 
         return $jsonArray;
     }
-}
-
-$bible = new Bible;
-$zachalo = $_GET['zachalo'] ?? null;
-$translation = $_GET['translation'] ?? null;
-if ($translation === 'default')
-    $translation = null;
-if ($zachalo) {
-    $data = $bible->run($zachalo, $translation);
-    header('Content-Type: application/json');
-    //echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE); //for get locale test (without unicode decode) for test.json
-    echo json_encode($data, JSON_PRETTY_PRINT);
 }
