@@ -230,16 +230,18 @@ class Day
                 foreach ($nr2 as $rtitle => $_readings) {
                     foreach ($_readings as $readings) {
                         $readings = str_replace('–', '-', $readings);
-                        if ($rtitle == 'Рядовое' && $this->skipRjadovoe && $serviceKey == 'Литургия')
+                        if ($rtitle === 'Рядовое' && $this->skipRjadovoe && $serviceKey === 'Литургия') {
                             continue;
+                        }
                         $fragments = [];
-                        if (strpos($readings,' ') === false) { // this is zachalo arrays: 25;Jh25
-                            foreach (explode(";", $readings) as $reading) {
-                                $reading_ex = explode("/", $reading);
-                                if ($weekend && isset($reading_ex[1]))
+                        if (strpos($readings, ' ') === false) { // this is zachalo arrays: 25;Jh25
+                            foreach (explode(';', $readings) as $reading) {
+                                $reading_ex = explode('/', $reading);
+                                if ($weekend && isset($reading_ex[1])) {
                                     $reading = $reading_ex[1];
-                                else
+                                } else {
                                     $reading = $reading_ex[0];
+                                }
                                 if (isset($this->zachala[$reading])) {
                                     $fl = true;
                                     $fragments[] = trim($this->zachala[$reading]);
