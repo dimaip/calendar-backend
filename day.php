@@ -809,10 +809,13 @@ header('Content-Type: application/json');
 if ($readings) {
     $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($data['readings']));
     $result = [];
-    foreach ($it as $v) {
+    foreach ($it as $complexVerse) {
         $bible = new Bible;
-        if ($v) {
-            $result[$v] = $bible->run($v, null);
+        if ($complexVerse) {
+            $simpleVerses = explode('~', $complexVerse);
+            foreach ($simpleVerses as $verse) {
+                $result[$v] = $bible->run($simpleVerse, null);
+            }
         }
     }
     echo json_encode($result, JSON_PRETTY_PRINT);
