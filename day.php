@@ -19,6 +19,8 @@ class Day
 
     protected $dayOfWeekNames = ['воскресение', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу'];
 
+    protected $liturgyPartKeys = ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'];
+
     protected function getStaticData($datestamp)
     {
         $d = date('Y-m-d', $datestamp);
@@ -171,34 +173,84 @@ class Day
         return [];
     }
 
-    protected function process_perehods($week, $dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp)
+    protected function processSaints($saints)
+    {
+        $saints = str_replace("#SR", "", $saints);
+        $saints = str_replace("#NSR", "", $saints);
+        $saints = preg_replace('/(?:\r\n|\r|\n)/', '<br>', $saints);
+        $saints = preg_replace('/#TP(.)/', '<img src="/assets/icons/$1.svg"/>', $saints);
+        $saints = str_replace('1.gif"', '1.gif" title="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
+        $saints = str_replace('2.gif"', '2.gif" title="Совершается служба на шесть"', $saints);
+        $saints = str_replace('3.gif"', '3.gif" title="Совершается служба со славословием"', $saints);
+        $saints = str_replace('4.gif"', '4.gif" title="Совершается служба с полиелеем"', $saints);
+        $saints = str_replace('5.gif"', '5.gif" title="Совершается всенощное бдение"', $saints);
+        $saints = str_replace('6.gif"', '6.gif" title="Совершается служба великому празднику"', $saints);
+
+        $saints = preg_replace_callback('#href="https://www.holytrinityorthodox.com/ru/calendar/los/(.*?).htm"#i', function ($matches) {
+            $key = $matches[1];
+            $key = str_replace("/", "-", $key);
+            $key = strtolower($key);
+            return 'data-saint="' . $key . '"';
+        }, $saints);
+        return $saints;
+    }
+    protected function processPerehods($week, $dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp)
     {
         $dayweek = $week . ';' . $dayOfWeekNumber; //concat key
         //OVERLAY GOSPEL SHIFT
         $dayweek_gospelshift = ($week + $gospelShift) . ';' . $dayOfWeekNumber; //concat key
         $perehods = $this->perehod[$dayweek];
-        $ap = explode(';', $perehods[0]['reading']['Литургия']);
-        $ap = explode(';', $perehods[0]['reading']['Литургия']);
+        $ap = explode(';', $perehods[0]['readings']['Литургия']);
+        $ap = explode(';', $perehods[0]['readings']['Литургия']);
         $manyReads = $ap[2] ?? null;
         $ap = $ap[0];
-        $gs = explode(';', $this->perehod[$dayweek_gospelshift][0]['reading']['Литургия']);
+        $gs = explode(';', $this->perehod[$dayweek_gospelshift][0]['readings']['Литургия']);
         $gs = $gs[1] ?? null;
         if (($ap || $gs) && !$manyReads) {
-            $perehods[0]['reading']['Литургия'] = $ap . ';' . $gs;
+            $perehods[0]['readings']['Литургия'] = $ap . ';' . $gs;
         }
 
         return $perehods;
     }
 
-    protected function formatReading($arr, $weekend)
+    protected function processWeekTitle($week_title, $week,  $weekOld)
     {
-        foreach ($arr as $array) {
-            if (!$array['reading_title'])
-                $array['reading_title'] = 'Рядовое';
-            $reading_title = $array['reading_title'];
-            //if($array['prazdnikTitle'])
-            //	$this->prazdnikTitle .= $array['prazdnikTitle'].'<br/>';
-            foreach ($array['reading'] as $serviceKey => $readings) {
+        if ($this->dayOfWeekNumber == 0) {
+            $sedmned = "Неделя";
+            $weekOld--;
+        } else {
+            $sedmned = "Седмица";
+        }
+        if (!$week_title) {
+            if ($weekOld == 1) {
+                $week_title = "Светлая седмица";
+            } else if ($weekOld < 8) {
+                if ($this->dayOfWeekNumber == 0) {
+                    $weekOld++;
+                }
+                $week_title = "$sedmned $weekOld-я по Пасхе";
+            } else if ($week > 43) {
+                $week_title = "$sedmned " . ($week - 43) . "-я Великого поста";
+            } else if ($weekOld < 46) {
+                $week_title = "$sedmned " . ($weekOld - 7) . "-я по Пятидесятнице";
+            }
+        }
+        return $week_title;
+    }
+    protected function processReadings($dayDataEntries)
+    {
+        $weekend = false;
+        if ($this->dayOfWeekNumber == 0 || $this->dayOfWeekNumber == 6) {
+            $weekend = true;
+        }
+        foreach ($dayDataEntries as $dayDataEntry) {
+            if (!$dayDataEntry['reading_title']) {
+                $dayDataEntry['reading_title'] = 'Рядовое';
+            }
+            $reading_title = $dayDataEntry['reading_title'];
+            //if($dayDataEntry['prazdnikTitle'])
+            //	$this->prazdnikTitle .= $dayDataEntry['prazdnikTitle'].'<br/>';
+            foreach ($dayDataEntry['readings'] as $serviceKey => $readings) {
                 //if(!$nr[$serviceKey][$reading_title])
                 if ($readings) {
                     if (!isset($nr[$serviceKey][$reading_title])) {
@@ -224,8 +276,9 @@ class Day
         $resultArray = [];
         foreach ($nr_or as $serviceKey => $nr2) {
             $fl = false;
-            if ($this->noLiturgy && $serviceKey == 'Литургия')
+            if ($this->noLiturgy && $serviceKey == 'Литургия') {
                 continue;
+            }
             if ($nr2) {
                 foreach ($nr2 as $rtitle => $_readings) {
                     foreach ($_readings as $readings) {
@@ -278,12 +331,69 @@ class Day
         return $skipRjadovoe;
     }
 
+    protected function getDayData($perehod)
+    {
+        $googleUrl = 'https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=0AnIrRiVoiOUSdENKckd0Vm1RbVhUMGVOQWNIZUNBUmc&single=true&output=csv&gid=';
+        $filename = 'Data/cache_' . ($perehod ? 'perehod' : 'neperehod') . '.csv';
+        $gid = $perehod ? 4 : 0;
+        if ($this->isDebug) {
+            unlink($filename);
+        }
+        if (!file_exists($filename)) {
+            file_put_contents($filename, file_get_contents($googleUrl . $gid));
+        }
+        $file = fopen($filename, 'r');
+        $indexes = null;
+        while (($line = fgetcsv($file)) !== FALSE) {
+            if (!$indexes) {
+                $indexes = $line;
+            } else {
+                $mappedLine = [];
+                foreach ($line as $index => $cell) {
+                    $key = $indexes[$index];
+                    $mappedLine[$key] = $cell;
+                }
+                $weekday = $mappedLine['Дата'];
+                $data = [];
+                $data['week_title'] = $mappedLine['Неделя'];
+                $data['saints'] = $mappedLine['Святые'];
+                $data['reading_title'] = $mappedLine['Заглавие чтения'];
+                $data['readings']['Утреня'] = $mappedLine['Утреня'];
+                $data['readings']['Литургия'] = $mappedLine['Литургия'];
+                $data['readings']['Вечерня'] = $mappedLine['Вечерня'];
+                $data['readings']['1-й час'] = $mappedLine['1-й час'];
+                $data['readings']['3-й час'] = $mappedLine['3-й час'];
+                $data['readings']['6-й час'] = $mappedLine['6-й час'];
+                $data['readings']['9-й час'] = $mappedLine['9-й час'];
+                $data['readings']['На освящении воды'] = $mappedLine['На освящении воды'];
+                $data['prayers'] = $mappedLine['Тропари Литургия'];
+                $data['prayersOther'] = $mappedLine['Тропари Остальные'];
+                foreach ($this->liturgyPartKeys as $liturgyPartKey) {
+                    $fieldValue = $mappedLine[$liturgyPartKey];
+                    if (in_array($liturgyPartKey, ['Прокимен', 'Аллилуарий', 'Причастен'])) {
+                        $fieldValue = json_decode($fieldValue, true);
+                    }
+                    $data['liturgyParts'][$liturgyPartKey] = $fieldValue;
+                }
+                if ($perehod) {
+                    $this->perehod[$weekday][] = $data;
+                } else {
+                    $this->neperehod[$weekday][] = $data;
+                }
+            }
+        }
+        fclose($file);
+    }
+
     protected function init($date)
     {
         if (!file_exists('Data')) {
             mkdir('Data', 0777, true);
         }
         $googleUrl = 'https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=0AnIrRiVoiOUSdENKckd0Vm1RbVhUMGVOQWNIZUNBUmc&single=true&output=csv&gid=';
+
+        $this->getDayData(true);
+        $this->getDayData(false);
 
         $filename = 'Data/cache_zachala_apostol.csv';
         $gid = 3;
@@ -314,67 +424,6 @@ class Day
             $key = $line[0];
             $reading = $line[1];
             $this->zachala[$key] = $reading;
-        }
-        fclose($file);
-
-        $filename = 'Data/cache_perehod.csv';
-        $gid = 4;
-        if ($this->isDebug) {
-            unlink($filename);
-        }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
-            $weekday = $line[0];
-            unset($neperehodArray);
-            $perehod_array['week_title'] = $line[1];
-            $perehod_array['saints'] = $line[2];
-            $perehod_array['reading_title'] = $line[3];
-            $perehod_array['reading']['Утреня'] = $line[4];
-            $perehod_array['reading']['Литургия'] = $line[5];
-            $perehod_array['reading']['Вечерня'] = $line[6];
-            $perehod_array['reading']['1-й час'] = $line[7];
-            $perehod_array['reading']['3-й час'] = $line[8];
-            $perehod_array['reading']['6-й час'] = $line[9];
-            $perehod_array['reading']['9-й час'] = $line[10];
-            $perehod_array['reading']['На освящении воды'] = $line[11];
-            $perehod_array['prayers'] = $line[12];
-            $perehod_array['prokimen'] = $line[13];
-            $perehod_array['aliluja'] = $line[14];
-            $perehod_array['prichasten'] = $line[15];
-            $this->perehod[$weekday][] = $perehod_array;
-        }
-        fclose($file);
-
-        $filename = 'Data/cache_neperehod.csv';
-        $gid = 0;
-        if ($this->isDebug) {
-            unlink($filename);
-        }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
-            $date = $line[0];
-            $neperehodArray['week_title'] = $line[1];
-            $neperehodArray['saints'] = $line[2];
-            $neperehodArray['reading_title'] = $line[3];
-            $neperehodArray['reading']['Утреня'] = $line[4];
-            $neperehodArray['reading']['Литургия'] = $line[5];
-            $neperehodArray['reading']['Вечерня'] = $line[6];
-            $neperehodArray['reading']['1-й час'] = $line[7];
-            $neperehodArray['reading']['3-й час'] = $line[8];
-            $neperehodArray['reading']['6-й час'] = $line[9];
-            $neperehodArray['reading']['9-й час'] = $line[10];
-            $neperehodArray['reading']['На освящении воды'] = $line[11];
-            $neperehodArray['prayers'] = $line[12];
-            $neperehodArray['prokimen'] = $line[13];
-            $neperehodArray['aliluja'] = $line[14];
-            $neperehodArray['prichasten'] = $line[15];
-            $this->neperehod[$date][] = $neperehodArray;
         }
         fclose($file);
 
@@ -418,6 +467,16 @@ class Day
         fclose($file);
     }
 
+    // Flatten $dayDataEntries
+    protected function reduceDayData($dayDataEntries)
+    {
+        $result = smartMerge($dayDataEntries, ['saints', 'prayers', 'prayersOther'], ['week_title']);
+        $liturgyPartsEntries = array_map(function ($d) {
+            return $d['liturgyParts'] ?? [];
+        }, $dayDataEntries);
+        $result['liturgyParts'] = smartMerge($liturgyPartsEntries);
+        return $result;
+    }
     /**
      * @param string $date
      * @return string
@@ -429,8 +488,6 @@ class Day
             $date = date('Ymd');
         $this->init($date);
 
-        $date_next = date("Ymd", strtotime("+1 days", strtotime($date)));
-        $date_prev = date("Ymd", strtotime("-1 days", strtotime($date)));
         $date = date('Ymd', strtotime("-13 days", strtotime($date)));
         $dateStampO = strtotime($date);
         $dateStamp = strtotime("+13 days", $dateStampO);
@@ -527,97 +584,63 @@ class Day
         if (($weekOld == 1) || ($week == 50) || ($weekOld == 2))
             $glas = null;
 
-        $perehods = $this->process_perehods($week, $this->dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+        $perehods = $this->processPerehods($week, $this->dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
 
 
         if ($week + $gospelShift == 36 && $this->dayOfWeekNumber == 0) {
             $debug .= "gospel shifted from praotez";
             $praotecStamp = strtotime(str_replace('/', '-', $this->getKey('25/12-0#1', $dateStampO) . "/" . $year));
 
-            $ap = explode(";", $perehods[0]['reading']['Литургия']);
+            $ap = explode(";", $perehods[0]['readings']['Литургия']);
             $manyReads = isset($ap[2]);
             $ap = $ap[0];
-            $processedPerehodForPraotez = $this->process_perehods(datediff('ww', $easterStamp, $praotecStamp, true) + 3, "0", $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
-            $gs = explode(";", $processedPerehodForPraotez[0]['reading']['Литургия']);
+            $processedPerehodForPraotez = $this->processPerehods(datediff('ww', $easterStamp, $praotecStamp, true) + 3, "0", $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+            $gs = explode(";", $processedPerehodForPraotez[0]['readings']['Литургия']);
             $gs = $gs[1];
             if (($ap || $gs) && !$manyReads) {
-                $perehods[0]['reading']['Литургия'] = $ap . ";" . $gs;
+                $perehods[0]['readings']['Литургия'] = $ap . ";" . $gs;
             }
         }
         if ($week == 37 && $this->dayOfWeekNumber == 0) {
             $debug .= "apostol shifted from praotez";
             $praotecStamp = strtotime(str_replace('/', '-', $this->getKey('25/12-0#1', $dateStampO) . "/" . $year));
-            $processedPerehodForPraotez = $this->process_perehods(datediff('ww', $easterStamp, $praotecStamp, true) + 3, "0", $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
-            $ap = explode(";", $processedPerehodForPraotez[0]['reading']['Литургия']);
+            $processedPerehodForPraotez = $this->processPerehods(datediff('ww', $easterStamp, $praotecStamp, true) + 3, "0", $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+            $ap = explode(";", $processedPerehodForPraotez[0]['readings']['Литургия']);
             $ap = $ap[0];
-            $gs = explode(";", $perehods[0]['reading']['Литургия']);
+            $gs = explode(";", $perehods[0]['readings']['Литургия']);
             $manyReads = isset($gs[2]);
             $gs = $gs[1];
             if (($ap || $gs) && !$manyReads)
-                $perehods[0]['reading']['Литургия'] = $ap . ";" . $gs;
+                $perehods[0]['readings']['Литургия'] = $ap . ";" . $gs;
         }
 
 
         //OVERLAY SUNDAY MATINS
-        $mat['reading']['Утреня'] = $matinsZachalo;
+        $mat['readings']['Утреня'] = $matinsZachalo;
         $mat['reading_title'] = 'Воскресное евангелие';
         $perehods[] = $mat;
 
+        // Merge perehod and neperehod data entries for given day
         $neperehodArray = $this->getNeperehod($dateStamp);
-        if (!$perehods)
-            $arrayz = $neperehodArray;
-        else if (!$neperehodArray)
-            $arrayz = $perehods;
-        else
-            $arrayz = array_merge($perehods, $neperehodArray);
-
-        $saints = '';
-        $prayers = '';
-        $week_title = '';
-        $prokimen = [];
-        $aliluja = [];
-        $prichasten = [];
-        //Saints
-        foreach ($arrayz as $ar) {
-            if (isset($ar['saints'])) {
-                if ($saints && $ar['saints']) {
-                    $saints .= "<br/>";
-                }
-                $saints .= trim($ar['saints']);
-            }
-            if (isset($ar['prayers'])) {
-                if ($prayers && $ar['prayers']) {
-                    $prayers .= '<br/>';
-                }
-                $prayers .= trim($ar['prayers']);
-            }
-            if (isset($ar['week_title'])) {
-                $week_title .= trim($ar['week_title']);
-            }
-            if (isset($ar['prokimen']) && $ar['prokimen']) {
-                $prokimen[] = json_decode($ar['prokimen'], true);
-            }
-            if (isset($ar['aliluja']) && $ar['aliluja']) {
-                $aliluja[] = json_decode($ar['aliluja'], true);
-            }
-            if (isset($ar['prichasten']) && $ar['prichasten']) {
-                $prichasten[] = json_decode($ar['prichasten'], true);
-            }
+        if (!$perehods) {
+            $dayDataEntries = $neperehodArray;
+        } else if (!$neperehodArray) {
+            $dayDataEntries = $perehods;
+        } else {
+            $dayDataEntries = array_merge($perehods, $neperehodArray);
         }
 
-        $prokimen = array_values(array_filter($prokimen));
-        $aliluja = array_values(array_filter($aliluja));
-        $prichasten = array_values(array_filter($prichasten));
+        $dayData = $this->reduceDayData($dayDataEntries);
 
         $saintsThisDay = trim($this->saints[date('d/m', $dateStampO)]);
 
-        if ($saints && $saintsThisDay) {
-            $saints .= "<br/>";
+        if ($dayData['saints'] && $saintsThisDay) {
+            $dayData['saints'] .= "<br/>";
         }
-        $saints .= $saintsThisDay;
+        $dayData['saints'] .= $saintsThisDay;
 
 
-        $this->skipRjadovoe = $this->check_skipRjadovoe($saints);
+        $this->skipRjadovoe = $this->check_skipRjadovoe($dayData['saints']);
 
         //PERENOS CHTENIJ
         if (($this->dayOfWeekNumber != 0) && (!$this->skipRjadovoe)) { //not on Sunday, check for move forward
@@ -627,7 +650,7 @@ class Day
             //combine saints
             $t = $this->getNeperehod($next_dateStamp);
             $next_saints = $t['0']['saints'] ?? '';
-            $r = $this->process_perehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber + 1), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+            $r = $this->processPerehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber + 1), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
             $next_saints .= $r['0']['saints'] ?? '';
             $next_saints .= $this->saints[date('d/m', $next_dateStampO)];
 
@@ -635,7 +658,7 @@ class Day
                 $debug .= "<br>something holy is around";
 
                 $r['0']['reading_title'] = 'За ' . $this->dayOfWeekNames[$this->normalizeDayOfWeek($this->dayOfWeekNumber + 1)];
-                $arrayz = array_merge($arrayz, $r);
+                $dayDataEntries = array_merge($dayDataEntries, $r);
             }
         }
         //refactor at will
@@ -647,7 +670,7 @@ class Day
             //combine saints
             $t = $this->getNeperehod($next_dateStamp);
             $next_saints = $t['0']['saints'] ?? '';
-            $r = $this->process_perehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber - 1), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+            $r = $this->processPerehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber - 1), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
             $next_saints .= $r['0']['saints'] ?? '';
             $next_saints .= $this->saints[date('d/m', $next_dateStampO)];
 
@@ -658,14 +681,14 @@ class Day
                 //combine saints
                 $t = $this->getNeperehod($next_dateStamp);
                 $next_saints = $t['0']['saints'] ?? '';
-                $r2 = $this->process_perehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber - 2), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
+                $r2 = $this->processPerehods($week, $this->normalizeDayOfWeek($this->dayOfWeekNumber - 2), $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
                 $next_saints .= $r2['0']['saints'] ?? '';
                 $next_saints .= $this->saints[date('d/m', $next_dateStampO)];
                 if ($this->check_skipRjadovoe($next_saints) || ($this->dayOfWeekNumber == 2)) {
                     $debug .= "<br>something very holy is around!";
 
                     $r['0']['reading_title'] = 'За ' . $this->dayOfWeekNames[$this->normalizeDayOfWeek($this->dayOfWeekNumber - 1)];
-                    $arrayz = array_merge($r, $arrayz);
+                    $dayDataEntries = array_merge($r, $dayDataEntries);
                 }
             }
         }
@@ -673,128 +696,59 @@ class Day
 
         if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             require('Data/static_sunday_troparion.php');
-            if ($prayers && $sunday_troparion[$glas])
-                $prayers .= "<br/>";
-            $prayers .= $sunday_troparion[$glas];
+            if (!isset($dayData['prayers'])) {
+                var_dump(($dayData));
+                die();
+            }
+            if ($dayData['prayers'] && $sunday_troparion[$glas]) {
+                $dayData['prayers'] .= "<br/>";
+            }
+            $dayData['prayers'] .= $sunday_troparion[$glas];
         }
 
 
         //skip rjad on sochelnik HACK HACK HACK
-        if ($this->dayOfWeekNumber == 5 && ($date == $year . '1222'))
+        if ($this->dayOfWeekNumber == 5 && ($date == $year . '1222')) {
             $this->noLiturgy = true;
+        }
         $debug .= '<br/>пропуск рядового чтения:' . $this->skipRjadovoe;
 
-        $saints = str_replace("#SR", "", $saints);
-        $saints = str_replace("#NSR", "", $saints);
-        $saints = preg_replace('/(?:\r\n|\r|\n)/', '<br>', $saints);
-        $saints = preg_replace('/#TP(.)/', '<img src="/assets/icons/$1.svg"/>', $saints);
-        $saints = str_replace('1.gif"', '1.gif" title="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
-        $saints = str_replace('2.gif"', '2.gif" title="Совершается служба на шесть"', $saints);
-        $saints = str_replace('3.gif"', '3.gif" title="Совершается служба со славословием"', $saints);
-        $saints = str_replace('4.gif"', '4.gif" title="Совершается служба с полиелеем"', $saints);
-        $saints = str_replace('5.gif"', '5.gif" title="Совершается всенощное бдение"', $saints);
-        $saints = str_replace('6.gif"', '6.gif" title="Совершается служба великому празднику"', $saints);
 
+        // @TODO: bring back static data
+        $staticData = ['readings' => null];
+        // $staticData = $this->getStaticData($dateStamp);
+        // if ($staticData) {
+        //     $readings = '';
+        //     foreach ($staticData['readings'] as $serviceType => $readingGroup) {
+        //         $serviceType = $serviceType == 'Утр' ? 'Утреня' : $serviceType;
+        //         $serviceType = $serviceType == 'Лит' ? 'Литургия' : $serviceType;
+        //         $readings .= $serviceType . ": <ul>";
+        //         foreach ($readingGroup as $readingType => $reading) {
+        //             // TODO: check if this needs to be urlencoded
+        //             $readingStr = join(' ', preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $reading));
+        //             $readingType = $readingType == 'Рядовое' ? '' : $readingType . ": ";
+        //             $readings .= "<li>" . $readingType . str_replace('*', '', $readingStr) . "</li>";
+        //         }
+        //         $readings .= "</ul>";
+        //     }
+        //     if ($staticData['readings']) {
+        //         $dynamicData['readings'] = $readings;
+        //     }
 
-        //format reading
-        $weekend = false;
-        if ($this->dayOfWeekNumber == 0 || $this->dayOfWeekNumber == 6) {
-            $weekend = true;
-        }
+        //     $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
+        // }
 
-        $reading_str = $this->formatReading($arrayz, $weekend);
-
-        //title
-        if ($this->dayOfWeekNumber == 0) {
-            $sedmned = "Неделя";
-            $weekOld--;
-        } else {
-            $sedmned = "Седмица";
-        }
-        if (!$week_title) {
-            if ($weekOld == 1) {
-                $week_title = "Светлая седмица";
-            } else if ($weekOld < 8) {
-                if ($this->dayOfWeekNumber == 0) {
-                    $weekOld++;
-                }
-                $week_title = "$sedmned $weekOld-я по Пасхе";
-            } else if ($week > 43) {
-                $week_title = "$sedmned " . ($week - 43) . "-я Великого поста";
-            } else if ($weekOld < 46) {
-                $week_title = "$sedmned " . ($weekOld - 7) . "-я по Пятидесятнице";
-            }
-        }
-
-        $dayweek = ($week + $gospelShift) . ";" . $this->dayOfWeekNumber;
-
-        $saints = preg_replace_callback('#href="https://www.holytrinityorthodox.com/ru/calendar/los/(.*?).htm"#i', function ($matches) {
-            $key = $matches[1];
-            $key = str_replace("/", "-", $key);
-            $key = strtolower($key);
-            return 'data-saint="' . $key . '"';
-        }, $saints);
-
-        $assignArray['date_o'] = strftime('%d %b %Y', $dateStampO);
-        $assignArray['date'] = strftime('%d %b %Y', $dateStamp);
-        $assignArray['day'] = strftime('%A', $dateStamp);
-        $assignArray['bu_day'] = date('Y-m-d', $dateStamp);
-        $assignArray['date_prev'] = $date_prev;
-        $assignArray['date_next'] = $date_next;
-        $assignArray['title'] = $week_title;
-        $assignArray['glas'] = $glas;
-        $assignArray['reading'] = $reading_str;
-        $assignArray['lent'] = $fast;
-        $assignArray['saints'] = $saints;
-        $assignArray['prayers'] = $prayers;
-        $assignArray['prokimen'] = $prokimen;
-        $assignArray['aliluja'] = $aliluja;
-        $assignArray['prichasten'] = $prichasten;
-        if ($this->isDebug) {
-            $assignArray['debug'] = $debug;
-            $assignArray['debug_r'] = $debug_r;
-        }
-
-
-        $staticData = $this->getStaticData($dateStamp);
-        if ($staticData) {
-            if ($staticData['saints']) {
-                // $assignArray['saints'] = $staticData['saints'];
-            }
-            $readings = '';
-            foreach ($staticData['readings'] as $serviceType => $readingGroup) {
-                $serviceType = $serviceType == 'Утр' ? 'Утреня' : $serviceType;
-                $serviceType = $serviceType == 'Лит' ? 'Литургия' : $serviceType;
-                $readings .= $serviceType . ": <ul>";
-                foreach ($readingGroup as $readingType => $reading) {
-                    // TODO: check if this needs to be urlencoded
-                    $readingStr = join(' ', preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $reading));
-                    $readingType = $readingType == 'Рядовое' ? '' : $readingType . ": ";
-                    $readings .= "<li>" . $readingType . str_replace('*', '', $readingStr) . "</li>";
-                }
-                $readings .= "</ul>";
-            }
-            if ($staticData['readings']) {
-                $assignArray['reading'] = $readings;
-            }
-
-            $assignArray['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
-        }
-
-        $jsonArray = array(
-            "title" => $staticData['title'] ?? $assignArray['title'] ?? null,
-            "readings" => $staticData['readings'] ?? $assignArray['reading'] ?? null,
+        $jsonArray = [
+            "title" => $this->processWeekTitle($dayData['week_title'], $week, $weekOld) ?? null,
+            "glas" => $glas ?? null,
+            "lent" => $fast ?? null,
+            "readings" => $staticData['readings'] ?? $this->processReadings($dayDataEntries) ?? null,
             'bReadings' => $this->getBReadings($dateStamp),
-            //"saints" => $staticData['saints'] ?? $assignArray['saints'] ?? null,
-            "saints" => $assignArray['saints'] ?? null,
-            "prayers" => $assignArray['prayers'] ?? null,
-            "prokimen" => $assignArray['prokimen'] ?? null,
-            "aliluja" => $assignArray['aliluja'] ?? null,
-            "prichasten" => $assignArray['prichasten'] ?? null,
-            "lent" => $assignArray['lent'] ?? null,
-            "glas" => $assignArray['glas'] ?? null,
-            "comment" => $assignArray['comment'] ?? null
-        );
+            "saints" => $this->processSaints($dayData['saints']) ?? null,
+            "prayers" => $dayData['prayers'] ?? null,
+            "prayersOther" => $dayData['prayersOther'] ?? null,
+            "liturgyParts" => $dayData['liturgyParts'],
+        ];
 
         return $jsonArray;
     }
