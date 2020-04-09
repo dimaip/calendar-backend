@@ -275,13 +275,13 @@ class Day
         // }
         $resultArray = [];
         foreach ($nr_or as $serviceKey => $nr2) {
-            $fl = false;
             if ($this->noLiturgy && $serviceKey == 'Литургия') {
                 continue;
             }
             if ($nr2) {
                 foreach ($nr2 as $rtitle => $_readings) {
                     foreach ($_readings as $readings) {
+                        $readingFound = false;
                         $readings = str_replace('–', '-', $readings);
                         if ($rtitle === 'Рядовое' && $this->skipRjadovoe && $serviceKey === 'Литургия') {
                             continue;
@@ -296,18 +296,21 @@ class Day
                                     $reading = $reading_ex[0];
                                 }
                                 if (isset($this->zachala[$reading])) {
-                                    $fl = true;
+                                    $readingFound = true;
                                     $fragments[] = trim($this->zachala[$reading]);
                                 }
                             }
                         } else { //this is verse: Мих. IV, 2-3; 5; VI, 2-5; 8; V, 4
-                            $fragments[] = $readings;
+                            $fragments[] = trim($readings);
+                            $readingFound = true;
                         }
-                        if (!$fl) {
+                        // If reading wasn't found just output it as is
+                        if (!$readingFound) {
                             $fragments[] = trim($readings);
                         }
-                        if (!isset($resultArray[$serviceKey]))
+                        if (!isset($resultArray[$serviceKey])) {
                             $resultArray[$serviceKey] = [];
+                        }
                         $resultArray[$serviceKey][$rtitle] = array_merge($resultArray[$serviceKey][$rtitle] ?? [], $fragments);
                     }
                 }
@@ -581,8 +584,9 @@ class Day
         //glass
         $glas = (($weekOld - 1) % 8);
         $glas = $glas ? $glas : 8;
-        if (($weekOld == 1) || ($week == 50) || ($weekOld == 2))
+        if (($weekOld == 1) || ($week == 50) || ($weekOld == 2)) {
             $glas = null;
+        }
 
         $perehods = $this->processPerehods($week, $this->dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
 
