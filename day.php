@@ -1,7 +1,7 @@
 <?php
 require_once('init.php');
 require('functions.php');
-require('bible.php');
+require_once('bible.php');
 
 class Day
 {
@@ -250,13 +250,15 @@ class Day
             $reading_title = $dayDataEntry['reading_title'];
             //if($dayDataEntry['prazdnikTitle'])
             //	$this->prazdnikTitle .= $dayDataEntry['prazdnikTitle'].'<br/>';
-            foreach ($dayDataEntry['readings'] as $serviceKey => $readings) {
-                //if(!$nr[$serviceKey][$reading_title])
-                if ($readings) {
-                    if (!isset($nr[$serviceKey][$reading_title])) {
-                        $nr[$serviceKey][$reading_title] = [];
+            if (isset($dayDataEntry['readings'])) {
+                foreach ($dayDataEntry['readings'] as $serviceKey => $readings) {
+                    //if(!$nr[$serviceKey][$reading_title])
+                    if ($readings) {
+                        if (!isset($nr[$serviceKey][$reading_title])) {
+                            $nr[$serviceKey][$reading_title] = [];
+                        }
+                        $nr[$serviceKey][$reading_title][] = $readings;
                     }
-                    $nr[$serviceKey][$reading_title][] = $readings;
                 }
             }
 
