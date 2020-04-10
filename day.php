@@ -250,7 +250,7 @@ class Day
             $reading_title = $dayDataEntry['reading_title'];
             //if($dayDataEntry['prazdnikTitle'])
             //	$this->prazdnikTitle .= $dayDataEntry['prazdnikTitle'].'<br/>';
-            if($dayDataEntry && isset($dayDataEntry['readings'])) {
+            if (isset($dayDataEntry['readings'])) {
                 foreach ($dayDataEntry['readings'] as $serviceKey => $readings) {
                     //if(!$nr[$serviceKey][$reading_title])
                     if ($readings) {
