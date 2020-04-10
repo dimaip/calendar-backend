@@ -202,6 +202,7 @@ class Bible
     public function run($zachalo = 'Притч. XV, 20 - XVI, 9.', $trans = null)
     {
         $zachalo = str_replace('–', '-', $zachalo);
+        $zachalo = str_replace('—', '-', $zachalo);
         if (strpos($zachalo, '@') !== false) {
             $z = str_replace("@", "", $zachalo);
             return [
