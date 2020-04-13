@@ -701,7 +701,7 @@ class Day
 
 
         if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
-            require_once('Data/static_sunday_troparion.php');
+            require('Data/static_sunday_troparion.php');
             if (!isset($dayData['prayers'])) {
                 var_dump(($dayData));
                 die();
