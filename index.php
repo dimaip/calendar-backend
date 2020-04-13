@@ -8,7 +8,13 @@ if (preg_match('/^\/clear-cache/', $_SERVER["REQUEST_URI"])) {
 
 if (preg_match('/^\/reading\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   include __DIR__ . '/bible.php';
-  list($zachalo, $translation) = explode('&translation=', urldecode($matches[1]));
+  $explodedUrl = explode('&translation=', urldecode($matches[1]));
+  $zachalo = $explodedUrl[0];
+  if (isset($explodedUrl[1])) {
+    $translation = $explodedUrl[1];
+  } else {
+    $translation = null;
+  }
   if ($translation === 'default') {
     $translation = null;
   }
