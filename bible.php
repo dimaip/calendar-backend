@@ -338,8 +338,9 @@ class Bible
             $prevVerseNo = false; // стихи бывают с ошибками, лучше подстраховаться, чтобы проверять корректность номеров
             foreach ($lines as $line) {
 
-                if (substr($line, 0, 3) !== '<p>')
+                if (substr($line, 0, 3) !== '<p>' || $line === '<p>') {
                     continue;
+                }
 
                 list($verseNo, $line) = explode(" ", substr($line, 3), 2); //$verseNo may be num or range 2-3
                 list($verseNoBegin, $verseNoEnd) = array_pad(explode('-', $verseNo), 2, null);
