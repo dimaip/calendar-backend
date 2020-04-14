@@ -179,12 +179,12 @@ class Day
         $saints = str_replace("#NSR", "", $saints);
         $saints = preg_replace('/(?:\r\n|\r|\n)/', '<br>', $saints);
         $saints = preg_replace('/#TP(.)/', '<img src="/assets/icons/$1.svg"/>', $saints);
-        $saints = str_replace('1.gif"', '1.gif" title="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
-        $saints = str_replace('2.gif"', '2.gif" title="Совершается служба на шесть"', $saints);
-        $saints = str_replace('3.gif"', '3.gif" title="Совершается служба со славословием"', $saints);
-        $saints = str_replace('4.gif"', '4.gif" title="Совершается служба с полиелеем"', $saints);
-        $saints = str_replace('5.gif"', '5.gif" title="Совершается всенощное бдение"', $saints);
-        $saints = str_replace('6.gif"', '6.gif" title="Совершается служба великому празднику"', $saints);
+        $saints = str_replace('1.svg"', '1.svg" alt="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
+        $saints = str_replace('2.svg"', '2.svg" alt="Совершается служба на шесть"', $saints);
+        $saints = str_replace('3.svg"', '3.svg" alt="Совершается служба со славословием"', $saints);
+        $saints = str_replace('4.svg"', '4.svg" alt="Совершается служба с полиелеем"', $saints);
+        $saints = str_replace('5.svg"', '5.svg" alt="Совершается всенощное бдение"', $saints);
+        $saints = str_replace('6.svg"', '6.svg" alt="Совершается служба великому празднику"', $saints);
 
         $saints = preg_replace_callback('#href="https://www.holytrinityorthodox.com/ru/calendar/los/(.*?).htm"#i', function ($matches) {
             $key = $matches[1];
