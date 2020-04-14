@@ -356,8 +356,9 @@ class Bible
                     $startPrintRegular = true;
                     $startPrintHidden = true;
                     $chapIdxsChapterRegular = true;
-                    if (!isset($chtenije[$chtenijeIdx]['verse_begin_optional']))
+                    if (!isset($chtenije[$chtenijeIdx]['verse_begin_optional'])) {
                         $startPrintOptional = true;
+                    }
                 }
 
                 if (
@@ -368,11 +369,17 @@ class Bible
                     $startPrintOptional = true;
                 }
 
-                if ($startPrintRegular && $startPrintOptional) $verseType = 'regular';
-                elseif ($startPrintRegular && !$startPrintOptional) $verseType = 'regularNotOptional';
-                elseif (!$startPrintRegular && $startPrintOptional) $verseType = 'optional';
-                elseif ($startPrintHidden) $verseType = 'hidden';
-                else $verseType = false;
+                if ($startPrintRegular && $startPrintOptional) {
+                    $verseType = 'regular';
+                } elseif ($startPrintRegular && !$startPrintOptional) {
+                    $verseType = 'regularNotOptional';
+                } elseif (!$startPrintRegular && $startPrintOptional) {
+                    $verseType = 'optional';
+                } elseif ($startPrintHidden) {
+                    $verseType = 'hidden';
+                } else {
+                    $verseType = false;
+                }
 
                 if ($verseType) {
                     $chapter['verses'][] = [
