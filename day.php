@@ -179,7 +179,8 @@ class Day
         $saints = str_replace("#NSR", "", $saints);
         $saints = preg_replace('/(?:\r\n|\r|\n)/', '<br>', $saints);
         $saints = preg_replace('/#TP(.)/', '<img src="/assets/icons/$1.svg"/>', $saints);
-        $saints = str_replace('0.svg"', '0.svg" alt="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
+        $saints = str_replace('o.svg"', 'o.svg" alt="Без знака"', $saints);
+        $saints = str_replace('0.svg"', '0.svg" alt="Без знака"', $saints);
         $saints = str_replace('1.svg"', '1.svg" alt="Cовершается служба, не отмеченная в Типиконе никаким знаком"', $saints);
         $saints = str_replace('2.svg"', '2.svg" alt="Совершается служба на шесть"', $saints);
         $saints = str_replace('3.svg"', '3.svg" alt="Совершается служба со славословием"', $saints);
