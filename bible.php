@@ -31,6 +31,7 @@ function do_reg($text, $regex)
 class Bible
 {
     protected $activeTransName = null;
+    protected $returnHidden = false;
 
     protected function getFragments($title)
     {
@@ -383,7 +384,7 @@ class Bible
                     $verseType = false;
                 }
 
-                if ($verseType) {
+                if ($verseType && ($verseType !== 'hidden' || $this->returnHidden)) {
                     $chapter['verses'][] = [
                         'verse' => $verseNo,
                         'type' => $verseType,
@@ -420,7 +421,9 @@ class Bible
 
             $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
 
-            $fragments[] = $chapter;
+
+            if($chapter['type'] !== 'hidden' || $this->returnHidden)
+                $fragments[] = $chapter;
         }
 
         $jsonArray = [
