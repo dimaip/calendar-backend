@@ -416,7 +416,7 @@ class Bible
                 }
             }
 
-            $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
+            $chapter['type'] = 'regular';
 
             $fragments[] = $chapter;
         }
