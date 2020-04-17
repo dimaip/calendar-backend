@@ -131,6 +131,8 @@ class Bible
                 $text = str_replace("<br>\n", ' ', $text);
                 $text = preg_replace('/<bqverse ([0-9]{1,3})>([0-9]{1,3})/', '<p>$1', $text);
                 $text = preg_replace('/<bqchapter ([0-9]{1,3})>/', '<bqchapter $1>Chapter $1', $text);
+                $text = preg_replace('/<A NAME="([0-9]{1,3})"><b>/', '', $text);
+                $text = preg_replace('/<p><i>.+?<\/i>/', '', $text);
                 break;
         }
     }
@@ -384,11 +386,12 @@ class Bible
                     $verseType = false;
                 }
 
-                if ($verseType && ($verseType !== 'hidden' || $this->returnHidden)) {
+                $verseText = trim(strip_tags($line));
+                if ($verseText && $verseType && ($verseType !== 'hidden' || $this->returnHidden)) {
                     $chapter['verses'][] = [
                         'verse' => $verseNo,
                         'type' => $verseType,
-                        'text' => trim(strip_tags($line))
+                        'text' =>  $verseText
                     ];
                 }
 
