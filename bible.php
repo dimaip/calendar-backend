@@ -323,12 +323,14 @@ class Bible
         $startPrintRegular = false;
         $startPrintHidden = false;
         $startPrintOptional = false;
+        $chapIdxsChapterRegular = false;
         if (trim($printChapterBegin) > trim($printChapterEnd)) {
             throw new Exception("printChapterBegin ($printChapterBegin) is bigger than printChapterEnd($printChapterEnd)");
         }
 
         for ($chapIdx = trim($printChapterBegin); $chapIdx <= $printChapterEnd; $chapIdx++) {
-            $chapIdxsChapterRegular = false;
+            if (!($chapIdxsChapterRegular && $startPrintRegular))
+                $chapIdxsChapterRegular = false;
             $chapter = [
                 'chapter' => $chapIdx,
                 'verses' => []
@@ -416,7 +418,7 @@ class Bible
                 }
             }
 
-            $chapter['type'] = 'regular';
+            $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
 
             $fragments[] = $chapter;
         }
