@@ -426,8 +426,9 @@ class Bible
             $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
 
 
-            if($chapter['type'] !== 'hidden' || $this->returnHidden)
+            if($chapter['type'] !== 'hidden' || $this->returnHidden) {
                 $fragments[] = $chapter;
+            }
         }
 
         $jsonArray = [
