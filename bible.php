@@ -32,6 +32,16 @@ class Bible
 {
     protected $activeTransName = null;
     protected $returnHidden = false;
+    public $tryUseTestBibleFiles = false;
+
+    protected function getBibleFilePath($filePath)
+    {
+        if ($this->tryUseTestBibleFiles && file_exists(__DIR__ . '/tests/bible/' . $filePath)) {
+            return __DIR__ . '/tests/bible/' . $filePath;
+        } else {
+            return __DIR__ . '/bible/' . $filePath;
+        }
+    }
 
     protected function getFragments($title)
     {
@@ -82,7 +92,7 @@ class Bible
         asort($dir);
         foreach ($dir as $folder) {
             if (!(($folder == '.') || ($folder == '..') || ($folder == '.git'))) {
-                $settings = file("bible/" . $folder . "/bibleqt.ini");
+                $settings = file($this->getBibleFilePath($folder . "/bibleqt.ini"));
 
                 foreach ($settings as $key => $setting) {
                     $comm = preg_match('{^\s*//}', $setting);
@@ -270,7 +280,7 @@ class Bible
         $trans = $trans ? $trans : $avail_trans['0']['id'];
         $this->activeTransName = $this->activeTransName ? $this->activeTransName : $avail_trans['0']['name'];
 
-        $settings = file("bible/" . $trans . "/bibleqt.ini");
+        $settings = file($this->getBibleFilePath($trans . "/bibleqt.ini"));
 
         foreach ($settings as $key => $setting) {
             $comm = preg_match('{^\s*//}', $setting);
@@ -309,8 +319,7 @@ class Bible
                 }
             }
         }
-        $filepath = __DIR__ . '/bible/' . $trans . '/' . $path;
-        $text = file_get_contents($filepath);
+        $text = file_get_contents($this->getBibleFilePath($trans . '/' . $path));
 
         self::translationPrepare('ALL', $text);
         self::translationPrepare(substr($trans, 1), $text);
@@ -321,6 +330,7 @@ class Bible
         }
 
         $fragments = [];
+        $versesGlobalCount = 0;
 
         $chtenijeIdx = 0;
         $startPrintRegular = false;
@@ -392,7 +402,7 @@ class Bible
                     $chapter['verses'][] = [
                         'verse' => $verseNo,
                         'type' => $verseType,
-                        'text' =>  $verseText
+                        'text' => $verseText
                     ];
                 }
 
@@ -426,9 +436,18 @@ class Bible
             $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
 
 
-            if($chapter['type'] !== 'hidden' || $this->returnHidden) {
+            if ($chapter['type'] !== 'hidden' || $this->returnHidden) {
                 $fragments[] = $chapter;
+                $versesGlobalCount += count($chapter['verses']);
             }
+        }
+
+        if($startPrintRegular=== true) {
+            throw new Exception("Verse hasn't end point");
+        }
+
+        if($versesGlobalCount=== 0) {
+            throw new Exception("Fragments haven't any verses");
         }
 
         $jsonArray = [

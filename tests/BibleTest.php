@@ -17,12 +17,19 @@ class BibleTest extends TestCase
     {
         require_once __DIR__ . '/../bible.php';
         $bible = new Bible;
+        $bible->tryUseTestBibleFiles = true;
         $zachalo = $reading ?? null;
         if ($translation === 'default') {
             $translation = null;
         }
 
-        $result = $bible->run($zachalo, $translation);
+        try {
+            $result = $bible->run($zachalo, $translation);
+        } catch (Exception $e) {
+            $this->assertMatchesTextSnapshot('Exception: ' . $e->getMessage());
+            return;
+        }
+
         $this->assertMatchesTextSnapshot(json_encode($result['fragments'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
 
