@@ -1,0 +1,49 @@
+[
+    {
+        "chapter": "25",
+        "verses": [
+            {
+                "verse": "8",
+                "type": "regular",
+                "text": "he will swallow up death permanently.  The sovereign LORD will wipe away the tears from every face, and remove his people's disgrace from all the earth. Indeed, the LORD has announced it."
+            },
+            {
+                "verse": "9",
+                "type": "regular",
+                "text": "At that time they will say, \"Look, here is our God! We waited for him and he delivered us. Here is the LORD! We waited for him. Let's be happy and celebrate his deliverance!\""
+            },
+            {
+                "verse": "10",
+                "type": "regular",
+                "text": "For the LORD's power will make this mountain secure. Moab will be trampled down where it stands,  as a heap of straw is trampled down in a manure pile."
+            },
+            {
+                "verse": "11",
+                "type": "regular",
+                "text": "Moab will spread out its hands in the middle of it, just as a swimmer spreads his hands to swim;  the LORD will bring down Moab's pride as it spreads its hands."
+            },
+            {
+                "verse": "12",
+                "type": "regular",
+                "text": "The fortified city (along with the very tops of your walls) he will knock down, he will bring it down, he will throw it down to the dusty ground."
+            }
+        ],
+        "type": "regular"
+    },
+    {
+        "chapter": 26,
+        "verses": [
+            {
+                "verse": "1",
+                "type": "regular",
+                "text": "At that time this song will be sung in the land of Judah: \"We have a strong city! The LORD's deliverance, like walls and a rampart, makes it secure."
+            },
+            {
+                "verse": "2",
+                "type": "regular",
+                "text": "Open the gates so a righteous nation can enter-- one that remains trustworthy."
+            }
+        ],
+        "type": "regular"
+    }
+]
