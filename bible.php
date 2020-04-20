@@ -332,8 +332,9 @@ class Bible
         }
 
         for ($chapIdx = trim($printChapterBegin); $chapIdx <= $printChapterEnd; $chapIdx++) {
-            if (!($chapIdxsChapterRegular && $startPrintRegular))
+            if (!($chapIdxsChapterRegular && $startPrintRegular)) {
                 $chapIdxsChapterRegular = false;
+            }
             $chapter = [
                 'chapter' => $chapIdx,
                 'verses' => []
@@ -425,8 +426,9 @@ class Bible
             $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
 
 
-            if($chapter['type'] !== 'hidden' || $this->returnHidden)
+            if($chapter['type'] !== 'hidden' || $this->returnHidden) {
                 $fragments[] = $chapter;
+            }
         }
 
         $jsonArray = [
