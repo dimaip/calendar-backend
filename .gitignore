@@ -1,6 +1,6 @@
 Data/cache_*
 Data/processed
-bible
+/bible
 
 /vendor/
 /.idea
