@@ -32,11 +32,19 @@ class Bible
 {
     protected $activeTransName = null;
     protected $returnHidden = false;
-    public $tryUseTestBibleFiles = false;
+    public $useTestBibleFiles = false;
 
     protected function getBibleFilePath($filePath)
     {
-        if ($this->tryUseTestBibleFiles && file_exists(__DIR__ . '/tests/bible/' . $filePath)) {
+        if ($this->useTestBibleFiles) {
+            if (!file_exists(__DIR__ . '/tests/bible/' . $filePath)) {
+                if (!file_exists(dirname(__DIR__ . '/tests/bible/' . $filePath))) {
+                    mkdir(dirname(__DIR__ . '/tests/bible/' . $filePath), 0755, true);
+                }
+                if (!copy(__DIR__ . '/bible/' . $filePath, __DIR__ . '/tests/bible/' . $filePath)) {
+                    throw new Exeption("Can't copy file 'bible/$filePath' to 'tests/bible/$filePath'");
+                }
+            }
             return __DIR__ . '/tests/bible/' . $filePath;
         } else {
             return __DIR__ . '/bible/' . $filePath;
@@ -442,11 +450,11 @@ class Bible
             }
         }
 
-        if($startPrintRegular=== true) {
+        if ($startPrintRegular === true) {
             throw new Exception("Verse hasn't end point");
         }
 
-        if($versesGlobalCount=== 0) {
+        if ($versesGlobalCount === 0) {
             throw new Exception("Fragments haven't any verses");
         }
 

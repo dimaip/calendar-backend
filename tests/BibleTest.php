@@ -17,7 +17,7 @@ class BibleTest extends TestCase
     {
         require_once __DIR__ . '/../bible.php';
         $bible = new Bible;
-        $bible->tryUseTestBibleFiles = true;
+        $bible->useTestBibleFiles = true;
         $zachalo = $reading ?? null;
         if ($translation === 'default') {
             $translation = null;
