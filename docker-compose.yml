@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+    calendar-backend:
+        image: dimaip/calendar-backend:latest
+        hostname: 'calendar-backend'
+        networks:
+            - main
+        ports:
+            - '80'
+        deploy:
+            labels:
+                - 'traefik.enable=true'
+                - 'traefik.port=80'
+                - 'traefik.default.protocol=http'
+                - 'traefik.docker.network=main'
+                - 'traefik.frontend.rule=Host:api.c.psmb.ru'
+networks:
+    main:
+        external:
+            name: main
