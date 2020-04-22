@@ -362,7 +362,7 @@ class Bible
             $prevVerseNo = false; // стихи бывают с ошибками, лучше подстраховаться, чтобы проверять корректность номеров
             foreach ($lines as $line) {
 
-                if (substr($line, 0, 3) !== '<p>' || $line === '<p>') {
+                if (substr($line, 0, 3) !== '<p>' || trim($line) === '<p>') {
                     continue;
                 }
 
