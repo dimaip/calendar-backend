@@ -1,0 +1,58 @@
+[
+    {
+        "chapter": "1",
+        "verses": [
+            {
+                "verse": "1",
+                "type": "regular",
+                "text": "This is the LORD's message that was given\n to Joel the son of Pethuel:"
+            },
+            {
+                "verse": "2",
+                "type": "regular",
+                "text": "Listen to this, you elders,\n and pay attention, all inhabitants of the land.\n Did anything like this ever happen in your days\n or in the days of your ancestors?"
+            },
+            {
+                "verse": "3",
+                "type": "regular",
+                "text": "Tell your children about it,\n and have your children tell their children,\n and their children the following generation."
+            },
+            {
+                "verse": "4",
+                "type": "regular",
+                "text": "What the gazam-locust left the `arbeh-locust consumed,\n and what the `arbeh-locust left the yeleq-locust consumed,\n and what the yeleq-locust left the hasil-locust consumed."
+            },
+            {
+                "verse": "5",
+                "type": "regular",
+                "text": "Awake, you drunkards, and weep!\n Wail, all you wine drinkers,\n because of the sweet wine,\n for it is removed from your mouth."
+            },
+            {
+                "verse": "6",
+                "type": "regular",
+                "text": "For a nation has come up against my land,\n a nation powerful and too many to count.\n Its teeth are those of a lion;\n its incisors are those of a lioness."
+            },
+            {
+                "verse": "7",
+                "type": "regular",
+                "text": "It has desolated my vines;\n my fig trees it has left in splinters.\n It has stripped them completely bare and thrown them aside.\n Their twigs are left whitened by exposure."
+            },
+            {
+                "verse": "8",
+                "type": "regular",
+                "text": "Wail like a young virgin clothed in sackcloth,\n because of the death of her husband-to-be."
+            },
+            {
+                "verse": "9",
+                "type": "regular",
+                "text": "Both the grain offering and the drink offering have been removed\n from the temple of the LORD.\n The priests, the attendants of the LORD, \n are engaged in mourning."
+            },
+            {
+                "verse": "10",
+                "type": "regular",
+                "text": "The fields have been utterly destroyed.\n The land is in mourning,\n because the grain has been destroyed.\n The fresh wine has dried up;\n the olive oil languishes in depletion."
+            }
+        ],
+        "type": "regular"
+    }
+]
