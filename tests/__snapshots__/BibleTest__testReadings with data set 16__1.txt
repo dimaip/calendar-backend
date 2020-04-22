@@ -1,0 +1,64 @@
+[
+    {
+        "chapter": "13",
+        "verses": [
+            {
+                "verse": "31",
+                "type": "regular",
+                "text": "When Judas had gone out, Jesus said, \"Now the Son of Man is glorified, and God is glorified in him."
+            },
+            {
+                "verse": "32",
+                "type": "regular",
+                "text": "If God is glorified in him, God will also glorify him in himself, and he will glorify him right away."
+            },
+            {
+                "verse": "33",
+                "type": "regular",
+                "text": "Children, I am still with you for a little while. You will look for me, and just as I said to the Jewish authorities, `Where I am going you cannot come,' now I tell you the same."
+            },
+            {
+                "verse": "34",
+                "type": "regular",
+                "text": "\"I give you a new commandment--to love one another. Just as I have loved you, you also are to love one another."
+            },
+            {
+                "verse": "35",
+                "type": "regular",
+                "text": "Everyone will know by this that you are my disciples--if you have love for one another.\""
+            },
+            {
+                "verse": "36",
+                "type": "regular",
+                "text": "Simon Peter said to him, \"Lord, where are you going?\" Jesus replied, \"Where I am going, you cannot follow me now, but you will follow later.\""
+            },
+            {
+                "verse": "37",
+                "type": "regular",
+                "text": "Peter said to him, \"Lord, why can't I follow you now? I will lay down my life for you!\""
+            },
+            {
+                "verse": "38",
+                "type": "regular",
+                "text": "Jesus answered, \"Will you lay down your life for me? I tell you the solemn truth, the rooster will not crow until you have denied me three times!"
+            }
+        ],
+        "type": "regular"
+    },
+    {
+        "chapter": 14,
+        "verses": [
+            {
+                "verse": "1",
+                "type": "regular",
+                "text": "\"Do not let your hearts be distressed. You believe in God; believe also in me."
+            },
+            {
+                "verse": "2",
+                "type": "regular",
+                "text": "There are many dwelling places in my Father's house. Otherwise, I would have told you. I am going away to make ready a place for you."
+            }
+        ],
+        "type": "regular"
+    }
+]
