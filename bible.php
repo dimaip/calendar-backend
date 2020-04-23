@@ -133,6 +133,7 @@ class Bible
         switch ($translation) {
             case "ALL":
                 //$text = preg_replace('/<p>([0-9]{1,3})/','<p><sup>$1</sup>', $text);
+                $text = preg_replace('/<br\s*\/?>/', "%line-break%", $text);
                 $text = preg_replace('/<a.*?<\/a>/i', '', $text);
                 $text = html_entity_decode($text);
                 break;
@@ -146,8 +147,8 @@ class Bible
                 $text = preg_replace('/<sup>([0-9]{1,3})[-\x{2013}]([0-9]{1,3})<\/sup>/u', '<p>$1-$2', $text); // unicode minus
                 break;
             case "NET":
-                $text = str_replace("<br>\n", ' ', $text);
-                $text = preg_replace('/<bqverse ([0-9]{1,3})>([0-9]{1,3})/', '<p>$1', $text);
+                $text = str_replace("\n", ' ', $text);
+                $text = preg_replace('/<bqverse ([0-9]{1,3})>([0-9]{1,3})/', "\n<p>$1", $text);
                 $text = preg_replace('/<bqchapter ([0-9]{1,3})>/', '<bqchapter $1>Chapter $1', $text);
                 $text = preg_replace('/<A NAME="([0-9]{1,3})"><b>/', '', $text);
                 $text = preg_replace('/<p><i>.+?<\/i>/', '', $text);
@@ -407,10 +408,11 @@ class Bible
 
                 $verseText = trim(strip_tags($line));
                 if ($verseText && $verseType && ($verseType !== 'hidden' || $this->returnHidden)) {
+                    $verseText = str_replace('%line-break%', "\n", $verseText);
                     $chapter['verses'][] = [
                         'verse' => $verseNo,
                         'type' => $verseType,
-                        'text' => $verseText
+                        'text' => trim($verseText)
                     ];
                 }
 
