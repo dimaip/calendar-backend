@@ -3,6 +3,15 @@ require_once('init.php');
 require_once('functions.php');
 require_once('bible.php');
 
+function styleHtml($text)
+{
+    return str_replace(
+        ['<h1>', '</h1>', '<h2>', '</h2>', '<h3>', '</h3>', '<p>', '</p>', '<strong>', '</strong>', '<blockquote>', '</blockquote>', '<code>', '</code>', '<del>', '</del>'],
+        ['<h1 class="_-ОСНОВНОЙ_Имя-Службы">', '</h1>', '<h2 class="_-ОСНОВНОЙ_Имя-РаздСл">', '</h2>', '<h3 class="_-ОСНОВНОЙ_Имя-части-отст5">', '</h3>', '<p class="_-ОСНОВНОЙ_Основной-отст1-5">', '</p>', '<span class="_-ВЫДЕЛЕНИЯ_КРАСНЫЙ">', '</span>', '<div class="_-ПЕТИТ_Петит-отст1-5">', '</div>', '<span class="_-ВЫДЕЛЕНИЯ_Чёрн-ПЕТИТ-в-осн">', '</span>', '<span class="_-ВЫДЕЛЕНИЯ_НАДИНДЕКС-красн CharOverride-1">', '</span>'],
+        $text
+    );
+}
+
 class Day
 {
     protected $isDebug = false;
@@ -16,10 +25,14 @@ class Day
     protected $skipRjadovoe;
     protected $noLiturgy;
     protected $dayOfWeekNumber;
+    protected $parsedown;
+
+    function __construct()
+    {
+        $this->parsedown = new Parsedown();
+    }
 
     protected $dayOfWeekNames = ['воскресение', 'понедельник', 'вторник', 'среду', 'четверг', 'пятницу', 'субботу'];
-
-    protected $liturgyPartKeys = ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'];
 
     protected function getStaticData($datestamp)
     {
@@ -375,12 +388,22 @@ class Day
                 $data['readings']['На освящении воды'] = $mappedLine['На освящении воды'];
                 $data['prayers'] = $mappedLine['Тропари Литургия'];
                 $data['prayersOther'] = $mappedLine['Тропари Остальные'];
-                foreach ($this->liturgyPartKeys as $liturgyPartKey) {
-                    $fieldValue = $mappedLine[$liturgyPartKey];
-                    if (in_array($liturgyPartKey, ['Прокимен', 'Аллилуарий', 'Причастен'])) {
-                        $fieldValue = json_decode($fieldValue, true);
+                $groups = [
+                    'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'],
+                    'shared' => ['Отпуст Синаксарный'],
+                    'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах'],
+                    'matins' => ['Cтихиры на хвалите']
+                ];
+                foreach ($groups as $groupName => $group) {
+                    foreach ($group as $partKey) {
+                        $fieldValue = $mappedLine[$partKey];
+                        if (in_array($partKey, ['Прокимен', 'Аллилуарий', 'Причастен'])) {
+                            $fieldValue = json_decode($fieldValue, true);
+                        }
+                        if ($fieldValue) {
+                            $data['parts'][$groupName][$partKey] = $fieldValue;
+                        }
                     }
-                    $data['liturgyParts'][$liturgyPartKey] = $fieldValue;
                 }
                 if ($perehod) {
                     $this->perehod[$weekday][] = $data;
@@ -478,10 +501,29 @@ class Day
     protected function reduceDayData($dayDataEntries)
     {
         $result = smartMerge($dayDataEntries, ['saints', 'prayers', 'prayersOther'], ['week_title']);
-        $liturgyPartsEntries = array_map(function ($d) {
-            return $d['liturgyParts'] ?? [];
+
+        $partsEntries = array_map(function ($d) {
+            return $d['parts'] ?? [];
         }, $dayDataEntries);
-        $result['liturgyParts'] = smartMerge($liturgyPartsEntries);
+        $parts = [];
+
+
+        foreach ($partsEntries as $groups) {
+            foreach ($groups as $groupName => $group) {
+                foreach ($group as $partName => $part) {
+                    if (!isset($parts[$groupName][$partName])) {
+                        $parts[$groupName][$partName] = [];
+                    }
+                    if ($part) {
+                        if (is_string($part)) {
+                            $part = styleHtml($this->parsedown->text($part));
+                        }
+                        $parts[$groupName][$partName][] = $part;
+                    }
+                }
+            }
+        }
+        $result['parts'] = $parts;
         return $result;
     }
     /**
@@ -755,7 +797,7 @@ class Day
             "saints" => $this->processSaints($dayData['saints']) ?? null,
             "prayers" => $dayData['prayers'] ?? null,
             "prayersOther" => $dayData['prayersOther'] ?? null,
-            "liturgyParts" => $dayData['liturgyParts'],
+            "parts" => $dayData['parts'],
         ];
 
         return $jsonArray;
