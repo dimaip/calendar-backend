@@ -386,8 +386,10 @@ class Day
                 $data['readings']['6-й час'] = $mappedLine['6-й час'];
                 $data['readings']['9-й час'] = $mappedLine['9-й час'];
                 $data['readings']['На освящении воды'] = $mappedLine['На освящении воды'];
-                $data['prayers'] = $mappedLine['Тропари Литургия'];
-                $data['prayersOther'] = $mappedLine['Тропари Остальные'];
+                $data['troparions'] = $mappedLine['Тропари'];
+                $data['kondacs'] = $mappedLine['Кондаки'];
+                $data['velichanija'] = $mappedLine['Величания'];
+                $data['eksopostilarii'] = $mappedLine['Эксапостиларии'];
                 $groups = [
                     'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'],
                     'shared' => ['Отпуст Синаксарный'],
@@ -500,7 +502,7 @@ class Day
     // Flatten $dayDataEntries
     protected function reduceDayData($dayDataEntries)
     {
-        $result = smartMerge($dayDataEntries, ['saints', 'prayers', 'prayersOther'], ['week_title']);
+        $result = smartMerge($dayDataEntries, ['saints', 'troparions', 'kondacs', 'velichanija', 'eksopostilarii'], ['week_title']);
 
         $partsEntries = array_map(function ($d) {
             return $d['parts'] ?? [];
@@ -746,14 +748,14 @@ class Day
 
         if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             require('Data/static_sunday_troparion.php');
-            if (!isset($dayData['prayers'])) {
+            if (!isset($dayData['troparions'])) {
                 var_dump(($dayData));
                 die();
             }
-            if ($dayData['prayers'] && $sunday_troparion[$glas]) {
-                $dayData['prayers'] .= "<br/>";
+            if ($dayData['troparions'] && $sunday_troparion[$glas]) {
+                $dayData['troparions'] .= "<br/>";
             }
-            $dayData['prayers'] .= $sunday_troparion[$glas];
+            $dayData['troparions'] .= $sunday_troparion[$glas];
         }
 
 
@@ -795,8 +797,10 @@ class Day
             "readings" => $staticData['readings'] ?? $this->processReadings($dayDataEntries) ?? null,
             'bReadings' => $this->getBReadings($dateStamp),
             "saints" => $this->processSaints($dayData['saints']) ?? null,
-            "prayers" => $dayData['prayers'] ?? null,
-            "prayersOther" => $dayData['prayersOther'] ?? null,
+            "troparions"  => $dayData['troparions'] ?? null,
+            "kondacs"  => $dayData['kondacs'] ?? null,
+            "velichanija"  => $dayData['velichanija'] ?? null,
+            "eksopostilarii" => $dayData['eksopostilarii'] ?? null,
             "parts" => $dayData['parts'],
         ];
 
