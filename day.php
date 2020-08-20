@@ -3,7 +3,9 @@ require_once('init.php');
 require_once('functions.php');
 require_once('bible.php');
 
-mkdir('Data/cache', 0755, true);
+if (!file_exists('Data/cache')) {
+    mkdir('Data/cache', 0755, true);
+}
 
 function styleHtml($text)
 {
