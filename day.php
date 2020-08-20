@@ -12,6 +12,38 @@ function styleHtml($text)
     );
 }
 
+function getAirtable($tableName)
+{
+    $url = "https://api.airtable.com/v0/appIcQPSHee2jKadk/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
+    $filename = 'Data/cache/' . md5($url);
+
+    if (file_exists($filename)) {
+        $content = file_get_contents($filename);
+        $records = json_decode($content, true);
+    } else {
+        $offset = null;
+        $records = [];
+        // Go through pagination and accumulate all records
+        do {
+            $content = file_get_contents($url .  ($offset ? '&offset=' . $offset : ''), false, stream_context_create([
+                'http' => [
+                    'method' => "GET",
+                    // This is the read-only key, it's safe to expose it publicly
+                    'header' => "Authorization: Bearer keygUv0FLzqXCLjvt\r\n"
+                ]
+            ]));
+            $data = json_decode($content, true);
+            $newRecords = array_map(function ($record) {
+                return $record['fields'];
+            }, $data['records']);
+            $records = array_merge($records, $newRecords);
+            $offset = $data['offset'] ?? null;
+        } while ($offset);
+        file_put_contents($filename, json_encode($records));
+    }
+    return $records;
+}
+
 class Day
 {
     protected $isDebug = false;
@@ -353,68 +385,48 @@ class Day
 
     protected function getDayData($perehod)
     {
-        $googleUrl = 'https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=0AnIrRiVoiOUSdENKckd0Vm1RbVhUMGVOQWNIZUNBUmc&single=true&output=csv&gid=';
-        $filename = 'Data/cache_' . ($perehod ? 'perehod' : 'neperehod') . '.csv';
-        $gid = $perehod ? 4 : 0;
-        if ($this->isDebug) {
-            unlink($filename);
-        }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        $indexes = null;
-        while (($line = fgetcsv($file)) !== FALSE) {
-            if (!$indexes) {
-                $indexes = $line;
-            } else {
-                $mappedLine = [];
-                foreach ($line as $index => $cell) {
-                    $key = $indexes[$index];
-                    $mappedLine[$key] = $cell;
-                }
-                $weekday = $mappedLine['Дата'];
-                $data = [];
-                $data['week_title'] = $mappedLine['Неделя'];
-                $data['saints'] = $mappedLine['Святые'];
-                $data['reading_title'] = $mappedLine['Заглавие чтения'];
-                $data['readings']['Утреня'] = $mappedLine['Утреня'];
-                $data['readings']['Литургия'] = $mappedLine['Литургия'];
-                $data['readings']['Вечерня'] = $mappedLine['Вечерня'];
-                $data['readings']['1-й час'] = $mappedLine['1-й час'];
-                $data['readings']['3-й час'] = $mappedLine['3-й час'];
-                $data['readings']['6-й час'] = $mappedLine['6-й час'];
-                $data['readings']['9-й час'] = $mappedLine['9-й час'];
-                $data['readings']['На освящении воды'] = $mappedLine['На освящении воды'];
-                $data['troparions'] = $mappedLine['Тропари'];
-                $data['kondacs'] = $mappedLine['Кондаки'];
-                $data['velichanija'] = $mappedLine['Величания'];
-                $data['eksopostilarii'] = $mappedLine['Эксапостиларии'];
-                $groups = [
-                    'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'],
-                    'shared' => ['Отпуст Синаксарный'],
-                    'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах'],
-                    'matins' => ['Cтихиры на хвалите']
-                ];
-                foreach ($groups as $groupName => $group) {
-                    foreach ($group as $partKey) {
-                        $fieldValue = $mappedLine[$partKey];
-                        if (in_array($partKey, ['Прокимен', 'Аллилуарий', 'Причастен'])) {
-                            $fieldValue = json_decode($fieldValue, true);
-                        }
-                        if ($fieldValue) {
-                            $data['parts'][$groupName][$partKey] = $fieldValue;
-                        }
+        $airtableData = getAirtable($perehod ? "Переходящие" : "Непереходящие");
+        foreach ($airtableData as $line) {
+            $weekday = $line['Дата'];
+            $data = [];
+            $data['week_title'] = $line['Неделя'] ?? '';
+            $data['saints'] = $line['Святые'] ?? '';
+            $data['reading_title'] = $line['Заглавие чтения'] ?? '';
+            $data['readings']['Утреня'] = $line['Утреня'] ?? '';
+            $data['readings']['Литургия'] = $line['Литургия'] ?? '';
+            $data['readings']['Вечерня'] = $line['Вечерня'] ?? '';
+            $data['readings']['1-й час'] = $line['1-й час'] ?? '';
+            $data['readings']['3-й час'] = $line['3-й час'] ?? '';
+            $data['readings']['6-й час'] = $line['6-й час'] ?? '';
+            $data['readings']['9-й час'] = $line['9-й час'] ?? '';
+            $data['readings']['На освящении воды'] = $line['На освящении воды'] ?? '';
+            $data['troparions'] = $line['Тропари'] ?? '';
+            $data['kondacs'] = $line['Кондаки'] ?? '';
+            $data['velichanija'] = $line['Величания'] ?? '';
+            $data['eksopostilarii'] = $line['Эксапостиларии'] ?? '';
+            $groups = [
+                'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'],
+                'shared' => ['Отпуст Синаксарный'],
+                'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах'],
+                'matins' => ['Cтихиры на хвалите']
+            ];
+            foreach ($groups as $groupName => $group) {
+                foreach ($group as $partKey) {
+                    $fieldValue = $line[$partKey] ?? '';
+                    if (in_array($partKey, ['Прокимен', 'Аллилуарий', 'Причастен'])) {
+                        $fieldValue = json_decode($fieldValue, true);
+                    }
+                    if ($fieldValue) {
+                        $data['parts'][$groupName][$partKey] = $fieldValue;
                     }
                 }
-                if ($perehod) {
-                    $this->perehod[$weekday][] = $data;
-                } else {
-                    $this->neperehod[$weekday][] = $data;
-                }
+            }
+            if ($perehod) {
+                $this->perehod[$weekday][] = $data;
+            } else {
+                $this->neperehod[$weekday][] = $data;
             }
         }
-        fclose($file);
     }
 
     protected function init($date)
