@@ -103,9 +103,13 @@ class Day
         } else if ($currentDayNumber == $dayNumber) {
             if ($noJumpIfSameDay == 0) {
                 $shiftToDay = 7;
+            } else {
+                $shiftToDay = 0;
             }
         } else if ($currentDayNumber > $dayNumber) {
             $shiftToDay = 7 - $currentDayNumber + $dayNumber;
+        } else {
+            $shiftToDay = 0;
         }
         $day_after = strtotime('+' . $shiftToDay . ' day', $day_stamp);
         return $day_after;
