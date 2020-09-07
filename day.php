@@ -198,7 +198,9 @@ class Day
     {
         $reading_array = [];
         $d_stamp = strtotime('-13days', $dateStamp); //date stamp, OC
-
+        if (!$this->neperehod) {
+            return [];
+        }
         foreach ($this->neperehod as $key => $value) {
             $res_key = $this->getKey($key, $d_stamp);
             if ($res_key == date('d/m', $d_stamp)) {
@@ -387,12 +389,19 @@ class Day
         return $skipRjadovoe;
     }
 
-    protected function getDayData($perehod)
+    protected function getDayData($perehod, $lang)
     {
         $airtableData = getAirtable($perehod ? "Переходящие" : "Непереходящие");
         foreach ($airtableData as $line) {
             $weekday = $line['Дата'];
             $data = [];
+            $langMap = [
+                'csj' => 'Цся',
+                'ru' => 'Рус',
+            ];
+            if ($line['Язык'] !== $langMap[$lang]) {
+                continue;
+            }
             $data['week_title'] = $line['Неделя'] ?? '';
             $data['saints'] = $line['Святые'] ?? '';
             $data['reading_title'] = $line['Заглавие чтения'] ?? '';
@@ -404,22 +413,15 @@ class Day
             $data['readings']['6-й час'] = $line['6-й час'] ?? '';
             $data['readings']['9-й час'] = $line['9-й час'] ?? '';
             $data['readings']['На освящении воды'] = $line['На освящении воды'] ?? '';
-            $data['troparions'] = $line['Тропари'] ?? '';
-            $data['kondacs'] = $line['Кондаки'] ?? '';
-            $data['velichanija'] = $line['Величания'] ?? '';
-            $data['eksopostilarii'] = $line['Эксапостиларии'] ?? '';
             $groups = [
                 'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'],
-                'shared' => ['Отпуст Синаксарный'],
+                'shared' => ['Отпуст Синаксарный', 'Тропари', 'Кондаки', 'Величания', 'Эксапостиларии'],
                 'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах'],
                 'matins' => ['Cтихиры на хвалите']
             ];
             foreach ($groups as $groupName => $group) {
                 foreach ($group as $partKey) {
                     $fieldValue = $line[$partKey] ?? '';
-                    if (in_array($partKey, ['Прокимен', 'Аллилуарий', 'Причастен'])) {
-                        $fieldValue = json_decode($fieldValue, true);
-                    }
                     if ($fieldValue) {
                         $data['parts'][$groupName][$partKey] = $fieldValue;
                     }
@@ -433,15 +435,15 @@ class Day
         }
     }
 
-    protected function init($date)
+    protected function init($date, $lang)
     {
         if (!file_exists('Data')) {
             mkdir('Data', 0777, true);
         }
         $googleUrl = 'https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=0AnIrRiVoiOUSdENKckd0Vm1RbVhUMGVOQWNIZUNBUmc&single=true&output=csv&gid=';
 
-        $this->getDayData(true);
-        $this->getDayData(false);
+        $this->getDayData(true, $lang);
+        $this->getDayData(false, $lang);
 
         $filename = 'Data/cache_zachala_apostol.csv';
         $gid = 3;
@@ -518,7 +520,7 @@ class Day
     // Flatten $dayDataEntries
     protected function reduceDayData($dayDataEntries)
     {
-        $result = smartMerge($dayDataEntries, ['saints', 'troparions', 'kondacs', 'velichanija', 'eksopostilarii'], ['week_title']);
+        $result = smartMerge($dayDataEntries, ['saints'], ['week_title']);
 
         $partsEntries = array_map(function ($d) {
             return $d['parts'] ?? [];
@@ -548,12 +550,20 @@ class Day
      * @param string $date
      * @return string
      */
-    public function run($date = null)
+    public function parts($date = null, $lang = 'ru')
+    {
+        return $this->run($date, $lang, true);
+    }
+    /**
+     * @param string $date
+     * @return string
+     */
+    public function run($date = null, $lang = 'ru', $isParts = false)
     {
         $debug = '';
         if (!$date)
             $date = date('Ymd');
-        $this->init($date);
+        $this->init($date, $lang);
 
         $date = date('Ymd', strtotime("-13 days", strtotime($date)));
         $dateStampO = strtotime($date);
@@ -697,7 +707,6 @@ class Day
         } else {
             $dayDataEntries = array_merge($perehods, $neperehodArray);
         }
-
         $dayData = $this->reduceDayData($dayDataEntries);
 
         $saintsThisDay = trim($this->saints[date('d/m', $dateStampO)]);
@@ -764,14 +773,7 @@ class Day
 
         if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             require('Data/static_sunday_troparion.php');
-            if (!isset($dayData['troparions'])) {
-                var_dump(($dayData));
-                die();
-            }
-            if ($dayData['troparions'] && $sunday_troparion[$glas]) {
-                $dayData['troparions'] .= "<br/>";
-            }
-            $dayData['troparions'] .= $sunday_troparion[$glas];
+            $dayData['parts']['shared']['Тропари'][] = $sunday_troparion[$glas][$lang];
         }
 
 
@@ -806,6 +808,10 @@ class Day
         //     $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
         // }
 
+        if ($isParts) {
+            return $dayData['parts'];
+        }
+
         $jsonArray = [
             "title" => $this->processWeekTitle($dayData['week_title'], $week, $weekOld) ?? null,
             "glas" => $glas ?? null,
@@ -813,11 +819,6 @@ class Day
             "readings" => $staticData['readings'] ?? $this->processReadings($dayDataEntries) ?? null,
             'bReadings' => $this->getBReadings($dateStamp),
             "saints" => $this->processSaints($dayData['saints']) ?? null,
-            "troparions"  => $dayData['troparions'] ?? null,
-            "kondacs"  => $dayData['kondacs'] ?? null,
-            "velichanija"  => $dayData['velichanija'] ?? null,
-            "eksopostilarii" => $dayData['eksopostilarii'] ?? null,
-            "parts" => $dayData['parts'],
         ];
 
         return $jsonArray;

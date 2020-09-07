@@ -46,6 +46,16 @@ if (preg_match('/^\/readings\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   echo json_encode($result, JSON_PRETTY_PRINT);
 }
 
+if (preg_match('/^\/parts\/(.+)\/(.*)/', $_SERVER["REQUEST_URI"], $matches)) {
+  include __DIR__ . '/day.php';
+
+  $day = new Day;
+  $date = $matches[1] ?? null;
+  $lang = $matches[2] ?? 'ru';
+  $data = $day->parts($date, $lang);
+  echo json_encode($data, JSON_PRETTY_PRINT);
+}
+
 if (preg_match('/^\/day\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   include __DIR__ . '/day.php';
 
