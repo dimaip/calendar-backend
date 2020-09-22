@@ -403,7 +403,7 @@ class Day
                 'csj' => 'Цся',
                 'ru' => 'Рус',
             ];
-            if ($line['Язык'] !== $langMap[$lang]) {
+            if (!isset($line['Язык']) || $line['Язык'] !== $langMap[$lang]) {
                 continue;
             }
             $data['week_title'] = $line['Неделя'] ?? '';
@@ -696,12 +696,6 @@ class Day
                 $perehods[0]['readings']['Литургия'] = $ap . ";" . $gs;
         }
 
-
-        //OVERLAY SUNDAY MATINS
-        $mat['readings']['Утреня'] = $matinsZachalo;
-        $mat['reading_title'] = 'Воскресное евангелие';
-        $perehods[] = $mat;
-
         // Merge perehod and neperehod data entries for given day
         $neperehodArray = $this->getNeperehod($dateStamp);
         if (!$perehods) {
@@ -722,6 +716,13 @@ class Day
 
 
         $this->skipRjadovoe = $this->check_skipRjadovoe($dayData['saints']);
+
+        if (!$this->skipRjadovoe) {
+            //OVERLAY SUNDAY MATINS
+            $mat['readings']['Утреня'] = $matinsZachalo;
+            $mat['reading_title'] = 'Воскресное евангелие';
+            $perehods[] = $mat;
+        }
 
         //PERENOS CHTENIJ
         if (($this->dayOfWeekNumber != 0) && (!$this->skipRjadovoe)) { //not on Sunday, check for move forward
@@ -775,7 +776,7 @@ class Day
         }
 
 
-        if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
+        if (!$this->skipRjadovoe && $this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             require('Data/static_sunday_troparion.php');
             $dayData['parts']['shared']['Тропари'][] = $sunday_troparion[$glas][$lang];
         }
