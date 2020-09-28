@@ -397,6 +397,9 @@ class Day
     {
         $airtableData = getAirtable($perehod ? "Переходящие" : "Непереходящие");
         foreach ($airtableData as $line) {
+            if (!isset($line['Дата'])) {
+                continue;
+            }
             $weekday = $line['Дата'];
             $data = [];
             $langMap = [
