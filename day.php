@@ -724,7 +724,7 @@ class Day
             //OVERLAY SUNDAY MATINS
             $mat['readings']['Утреня'] = $matinsZachalo;
             $mat['reading_title'] = 'Воскресное евангелие';
-            $perehods[] = $mat;
+            array_unshift($dayDataEntries , $mat);
         }
 
         //PERENOS CHTENIJ
