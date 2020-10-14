@@ -62,5 +62,5 @@ if (preg_match('/^\/day\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   $day = new Day;
   $date = $matches[1] ?? null;
   $data = $day->run($date);
-  echo json_encode($data, JSON_PRETTY_PRINT);
+  echo json_encode($data, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
 }
