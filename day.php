@@ -11,7 +11,7 @@ function styleHtml($text)
 {
     return str_replace(
         ['<h1>', '</h1>', '<h2>', '</h2>', '<h3>', '</h3>', '<p>', '</p>', '<strong>', '</strong>', '<blockquote>', '</blockquote>', '<code>', '</code>', '<del>', '</del>'],
-        ['<h1 class="_-ОСНОВНОЙ_Имя-Службы">', '</h1>', '<h2 class="_-ОСНОВНОЙ_Имя-РаздСл">', '</h2>', '<h3 class="_-ОСНОВНОЙ_Имя-части-отст5">', '</h3>', '<p class="_-ОСНОВНОЙ_Основной-отст1-5">', '</p>', '<span class="_-ВЫДЕЛЕНИЯ_КРАСНЫЙ">', '</span>', '<div class="_-ПЕТИТ_Петит-отст1-5">', '</div>', '<span class="_-ВЫДЕЛЕНИЯ_Чёрн-ПЕТИТ-в-осн">', '</span>', '<span class="_-ВЫДЕЛЕНИЯ_НАДИНДЕКС-красн CharOverride-1">', '</span>'],
+        ['<h1 class="H1">', '</h1>', '<h2 class="H2">', '</h2>', '<h3 class="H3">', '</h3>', '<p class="P">', '</p>', '<span class="Red">', '</span>', '<div class="Petit">', '</div>', '<span class="PetitInline">', '</span>', '<span class="Super">', '</span>'],
         $text
     );
 }
