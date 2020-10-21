@@ -95,22 +95,31 @@ class Day
     protected function getDayAfter($date, $dayNumber = 1, $shTimes = 0, $noJumpIfSameDay = 0)
     {
         $day_stamp = strtotime($date);
-        $currentDayNumber = date('N', $day_stamp);
-        if ($currentDayNumber == 7)
-            $currentDayNumber = 0;
-        if ($currentDayNumber < $dayNumber) {
-            $shiftToDay = $dayNumber - $currentDayNumber;
-        } else if ($currentDayNumber == $dayNumber) {
-            if ($noJumpIfSameDay == 0) {
-                $shiftToDay = 7;
+        $currentDayNumber = date('w', $day_stamp);
+        if ($dayNumber === 'w') {
+            if ($currentDayNumber == 0) {
+                $shiftToDay = 1;
+            } else if ($currentDayNumber == 6) {
+                $shiftToDay = 2;
             } else {
                 $shiftToDay = 0;
             }
-        } else if ($currentDayNumber > $dayNumber) {
-            $shiftToDay = 7 - $currentDayNumber + $dayNumber;
         } else {
-            $shiftToDay = 0;
+            if ($currentDayNumber < $dayNumber) {
+                $shiftToDay = $dayNumber - $currentDayNumber;
+            } else if ($currentDayNumber == $dayNumber) {
+                if ($noJumpIfSameDay == 0) {
+                    $shiftToDay = 7;
+                } else {
+                    $shiftToDay = 0;
+                }
+            } else if ($currentDayNumber > $dayNumber) {
+                $shiftToDay = 7 - $currentDayNumber + $dayNumber;
+            } else {
+                $shiftToDay = 0;
+            }
         }
+
         $day_after = strtotime('+' . $shiftToDay . ' day', $day_stamp);
         return $day_after;
     }
@@ -118,10 +127,7 @@ class Day
     protected function getDayBefore($date, $dayNumber = 1, $shTimes = 0)
     {
         $day_stamp = strtotime($date);
-        $currentDayNumber = (int) date('N', $day_stamp);
-        if ($currentDayNumber == 7) {
-            $currentDayNumber = 0;
-        }
+        $currentDayNumber = (int) date('w', $day_stamp);
 
         if ($dayNumber === 'w') {
             if ($currentDayNumber == 0) {
@@ -173,13 +179,14 @@ class Day
             if (date('m', $d_stamp) == '12') //if december
                 $d_Y++;
         }
-        if (preg_match("/(\d\d\/\d\d)(.)?(\w)?#?(\d)?/u", $key, $out)) {
+        if (preg_match("/(\d\d\/\d\d)(.)?(\!?\w)?#?(\d)?/u", $key, $out)) {
             $shDateO = str_replace("/", "-", $out['1']) . "-" . $d_Y; //date, OC, with slashes
             $sh_sign = $out['2'] ?? null; //operation sign
             $shDayn = $out['3'] ?? null; //day number,0 - sunday
             $shTimes = $out['4'] ?? null;
             $shDateStamp = strtotime('+13 days', strtotime($shDateO)); //timestamp NC
             $shDate = date('d-m-Y', $shDateStamp); //NC date
+            $res_key = null;
             switch ($sh_sign) {
                 case '+':
                     $res_key = date('d/m', strtotime('-13 days', $this->getDayAfter($shDate, $shDayn, $shTimes))); //OC, key
@@ -189,6 +196,29 @@ class Day
                     break;
                 case '~':
                     $res_key = date('d/m', strtotime('-13 days', $this->getDayNearest($shDate, $shDayn))); //OC, key
+                    break;
+                case '=':
+                    $dayOfWeekNumber = date('w', $shDateStamp);
+                    // Negation
+                    if (isset($shDayn[0]) && $shDayn[0] === '!') {
+                        if ($shDayn[1] === 'w' ?
+                            // Not work day
+                            ($dayOfWeekNumber === '6' || $dayOfWeekNumber === '0') :
+                            // Not day number
+                            $dayOfWeekNumber !== $shDayn[1]
+                        ) {
+                            $res_key = date('d/m', strtotime($shDateO)); //OC, key
+                        }
+                    } else {
+                        if ($shDayn === 'w' ?
+                            // Work day
+                            ($dayOfWeekNumber !== '6' && $dayOfWeekNumber !== '0') :
+                            // Day number
+                            $dayOfWeekNumber === $shDayn
+                        ) {
+                            $res_key = date('d/m', strtotime($shDateO)); //OC, key
+                        }
+                    }
                     break;
                 case '':
                     $res_key = date('d/m', strtotime($shDateO)); //OC, key
@@ -207,7 +237,7 @@ class Day
         }
         foreach ($this->neperehod as $key => $value) {
             $res_key = $this->getKey($key, $d_stamp);
-            if ($res_key == date('d/m', $d_stamp)) {
+            if ($res_key && $res_key == date('d/m', $d_stamp)) {
                 foreach ($value as $v) {
                     $reading_array[] = $v;
                 }
@@ -400,8 +430,6 @@ class Day
             if (!isset($line['Дата'])) {
                 continue;
             }
-            $weekday = $line['Дата'];
-            $data = [];
             $langMap = [
                 'csj' => 'Цся',
                 'ru' => 'Рус',
@@ -409,6 +437,7 @@ class Day
             if (!isset($line['Язык']) || $line['Язык'] !== $langMap[$lang]) {
                 continue;
             }
+            $data = [];
             $data['week_title'] = $line['Неделя'] ?? '';
             $data['saints'] = $line['Святые'] ?? '';
             $data['reading_title'] = $line['Заглавие чтения'] ?? '';
@@ -434,10 +463,12 @@ class Day
                     }
                 }
             }
-            if ($perehod) {
-                $this->perehod[$weekday][] = $data;
-            } else {
-                $this->neperehod[$weekday][] = $data;
+            foreach (explode(',', $line['Дата']) as $weekday) {
+                if ($perehod) {
+                    $this->perehod[$weekday][] = $data;
+                } else {
+                    $this->neperehod[$weekday][] = $data;
+                }
             }
         }
     }
@@ -724,7 +755,7 @@ class Day
             //OVERLAY SUNDAY MATINS
             $mat['readings']['Утреня'] = $matinsZachalo;
             $mat['reading_title'] = 'Воскресное евангелие';
-            array_unshift($dayDataEntries , $mat);
+            array_unshift($dayDataEntries, $mat);
         }
 
         //PERENOS CHTENIJ
