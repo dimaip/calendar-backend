@@ -812,7 +812,7 @@ class Day
 
         if (!$this->skipRjadovoe && $this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             require('Data/static_sunday_troparion.php');
-            $dayData['parts']['shared']['Тропари'][] = $sunday_troparion[$glas][$lang];
+            array_unshift($dayData['parts']['shared']['Тропари'], $sunday_troparion[$glas][$lang]);
         }
 
 
