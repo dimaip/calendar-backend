@@ -811,8 +811,16 @@ class Day
 
 
         if (!$this->skipRjadovoe && $this->dayOfWeekNumber == 0 && $glas && $week != 8) {
+            if (!isset($dayData['parts']['shared']['Тропари'])) {
+                $dayData['parts']['shared']['Тропари'] = [];
+            }
+            if (!isset($dayData['parts']['shared']['Кондаки'])) {
+                $dayData['parts']['shared']['Кондаки'] = [];
+            }
             require('Data/static_sunday_troparion.php');
             array_unshift($dayData['parts']['shared']['Тропари'], $sunday_troparion[$glas][$lang]);
+            require('Data/static_sunday_kondac.php');
+            array_unshift($dayData['parts']['shared']['Кондаки'], $sunday_kondac[$glas][$lang]);
         }
 
 
