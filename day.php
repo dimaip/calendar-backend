@@ -830,40 +830,40 @@ class Day
         }
         $debug .= '<br/>пропуск рядового чтения:' . $this->skipRjadovoe;
 
-
-        // @TODO: bring back static data
-        $staticData = ['readings' => null];
-        // $staticData = $this->getStaticData($dateStamp);
-        // if ($staticData) {
-        //     $readings = '';
-        //     foreach ($staticData['readings'] as $serviceType => $readingGroup) {
-        //         $serviceType = $serviceType == 'Утр' ? 'Утреня' : $serviceType;
-        //         $serviceType = $serviceType == 'Лит' ? 'Литургия' : $serviceType;
-        //         $readings .= $serviceType . ": <ul>";
-        //         foreach ($readingGroup as $readingType => $reading) {
-        //             // TODO: check if this needs to be urlencoded
-        //             $readingStr = join(' ', preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $reading));
-        //             $readingType = $readingType == 'Рядовое' ? '' : $readingType . ": ";
-        //             $readings .= "<li>" . $readingType . str_replace('*', '', $readingStr) . "</li>";
-        //         }
-        //         $readings .= "</ul>";
-        //     }
-        //     if ($staticData['readings']) {
-        //         $dynamicData['readings'] = $readings;
-        //     }
-
-        //     $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
-        // }
-
         if ($isParts) {
             return $dayData['parts'];
+        }
+
+        $readings = $this->processReadings($dayDataEntries);
+
+        $staticData = $this->getStaticData($dateStamp);
+        if ($staticData) {
+            $staticReadings = [];
+            foreach ($staticData['readings'] as $serviceType => $readingGroup) {
+                $serviceType = $serviceType == 'Утр' ? 'Утреня' : $serviceType;
+                $serviceType = $serviceType == 'Лит' ? 'Литургия' : $serviceType;
+                foreach ($readingGroup as $readingType => $reading) {
+                    $readingType = $readingType == '' ? 'Рядовое' : $readingType;
+                    $readingType = str_replace('и за ', 'За ', $readingType);
+                    $reading = preg_replace('/(.*),$/i', '$1.', $reading);
+
+                    $staticReadings[$serviceType][$readingType] = array_merge($staticReadings[$serviceType][$readingType] ?? [], $reading);
+                }
+            }
+            if ($staticReadings["Литургия"]) {
+                $readings['Литургия'] = $staticReadings["Литургия"];
+            }
+            if ($staticReadings["Утреня"]) {
+                $readings['Утреня'] = $staticReadings["Утреня"];
+            }
+            // $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
         }
 
         $jsonArray = [
             "title" => $this->processWeekTitle($dayData['week_title'], $week, $weekOld) ?? null,
             "glas" => $glas ?? null,
             "lent" => $fast ?? null,
-            "readings" => $staticData['readings'] ?? $this->processReadings($dayDataEntries) ?? null,
+            "readings" => $readings ?? null,
             'bReadings' => $this->getBReadings($dateStamp),
             "saints" => $this->processSaints($dayData['saints']) ?? null,
         ];
