@@ -1,0 +1,25 @@
+{
+  "title": "Седмица 37-я по Пятидесятнице",
+  "glas": "3",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "Сретение Господа Нашего Иисуса Христа",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_2_25_32.html#z\">Лк., 8 зач., II, 25-32.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_evr_7_7_17.html#z\">Евр., 316 зач., VII, 7-17.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_2_22_40.html#z\">Лк., 7 зач., II, 22-40.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 8 зач., II, 25-32."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Евр., 316 зач., VII, 7-17.",
+        "Лк., 7 зач., II, 22-40."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Сретение Господне"
+  ]
+}

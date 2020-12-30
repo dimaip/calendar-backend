@@ -1,0 +1,33 @@
+{
+  "title": "Светлая седмица - сплошная",
+  "glas": "",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_1_15.html#z\">Лк., 50 зач., X, 1-15.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_deqn_3_11_16.html#z\">Деян., 8 зач., III, 11-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_3_22_33.html#z\">Ин., 11 зач., III, 22-33.</a> Ап.: <a href=\"https://days.pravoslavie.ru/bible/z_1-pet_5_6_14.html#z\">1 Пет., 63 зач., V, 6-14.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_6_7_13.html#z\">Мк., 23 зач., VI, 7-13.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 50 зач., X, 1-15."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Деян., 8 зач., III, 11-16.",
+        "Ин., 11 зач., III, 22-33."
+      ],
+      "Ап.": [
+        "1 Пет., 63 зач., V, 6-14.",
+        "Мк., 23 зач., VI, 7-13."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Апостол и евангелист Марк",
+    "Сильвестр Обнорский, Пошехонский, прп.",
+    "Василий Поляномерульский (Пояна-Мэрулуйский), прп.",
+    "Сергий (Рохлецов), протоиерей, сщмч.",
+    "Цареградская"
+  ]
+}

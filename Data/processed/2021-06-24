@@ -1,0 +1,38 @@
+{
+  "title": "Седмица 1-я по Пятидесятнице (сплошная)",
+  "glas": "7",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div>Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_21_15_25.html#z\">Ин., 67 зач., XXI, 15-25</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>. Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_rim_1_28_0_2_0_9.html#z\">Рим., 81 зач., I, 28 - II, 9.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_5_27_32.html#z\">Мф., 13 зач., V, 27-32.</a> Апп.: <a href=\"https://days.pravoslavie.ru/bible/z_deqn_11_19_26_11_29_30.html#z\">Деян., 28 зач., XI, 19-26, 29-30.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_16_21.html#z\">Лк., 51 зач., X, 16-21.</a></div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба в честь иконы Божией Матери, именуемой «Достойно есть», то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_lk_1_39_49_1_56_56.html#z\">Лк., 4 зач., I, 39-49, 56,</a> а на литургии - чтения дня и Богородицы: <a href=\"https://days.pravoslavie.ru/bible/z_flp_2_5_11.html#z\">Флп., 240 зач., II, 5-11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_38_42_11_27_28.html#z\">Лк., 54 зач., X, 38-42; XI, 27-28.</a> </div>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 67 зач., XXI, 15-25"
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Рим., 81 зач., I, 28 - II, 9.",
+        "Мф., 13 зач., V, 27-32."
+      ],
+      "Апп.": [
+        "Деян., 28 зач., XI, 19-26, 29-30.",
+        "Лк., 51 зач., X, 16-21."
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Лк., 4 зач., I, 39-49, 56,",
+      "Флп., 240 зач., II, 5-11.",
+      "Лк., 54 зач., X, 38-42; XI, 27-28."
+    ]
+  ],
+  "saints": [
+    "Апостол Варфоломей",
+    "Святой Варнава, апостол от 70-ти",
+    "Преподобный Варнава Ветлужский",
+    "Преподобный Ефрем Новоторжский"
+  ]
+}

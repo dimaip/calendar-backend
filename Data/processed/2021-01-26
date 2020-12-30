@@ -1,0 +1,35 @@
+{
+  "title": "Седмица 34-я по Пятидесятнице",
+  "glas": "8",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_evr_9_8_10_9_15_23.html#z\">Евр., 321 зач., IX, 8-10, 15-23.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_8_22_26.html#z\">Мк., 34 зач., VIII, 22-26.</a> Прпп.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.   </div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба прп. Иринарха, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_11_27_30.html#z\">Мф., 43 зач., XI, 27-30,</a> а на литургии - чтения дня и преподобного: <a href=\"https://days.pravoslavie.ru/bible/z_gal_5_22_0_6_0_2.html#z\">Гал., 213 зач., V, 22 - VI, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "Евр., 321 зач., IX, 8-10, 15-23.",
+        "Мк., 34 зач., VIII, 22-26."
+      ],
+      "Прпп.": [
+        "Рим., 99 зач., VIII, 28-39.",
+        "Лк., 24 зач., VI, 17-23"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Мф., 43 зач., XI, 27-30,",
+      "Гал., 213 зач., V, 22 - VI, 2.",
+      "Лк., 24 зач., VI, 17-23."
+    ]
+  ],
+  "saints": [
+    "Мученик Ермил Белградский",
+    "Мученик Стратоник",
+    "Иринарх Ростовский, затворник",
+    "Елеазар (Севрюков) Анзерский, прп.",
+    "Петр Авессаломит (Анийский), мч.",
+    "Святитель Иаков Низибийский (Нисивийский), епископ"
+  ]
+}

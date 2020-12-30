@@ -1,0 +1,43 @@
+{
+  "title": "Седмица 7-я по Пятидесятнице",
+  "glas": "5",
+  "fast": "День постный",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "<div>Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_12_19.html#z\">Лк., 106 зач., XXI, 12-19.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_7_35_0_8_0_7.html#z\">1 Кор., 139 зач., VII, 35 - VIII, 7.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_15_29_31.html#z\">Мф., 63 зач., XV, 29-31.</a> Блгвв. кнн.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_15_17_0_16_0_2.html#z\">Ин., 52 зач., XV, 17 - XVI, 2.</a> Мц.: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_6_1_10.html#z\">2 Кор., 181 зач., VI, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_36_50.html#z\">Лк., 33 зач., VII, 36-50</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Чтения мц. Христины читаются, если ей совершается служба. </div>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 106 зач., XXI, 12-19."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "1 Кор., 139 зач., VII, 35 - VIII, 7.",
+        "Мф., 63 зач., XV, 29-31."
+      ],
+      "Блгвв. кнн.": [
+        "Рим., 99 зач., VIII, 28-39.",
+        "Ин., 52 зач., XV, 17 - XVI, 2."
+      ],
+      "Мц.": [
+        "2 Кор., 181 зач., VI, 1-10.",
+        "Лк., 33 зач., VII, 36-50"
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Христина Тирская, мц.",
+    "Благоверный князь Борис",
+    "Благоверный князь Глеб",
+    "Поликарп Печерский, архимандрит",
+    "Святитель Георгий (Конисский), архиепископ Могилевский",
+    "Далмат Исетский, прп.",
+    "Алфей (Корбанский), диакон, сщмч.",
+    "Иоанн (Калинин, Оленевский), иерей, исп.",
+    "Николай (Понгельский), иерей, сщмч."
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "title": "Седмица 5-я по Пятидесятнице",
+  "glas": "3",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div>Свв.: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_6_1_10.html#z\">2 Кор., 181 зач., VI, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_36_50.html#z\">Лк., 33 зач., VII, 36-50.</a> Ряд.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_14_21.html#z\">Рим., 97 зач., VIII, 14-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_9_9_13.html#z\">Мф., 30 зач., IX, 9-13.</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>  </div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба сщмч. Илариона, архиеп. Верейского, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_16_22.html#z\">Мф., 36 зач., X, 16-22,</a> а на литургии - чтения священномученика: <a href=\"https://days.pravoslavie.ru/bible/z_evr_7_26_0_8_0_2.html#z\">Евр., 318 зач., VII, 26 - VIII, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16,</a> и дня. </div>",
+  "readings": {
+    "Литургия": {
+      "Свв.": [
+        "2 Кор., 181 зач., VI, 1-10.",
+        "Лк., 33 зач., VII, 36-50."
+      ],
+      "Ряд.": [
+        "Рим., 97 зач., VIII, 14-21.",
+        "Мф., 30 зач., IX, 9-13."
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Мф., 36 зач., X, 16-22,",
+      "Евр., 318 зач., VII, 26 - VIII, 2.",
+      "Ин., 36 зач., X, 9-16,"
+    ]
+  ],
+  "saints": [
+    "Святая великомученица Евфимия Всехвальная",
+    "Святая равноапостольная великая княгиня Российская Ольга",
+    "Сщмч. Иларион (Троицкий), архиепископ Верейский",
+    "Киндей Сидский (Памфилийский), пресвитер, сщмч.",
+    "Оковецкая (Ржевская)",
+    "Борколабовская"
+  ]
+}

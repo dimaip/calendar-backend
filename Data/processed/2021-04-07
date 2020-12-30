@@ -1,0 +1,38 @@
+{
+  "title": "Седмица 4-я Великого поста, Крестопоклонная",
+  "glas": "2",
+  "fast": "Великий пост",
+  "fast_detail": "Разрешается рыба",
+  "originalTitle": "Благовещение Пресвятой Богородицы",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_1_39_49_1_56_56.html#z\">Лк., 4 зач., I, 39-49, 56.</a> На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_is_26_21_0_27_0_9.html#z\">Ис. XXVI, 21 - XXVII, 9.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_byt_9_18_0_10_0_1.html#z\">Быт. IX, 18 - X, 1.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_12_23_0_13_0_9.html#z\">Притч. XII, 23 - XIII, 9.</a> Благовещения: <a href=\"https://days.pravoslavie.ru/bible/z_ish_3_1_8.html#z\">Исх. III, 1-8.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_8_22_30.html#z\">Притч. VIII, 22-30.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_evr_2_11_18.html#z\">Евр., 306 зач., II, 11-18.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_1_24_38.html#z\">Лк., 3 зач., I, 24-38.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 4 зач., I, 39-49, 56."
+      ],
+      "На 6-м часе": [
+        "Ис. XXVI, 21 - XXVII, 9."
+      ],
+      "На вечерне": [
+        "Быт. IX, 18 - X, 1.",
+        "Притч. XII, 23 - XIII, 9."
+      ],
+      "Благовещения": [
+        "Исх. III, 1-8.",
+        "Притч. VIII, 22-30."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Евр., 306 зач., II, 11-18.",
+        "Лк., 3 зач., I, 24-38."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Благовещение Пресвятой Богородицы",
+    "Святитель Тихон (Белавин), патриарх Московский и всея Руси",
+    "Савва Новый, иеромонах"
+  ]
+}

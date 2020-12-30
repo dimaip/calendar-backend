@@ -1,0 +1,28 @@
+{
+  "title": "Седмица 26-я по Пятидесятнице",
+  "glas": "8",
+  "fast": "Рождественский пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_1-tim_1_8_14.html#z\">1 Тим., 279 зач., I, 8-14.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_19_45_48.html#z\">Лк., 98 зач., XIX, 45-48.</a> Прав.: <a href=\"https://days.pravoslavie.ru/bible/z_kol_3_12_16.html#z\">Кол., 258 зач., III, 12-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_31_36.html#z\">Лк., 26 зач., VI, 31-36</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Чтения прав. Филарета читаются, если ему совершается служба. </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "1 Тим., 279 зач., I, 8-14.",
+        "Лк., 98 зач., XIX, 45-48."
+      ],
+      "Прав.": [
+        "Кол., 258 зач., III, 12-16.",
+        "Лк., 26 зач., VI, 31-36"
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Наум, пророк, из 12 малых пророков",
+    "Филарет Милостивый, Пафлагонянин",
+    "Анания Персиянин, мч."
+  ]
+}

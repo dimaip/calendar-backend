@@ -1,0 +1,30 @@
+{
+  "title": "Седмица cырная (масленица) - сплошная",
+  "glas": "6",
+  "fast": "",
+  "fast_detail": "Из трапезы исключается мясо",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_17_30.html#z\">Лк., 31 зач., VII, 17-30.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_iud_1_1_10.html#z\">Иуд., 77 зач., I, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_22_39_42_22_45_0_23_0_1.html#z\">Лк., 109 зач., XXII, 39-42, 45 - XXIII, 1.</a> Предтечи: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_4_6_15.html#z\">2 Кор., 176 зач., IV, 6-15.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_11_2_15.html#z\">Мф., 40 зач., XI, 2-15</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 31 зач., VII, 17-30."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Иуд., 77 зач., I, 1-10.",
+        "Лк., 109 зач., XXII, 39-42, 45 - XXIII, 1."
+      ],
+      "Предтечи": [
+        "2 Кор., 176 зач., IV, 6-15.",
+        "Мф., 40 зач., XI, 2-15"
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Пророк, Предтеча и Креститель Господень Иоанн",
+    "Еразм Печерский, прп."
+  ]
+}

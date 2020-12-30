@@ -1,0 +1,37 @@
+{
+  "title": "Неделя 7-я по Пятидесятнице",
+  "glas": "6",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div>Утр. - Ев. 7-е, <a href=\"https://days.pravoslavie.ru/bible/z_in_20_1_10.html#z\">Ин., 63 зач., XX, 1-10.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_rim_15_1_7.html#z\">Рим., 116 зач., XV, 1-7.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_9_27_35.html#z\">Мф., 33 зач., IX, 27-35.</a> Прп.: <a href=\"https://days.pravoslavie.ru/bible/z_gal_5_22_0_6_0_2.html#z\">Гал., 213 зач., V, 22 - VI, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>  * Чтения прп. Моисея Угрина читаются, если ему совершается служба. </div>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 63 зач., XX, 1-10."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Рим., 116 зач., XV, 1-7.",
+        "Мф., 33 зач., IX, 27-35."
+      ],
+      "Преподобному": [
+        "Гал., 213 зач., V, 22 - VI, 2.",
+        "Лк., 24 зач., VI, 17-23"
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Ермолай Никомидийский, иерей, сщмч.",
+    "Ермипп Никомидийский, иерей, сщмч.",
+    "Ермократ Никомидийский, иерей, сщмч.",
+    "Преподобномученица Параскева Римская",
+    "Преподобный Моисей Угрин, Печерский",
+    "Собор Смоленских святых",
+    "Сергий (Стрельников), протоиерей, сщмч."
+  ]
+}

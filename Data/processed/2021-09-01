@@ -1,0 +1,36 @@
+{
+  "title": "Седмица 11-я по Пятидесятнице",
+  "glas": "1",
+  "fast": "День постный",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_2-kor_3_4_11.html#z\">2 Кор., 173 зач., III, 4-11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_23_29_39.html#z\">Мф., 96 зач., XXIII, 29-39.</a> Мч.: <a href=\"https://days.pravoslavie.ru/bible/z_ef_6_10_17.html#z\">Еф., 233 зач., VI, 10-17.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_12_19.html#z\">Лк., 106 зач., XXI, 12-19</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба в честь Донской иконы Божией Матери, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_lk_1_39_49_1_56_56.html#z\">Лк., 4 зач., I, 39-49, 56,</a> а на литургии - чтения дня и Богородицы: <a href=\"https://days.pravoslavie.ru/bible/z_flp_2_5_11.html#z\">Флп., 240 зач., II, 5-11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_38_42_11_27_28.html#z\">Лк., 54 зач., X, 38-42; XI, 27-28.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "2 Кор., 173 зач., III, 4-11.",
+        "Мф., 96 зач., XXIII, 29-39."
+      ],
+      "Мч.": [
+        "Еф., 233 зач., VI, 10-17.",
+        "Лк., 106 зач., XXI, 12-19"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Лк., 4 зач., I, 39-49, 56,",
+      "Флп., 240 зач., II, 5-11.",
+      "Лк., 54 зач., X, 38-42; XI, 27-28."
+    ]
+  ],
+  "saints": [
+    "Мученик Андрей Стратилат",
+    "Тимофей Палестинский, мч.",
+    "Агапий Кесарийский (Палестинский), мч.",
+    "Фекла Газская, мц.",
+    "Святитель Питирим, епископ Великопермский",
+    "Николай (Лебедев), иерей, сщмч.",
+    "Донская"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "title": "Седмица 3-я по Пасхе",
+  "glas": "2",
+  "fast": "День постный",
+  "fast_detail": "Разрешается рыба",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_21_15_25.html#z\">Ин., 67 зач., XXI, 15-25.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_deqn_8_40_0_9_0_19.html#z\">Деян., 21 зач., VIII, 40 - IX, 19.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_6_48_54.html#z\">Ин., 23 зач., VI, 48-54.</a> Ап.: <a href=\"https://days.pravoslavie.ru/bible/z_1-in_1_1_7.html#z\">1 Ин., 68 зач., I, 1-7.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_19_25_27_21_24_25.html#z\">Ин., 61 зач., XIX, 25-27; XXI, 24-25.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 67 зач., XXI, 15-25."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Деян., 21 зач., VIII, 40 - IX, 19.",
+        "Ин., 23 зач., VI, 48-54."
+      ],
+      "Ап.": [
+        "1 Ин., 68 зач., I, 1-7.",
+        "Ин., 61 зач., XIX, 25-27; XXI, 24-25."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Апостол и евангелист Иоанн Богослов",
+    "Преподобный Арсений Великий",
+    "Преподобный Пимен, постник Печерский",
+    "Преподобный Арсений Трудолюбивый",
+    "Никифор (Зайцев), мч."
+  ]
+}
