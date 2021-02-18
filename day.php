@@ -818,9 +818,10 @@ class Day
                 $dayData['parts']['shared']['Кондаки'] = [];
             }
             require('Data/static_sunday_troparion.php');
-            array_unshift($dayData['parts']['shared']['Тропари'], $sunday_troparion[$glas][$lang]);
+
+            array_unshift($dayData['parts']['shared']['Тропари'], styleHtml($this->parsedown->text($sunday_troparion[$glas][$lang])));
             require('Data/static_sunday_kondac.php');
-            array_unshift($dayData['parts']['shared']['Кондаки'], $sunday_kondac[$glas][$lang]);
+            array_unshift($dayData['parts']['shared']['Кондаки'], styleHtml($this->parsedown->text($sunday_kondac[$glas][$lang])));
         }
 
 
@@ -850,10 +851,10 @@ class Day
                     $staticReadings[$serviceType][$readingType] = array_merge($staticReadings[$serviceType][$readingType] ?? [], $reading);
                 }
             }
-            if ($staticReadings["Литургия"]) {
+            if (isset($staticReadings["Литургия"])) {
                 $readings['Литургия'] = $staticReadings["Литургия"];
             }
-            if ($staticReadings["Утреня"]) {
+            if (isset($staticReadings["Утреня"])) {
                 $readings['Утреня'] = $staticReadings["Утреня"];
             }
             // $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
