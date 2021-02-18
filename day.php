@@ -18,7 +18,8 @@ function styleHtml($text)
 
 function getAirtable($tableName)
 {
-    $url = "https://api.airtable.com/v0/appIcQPSHee2jKadk/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
+    $tableId = $tableName === "Переходящие" ? "app9lgHrH4aDmn9IO" : "appIcQPSHee2jKadk";
+    $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
     $filename = 'Data/cache/' . md5($url);
 
     if (file_exists($filename)) {
