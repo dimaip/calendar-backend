@@ -6,11 +6,13 @@
   "originalTitle": "",
   "originalReadings": "На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_is_45_11_17.html#z\">Ис. XLV, 11-17.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_byt_22_1_18.html#z\">Быт. XXII, 1-18.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_17_17_0_18_0_5.html#z\">Притч. XVII, 17 - XVIII, 5.</a>",
   "readings": {
-    "Литургия": {
-      "На 6-м часе": [
+    "6-й час": {
+      "Рядовое": [
         "Ис. XLV, 11-17."
-      ],
-      "На вечерне": [
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
         "Быт. XXII, 1-18.",
         "Притч. XVII, 17 - XVIII, 5."
       ]

@@ -6,11 +6,13 @@
   "originalTitle": "",
   "originalReadings": "На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_zah_8_7_17.html#z\">Зах. VIII, 7-17.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_zah_8_19_23.html#z\">Зах. VIII, 19-23.</a>",
   "readings": {
-    "Литургия": {
-      "На 6-м часе": [
+    "6-й час": {
+      "Рядовое": [
         "Зах. VIII, 7-17."
-      ],
-      "На вечерне": [
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
         "Зах. VIII, 19-23."
       ]
     }

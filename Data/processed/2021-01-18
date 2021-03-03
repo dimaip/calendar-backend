@@ -6,6 +6,30 @@
   "originalTitle": "",
   "originalReadings": "На 1-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_deqn_13_25_32.html#z\">Деян., 33 зач., XIII, 25-32.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_3_1_11.html#z\">Мф., 5 зач., III, 1-11.</a> На 3-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_deqn_19_1_8.html#z\">Деян., 42 зач., XIX, 1-8.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_1_1_8.html#z\">Мк., 1 зач., I, 1-8.</a> На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_rim_6_3_11.html#z\">Рим., 91 зач., VI, 3-11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_1_9_15.html#z\">Мк., 2 зач., I, 9-15.</a> На 9-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_tit_2_11_14_3_4_7.html#z\">Тит., 302 зач., II, 11-14; III, 4-7.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_3_13_17.html#z\">Мф., 6 зач., III, 13-17.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_9_19_27.html#z\">1 Кор., 143 зач., IX, 19-27.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_3_1_18.html#z\">Лк., 9 зач., III, 1-18.</a> На освящении воды: <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_10_1_4.html#z\">1 Кор., 143 зач. (от&nbsp;полу&#769;), X, 1-4.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_1_9_11.html#z\">Мк., 2 зач., I, 9-11.</a>  ",
   "readings": {
+    "1-й час": {
+      "Рядовое": [
+        "Деян., 33 зач., XIII, 25-32.",
+        "Мф., 5 зач., III, 1-11."
+      ]
+    },
+    "3-й час": {
+      "Рядовое": [
+        "Деян., 42 зач., XIX, 1-8.",
+        "Мк., 1 зач., I, 1-8."
+      ]
+    },
+    "6-й час": {
+      "Рядовое": [
+        "Рим., 91 зач., VI, 3-11.",
+        "Мк., 2 зач., I, 9-15."
+      ]
+    },
+    "9-й час": {
+      "Рядовое": [
+        "Тит., 302 зач., II, 11-14; III, 4-7.",
+        "Мф., 6 зач., III, 13-17."
+      ]
+    },
     "Литургия": {
       "Рядовое": [
         "1 Кор., 143 зач., IX, 19-27.",

@@ -6,11 +6,13 @@
   "originalTitle": "",
   "originalReadings": "На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_ioil_2_12_26.html#z\">Иоил. II, 12-26.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_ioil_3_12_21.html#z\">Иоил. III, 12-21.</a>",
   "readings": {
-    "Литургия": {
-      "На 6-м часе": [
+    "6-й час": {
+      "Рядовое": [
         "Иоил. II, 12-26."
-      ],
-      "На вечерне": [
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
         "Иоил. III, 12-21."
       ]
     }

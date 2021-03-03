@@ -6,11 +6,13 @@
   "originalTitle": "",
   "originalReadings": "На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_is_1_1_20.html#z\">Ис. I, 1-20.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_byt_1_1_13.html#z\">Быт. I, 1-13.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_1_1_20.html#z\">Притч. I, 1-20.</a>",
   "readings": {
-    "Литургия": {
-      "На 6-м часе": [
+    "6-й час": {
+      "Рядовое": [
         "Ис. I, 1-20."
-      ],
-      "На вечерне": [
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
         "Быт. I, 1-13.",
         "Притч. I, 1-20."
       ]
