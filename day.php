@@ -259,7 +259,7 @@ class Day
         return [];
     }
 
-    protected function processSaints($saints)
+    protected function processSaints($saints, $dateStamp)
     {
         $saints = str_replace("#SR", "", $saints);
         $saints = str_replace("#NSR", "", $saints);
@@ -274,11 +274,11 @@ class Day
         $saints = str_replace('5.svg"', '5.svg" alt="Совершается всенощное бдение"', $saints);
         $saints = str_replace('6.svg"', '6.svg" alt="Совершается служба великому празднику"', $saints);
 
-        $saints = preg_replace_callback('#href="https://www.holytrinityorthodox.com/ru/calendar/los/(.*?).htm"#i', function ($matches) {
+        $saints = preg_replace_callback('#href="https://www.holytrinityorthodox.com/ru/calendar/los/(.*?).htm"#i', function ($matches) use ($dateStamp) {
             $key = $matches[1];
             $key = str_replace("/", "-", $key);
             $key = strtolower($key);
-            return 'data-saint="' . $key . '"';
+            return 'href="/#/date/' . date('Y-m-d', $dateStamp) . '/saint/' . $key . '" data-saint="' . $key . '"';
         }, $saints);
         return $saints;
     }
@@ -867,7 +867,7 @@ class Day
             "lent" => $fast ?? null,
             "readings" => $readings ?? null,
             'bReadings' => $this->getBReadings($dateStamp),
-            "saints" => $this->processSaints($dayData['saints']) ?? null,
+            "saints" => $this->processSaints($dayData['saints'], $dateStamp) ?? null,
         ];
 
         return $jsonArray;
