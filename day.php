@@ -249,14 +249,8 @@ class Day
 
     protected function getBReadings($dateStamp)
     {
-        foreach ($this->bReadings as $key => $value) {
-            if ($key === date('j/n/Y', $dateStamp)) {
-                foreach ($value as $v) {
-                    return $v;
-                }
-            }
-        }
-        return [];
+        $key = date('j/n/Y', $dateStamp);
+        return $this->bReadings[$key] ?? [];
     }
 
     protected function processSaints($saints, $dateStamp)
@@ -527,14 +521,20 @@ class Day
         $file = fopen($filename, 'r');
         while (($line = fgetcsv($file)) !== FALSE) {
             $date = $line[0];
-            $bReadingsArray = [];
             if ($line[1]) {
-                $bReadingsArray['Утром'] = ['unnamed' => [$line[1]]];
+                if (isset($this->bReadings[$date]['Утром']['unnamed'])) {
+                    $this->bReadings[$date]['Утром']['Другое чтение'] = [$line[1]];
+                } else {
+                    $this->bReadings[$date]['Утром']['unnamed'] = [$line[1]];
+                }
             }
             if ($line[2]) {
-                $bReadingsArray['Вечером'] = ['unnamed' => [$line[2]]];
+                if (isset($this->bReadings[$date]['Вечером']['unnamed'])) {
+                    $this->bReadings[$date]['Вечером']['Другое чтение'] = [$line[2]];
+                } else {
+                    $this->bReadings[$date]['Вечером']['unnamed'] = [$line[2]];
+                }
             }
-            $this->bReadings[$date][] = $bReadingsArray;
         }
         fclose($file);
 
