@@ -522,18 +522,10 @@ class Day
         while (($line = fgetcsv($file)) !== FALSE) {
             $date = $line[0];
             if ($line[1]) {
-                if (isset($this->bReadings[$date]['Утром']['unnamed'])) {
-                    $this->bReadings[$date]['Утром']['Другое чтение'] = [$line[1]];
-                } else {
-                    $this->bReadings[$date]['Утром']['unnamed'] = [$line[1]];
-                }
+                $this->bReadings[$date]['Утром']['unnamed'][] = $line[1];
             }
             if ($line[2]) {
-                if (isset($this->bReadings[$date]['Вечером']['unnamed'])) {
-                    $this->bReadings[$date]['Вечером']['Другое чтение'] = [$line[2]];
-                } else {
-                    $this->bReadings[$date]['Вечером']['unnamed'] = [$line[2]];
-                }
+                $this->bReadings[$date]['Вечером']['unnamed'][] = $line[2];
             }
         }
         fclose($file);
