@@ -468,7 +468,7 @@ class Day
         }
     }
 
-    protected function init($date, $lang)
+    protected function init($date, $lang, $weekToEaster)
     {
         if (!file_exists('Data')) {
             mkdir('Data', 0777, true);
@@ -522,7 +522,7 @@ class Day
         while (($line = fgetcsv($file)) !== FALSE) {
             $date = $line[0];
             if ($line[1]) {
-                $this->bReadings[$date]['Утром']['unnamed'][] = $line[1];
+                $this->bReadings[$date][$weekToEaster > -7 ? 'На 6-м часе' : 'Вечером']['unnamed'][] = $line[1];
             }
             if ($line[2]) {
                 $this->bReadings[$date]['Вечером']['unnamed'][] = $line[2];
@@ -594,7 +594,6 @@ class Day
         $debug = '';
         if (!$date)
             $date = date('Ymd');
-        $this->init($date, $lang);
 
         $date = date('Ymd', strtotime("-13 days", strtotime($date)));
         $dateStampO = strtotime($date);
@@ -612,6 +611,9 @@ class Day
         $debug .= "год" . $year;
 
         $week = datediff('ww', $easterStamp, $dateStamp, true) + 1;
+        $weekToEaster = datediff('ww', $nextEasterStamp, $dateStamp, true) + 1;
+
+        $this->init($date, $lang, $weekToEaster);
 
         $fast = null;
         if (strtotime('15-11-' . $year) <= $dateStampO && $dateStampO <= strtotime('24-12-' . ($year))) {
@@ -642,7 +644,6 @@ class Day
         $prosv = strtotime('19-01-' . ($year + 1));
         $mondayAfterProsv = $this->getDayAfter('19-01-' . ($year + 1), 1, 0, 1); //NB: Weird stuff, but if Prosv is on Monday, the reset should occur the same day
         $weekAfterProsv = $this->getDayAfter('19-01-' . ($year + 1), 0);
-        $weekToEaster = datediff('ww', $nextEasterStamp, $dateStamp, true) + 1;
 
         $weekOld = $week; //save old week number, neccessary for matins order
         if ($week > 40 || $dateStamp >= $mondayAfterProsv) {
