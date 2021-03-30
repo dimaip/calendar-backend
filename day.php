@@ -522,7 +522,7 @@ class Day
         while (($line = fgetcsv($file)) !== FALSE) {
             $date = $line[0];
             if ($line[1]) {
-                $this->bReadings[$date][$weekToEaster > -7 ? 'На 6-м часе' : 'Вечером']['unnamed'][] = $line[1];
+                $this->bReadings[$date][$weekToEaster > -7 && !($this->dayOfWeekNumber === 6 || $this->dayOfWeekNumber === 0) ? 'На 6-м часе' : 'Утром']['unnamed'][] = $line[1];
             }
             if ($line[2]) {
                 $this->bReadings[$date]['Вечером']['unnamed'][] = $line[2];
