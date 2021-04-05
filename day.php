@@ -281,6 +281,9 @@ class Day
         $dayweek = $week . ';' . $dayOfWeekNumber; //concat key
         //OVERLAY GOSPEL SHIFT
         $dayweek_gospelshift = ($week + $gospelShift) . ';' . $dayOfWeekNumber; //concat key
+        if (!isset($this->perehod[$dayweek])) {
+            return [];
+        }
         $perehods = $this->perehod[$dayweek];
         $ap = explode(';', $perehods[0]['readings']['Литургия']);
         $ap = explode(';', $perehods[0]['readings']['Литургия']);
@@ -447,7 +450,7 @@ class Day
             $groups = [
                 'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст', 'Богородичен литургический'],
                 'shared' => ['Отпуст Синаксарный', 'Тропари', 'Кондаки', 'Величания', 'Эксапостиларии', 'Богородичен синаксарный'],
-                'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах', 'Прокимен вечерни'],
+                'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах', 'Прокимен вечерни', 'Прокимен триоди 1', 'Прокимен триоди 2'],
                 'matins' => ['Cтихиры на хвалите', 'Прокимен утрени', 'Степенны']
             ];
             foreach ($groups as $groupName => $group) {
