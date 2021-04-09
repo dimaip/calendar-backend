@@ -32,7 +32,8 @@ if (preg_match('/^\/readings\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   $day = new Day;
   $date = $matches[1] ?? null;
   $data = $day->run($date);
-  $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($data['readings']));
+  $readings = $data['bReadings'] ? array_merge($data['readings'], $data['bReadings']) : $data['readings'];
+  $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($readings));
   $result = [];
   foreach ($it as $complexVerse) {
     $bible = new Bible;
