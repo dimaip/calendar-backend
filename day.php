@@ -807,7 +807,7 @@ class Day
         }
 
 
-        if (!$this->skipRjadovoe && $this->dayOfWeekNumber == 0 && $glas && $week != 8) {
+        if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
             if (!isset($dayData['parts']['shared']['Тропари'])) {
                 $dayData['parts']['shared']['Тропари'] = [];
             }
