@@ -449,7 +449,7 @@ class Day
             $data['readings']['На освящении воды'] = $line['На освящении воды'] ?? '';
             $groups = [
                 'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст', 'Богородичен литургический'],
-                'shared' => ['Отпуст Синаксарный', 'Тропари', 'Кондаки', 'Величания', 'Эксапостиларии', 'Богородичен синаксарный'],
+                'shared' => ['Отпуст Синаксарный', 'Тропари', 'Кондаки', 'Величания', 'Эксапостиларии', 'Богородичен синаксарный', 'Тропарь на часах', 'Кондак на часах'],
                 'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах', 'Прокимен вечерни', 'Прокимен триоди 1', 'Прокимен триоди 2'],
                 'matins' => ['Cтихиры на хвалите', 'Прокимен утрени', 'Степенны']
             ];
@@ -805,22 +805,6 @@ class Day
                 }
             }
         }
-
-
-        if ($this->dayOfWeekNumber == 0 && $glas && $week != 8) {
-            if (!isset($dayData['parts']['shared']['Тропари'])) {
-                $dayData['parts']['shared']['Тропари'] = [];
-            }
-            if (!isset($dayData['parts']['shared']['Кондаки'])) {
-                $dayData['parts']['shared']['Кондаки'] = [];
-            }
-            require('Data/static_sunday_troparion.php');
-
-            array_unshift($dayData['parts']['shared']['Тропари'], styleHtml($this->parsedown->text($sunday_troparion[$glas][$lang])));
-            require('Data/static_sunday_kondac.php');
-            array_unshift($dayData['parts']['shared']['Кондаки'], styleHtml($this->parsedown->text($sunday_kondac[$glas][$lang])));
-        }
-
 
         //skip rjad on sochelnik HACK HACK HACK
         if ($this->dayOfWeekNumber == 5 && ($date == $year . '1222')) {
