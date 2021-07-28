@@ -1,6 +1,11 @@
 <?php
 setlocale(LC_ALL, 'ru_RU.utf8');
 
+function endsWith($haystack, $needle)
+{
+	return substr($haystack, -strlen($needle)) === $needle;
+}
+
 function datediff($interval, $datefrom, $dateto, $using_timestamps = false)
 {
 	/*

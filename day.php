@@ -448,8 +448,8 @@ class Day
             $data['readings']['9-й час'] = $line['9-й час'] ?? '';
             $data['readings']['На освящении воды'] = $line['На освящении воды'] ?? '';
             $groups = [
-                'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст', 'Богородичен литургический'],
-                'shared' => ['Отпуст Синаксарный', 'Тропари', 'Кондаки', 'Величания', 'Эксапостиларии', 'Богородичен синаксарный', 'Тропарь на часах', 'Кондак на часах'],
+                'liturgy' => ['Прокимен', 'Аллилуарий', 'Причастен', 'Входной стих', 'Вместо Трисвятого', 'Задостойник', 'Отпуст'],
+                'shared' => ['Отпуст Синаксарный', 'Тропари', 'Кондаки', 'Величания', 'Эксапостиларии', 'Богородичен', 'Тропари-службы', 'Кондаки-службы', 'Богородичен-службы'],
                 'vespers' => ['Cтихиры на Господи взываю', 'Cтихиры на стихах', 'Прокимен вечерни', 'Прокимен триоди 1', 'Прокимен триоди 2'],
                 'matins' => ['Cтихиры на хвалите', 'Прокимен утрени', 'Степенны']
             ];
@@ -561,10 +561,12 @@ class Day
         }, $dayDataEntries);
         $parts = [];
 
-
         foreach ($partsEntries as $groups) {
             foreach ($groups as $groupName => $group) {
                 foreach ($group as $partName => $part) {
+                    if (endsWith($partName, '-службы')) {
+                        continue;
+                    }
                     if (!isset($parts[$groupName][$partName])) {
                         $parts[$groupName][$partName] = [];
                     }
@@ -572,7 +574,11 @@ class Day
                         if (is_string($part)) {
                             $part = styleHtml($this->parsedown->text($part));
                         }
-                        $parts[$groupName][$partName][] = $part;
+                        $services = null;
+                        if (isset($group[$partName . '-службы'])) {
+                            $services = $group[$partName . '-службы'];
+                        }
+                        $parts[$groupName][$partName][] = ["value" => $part, "services" => $services];
                     }
                 }
             }
