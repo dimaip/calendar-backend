@@ -10,8 +10,8 @@ if (!file_exists('Data/cache')) {
 function styleHtml($text)
 {
     return str_replace(
-        ['<h1>', '</h1>', '<h2>', '</h2>', '<h3>', '</h3>', '<p>', '</p>', '<strong>', '</strong>', '<blockquote>', '</blockquote>', '<code>', '</code>', '<del>', '</del>'],
-        ['<h1 class="H1">', '</h1>', '<h2 class="H2">', '</h2>', '<h3 class="H3">', '</h3>', '<p class="P">', '</p>', '<span class="Red">', '</span>', '<div class="Petit">', '</div>', '<span class="PetitInline">', '</span>', '<span class="Super">', '</span>'],
+        ['<h1>', '</h1>', '<h2>', '</h2>', '<h3>', '</h3>', '<h4>', '</h4>', '<p>', '</p>', '<strong>', '</strong>', '<blockquote>', '</blockquote>', '<code>', '</code>', '<del>', '</del>'],
+        ['<h1 class="H1">', '</h1>', '<h2 class="H2">', '</h2>', '<h3 class="H3">', '</h3>', '<h4 class="H4">', '</h4>', '<p class="P">', '</p>', '<span class="Red">', '</span>', '<div class="Petit">', '</div>', '<span class="PetitInline">', '</span>', '<span class="Super">', '</span>'],
         $text
     );
 }
