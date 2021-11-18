@@ -6,10 +6,11 @@
   "originalTitle": "",
   "originalReadings": "<div>Прмч.: <a href=\"https://days.pravoslavie.ru/bible/z_2-tim_1_8_18.html#z\">2 Тим., 291 зач., I, 8-18.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_23_31.html#z\">Мф., 37 зач., X, 23-31.</a> Ряд.: <a href=\"https://days.pravoslavie.ru/bible/z_gal_1_3_10.html#z\">Гал., 199 зач., I, 3-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_19_21.html#z\">Лк., 51 зач. (от&nbsp;полу&#769;), X, 19-21</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба сщмч. Серафима, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_16_22.html#z\">Мф., 36 зач., X, 16-22,</a> а на литургии - чтения священномученика: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_12_19.html#z\">Лк., 106 зач., XXI, 12-19,</a> и дня. </div>",
   "readings": {
-  "Утреня": {
-      "Сщмч.": [
-        "Мф., 36 зач., X, 16-22."
-      ]
+    "Утреня": {
+        "Сщмч.": [
+          "Мф., 36 зач., X, 16-22."
+        ],
+    },
     "Литургия": {
       "Сщмч.": [
         "Рим., 99 зач., VIII, 28-39.",

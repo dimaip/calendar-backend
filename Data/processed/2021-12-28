@@ -6,10 +6,11 @@
   "originalTitle": "",
   "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_2-tim_3_16_0_4_0_4.html#z\">2 Тим., 297 зач., III, 16 - IV, 4.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_8_22_26.html#z\">Мк., 34 зач., VIII, 22-26</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба сщмч. Илариона, архиеп. Верейского, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_16_22.html#z\">Мф., 36 зач., X, 16-22,</a> а на литургии - чтения дня и священномученика: <a href=\"https://days.pravoslavie.ru/bible/z_evr_7_26_0_8_0_2.html#z\">Евр., 318 зач., VII, 26 - VIII, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16.</a> </div>",
   "readings": {
-  "Утреня": {
-      "Сщмч.": [
-        "Мф., 36 зач., X, 16-22."
-      ]
+    "Утреня": {
+        "Сщмч.": [
+          "Мф., 36 зач., X, 16-22."
+        ],
+    },
     "Литургия": {
       "Рядовое": [
         "2 Тим., 297 зач., III, 16 - IV, 4.",
