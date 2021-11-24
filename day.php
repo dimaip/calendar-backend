@@ -16,9 +16,8 @@ function styleHtml($text)
     );
 }
 
-function getAirtable($tableName)
+function getAirtable($tableId, $tableName)
 {
-    $tableId = $tableName === "Переходящие" ? "app9lgHrH4aDmn9IO" : "appIcQPSHee2jKadk";
     $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
     $filename = 'Data/cache/' . md5($url);
 
@@ -47,6 +46,24 @@ function getAirtable($tableName)
         file_put_contents($filename, json_encode($records));
     }
     return $records;
+}
+
+function getNeperehod()
+{
+    return array_merge(
+        getAirtable('app1fn7GFDSwVrrt3', 'Непереходящие'),
+        getAirtable('app2EOfdT7MF0CHkv', 'Непереходящие'),
+        getAirtable('appWJJXEUjVHOiHZB', 'Непереходящие'),
+        getAirtable('appaU3RHAHFfAGOiU', 'Непереходящие'),
+        getAirtable('appFCqIS9Fd69qatx', 'Непереходящие'),
+        getAirtable('appp9Lr7kOrNHAdkj', 'Непереходящие'),
+        getAirtable('appv2WDra6MYIJ8d8', 'Непереходящие'),
+        getAirtable('appKxcdLuiWPqcA4K', 'Непереходящие'),
+        getAirtable('appu454eFmvMCPd0B', 'Непереходящие'),
+        getAirtable('appkM6kjC92rWqdtq', 'Непереходящие'),
+        getAirtable('appldjhytU1iITQl3', 'Непереходящие'),
+        getAirtable('app0Y6GpYy1JRQuvc', 'Непереходящие'),
+    );
 }
 
 class Day
@@ -423,7 +440,7 @@ class Day
 
     protected function getDayData($perehod, $lang)
     {
-        $airtableData = getAirtable($perehod ? "Переходящие" : "Непереходящие");
+        $airtableData = $perehod ? getAirtable("app9lgHrH4aDmn9IO", "Переходящие") : getNeperehod();
         foreach ($airtableData as $line) {
             if (!isset($line['Дата'])) {
                 continue;
