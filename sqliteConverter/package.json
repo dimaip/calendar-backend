@@ -1,0 +1,10 @@
+{
+  "name": "sqliteConverter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "lodash.groupby": "^4.6.0",
+    "sqlite3": "^5.0.2"
+  }
+}
