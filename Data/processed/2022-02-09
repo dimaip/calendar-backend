@@ -1,0 +1,29 @@
+{
+  "title": "Седмица 34-я по Пятидесятнице",
+  "glas": "8",
+  "fast": "День постный",
+  "fast_detail": "Разрешается рыба",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_10_1_9.html#z\">Ин., 35 зач. (от&nbsp;полу&#769;), X, 1-9.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_1-pet_4_1_11.html#z\">1 Пет., 61 зач., IV, 1-11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_12_28_37.html#z\">Мк., 56 зач., XII, 28-37.</a> Свт.: <a href=\"https://days.pravoslavie.ru/bible/z_evr_7_26_0_8_0_2.html#z\">Евр., 318 зач., VII, 26 - VIII, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 35 зач. (от полу́), X, 1-9."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "1 Пет., 61 зач., IV, 1-11.",
+        "Мк., 56 зач., XII, 28-37."
+      ],
+      "Свт.": [
+        "Евр., 318 зач., VII, 26 - VIII, 2.",
+        "Ин., 36 зач., X, 9-16."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Святитель Иоанн Златоуст"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "title": "Седмица 3-я по Пасхе",
+  "glas": "2",
+  "fast": "День постный",
+  "fast_detail": "Разрешается рыба",
+  "originalTitle": "",
+  "originalReadings": "<div>Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_21_15_25.html#z\">Ин., 67 зач., XXI, 15-25</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>. Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_deqn_8_40_0_9_0_19.html#z\">Деян., 21 зач., VIII, 40 - IX, 19.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_6_48_54.html#z\">Ин., 23 зач., VI, 48-54.</a> Ап.: <a href=\"https://days.pravoslavie.ru/bible/z_deqn_12_1_11.html#z\">Деян., 29 зач., XII, 1-11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_5_1_11.html#z\">Лк., 17 зач., V, 1-11.</a></div><div class='DAYS_snoska' style='display:none'>* В день совершения полиелейной службы свт. Игнатия на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_in_10_1_9.html#z\">Ин., 35 зач. (от&nbsp;полу&#769;), X, 1-9,</a> а на литургии - чтения дня и святителя: <a href=\"https://days.pravoslavie.ru/bible/z_evr_7_26_0_8_0_2.html#z\">Евр., 318 зач., VII, 26 - VIII, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16.</a> </div>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 67 зач., XXI, 15-25"
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Деян., 21 зач., VIII, 40 - IX, 19.",
+        "Ин., 23 зач., VI, 48-54."
+      ],
+      "Ап.": [
+        "Деян., 29 зач., XII, 1-11.",
+        "Лк., 17 зач., V, 1-11."
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Ин., 35 зач. (от полу́), X, 1-9,",
+      "Евр., 318 зач., VII, 26 - VIII, 2.",
+      "Ин., 36 зач., X, 9-16."
+    ]
+  ],
+  "saints": [
+    "Апостол Иаков Зеведеев",
+    "Святитель Никита Печерский, епископ Новгородский, затворник",
+    "Святитель Игнатий Брянчанинов",
+    "Святитель Донат Еврийский, епископ",
+    "Святитель Василий Амасийский, епископ, сщмч.",
+    "Максим, мч."
+  ]
+}

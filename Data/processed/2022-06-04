@@ -1,0 +1,31 @@
+{
+  "title": "Седмица 6-я по Пасхе",
+  "glas": "5",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_deqn_20_7_12.html#z\">Деян., 43 зач., XX, 7-12.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_14_10_21.html#z\">Ин., 48 зач., XIV, 10-21</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если в этот день совершается полиелейная служба мч. Иоанна-Владимира, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_lk_12_2_12.html#z\">Лк., 63 зач., XII, 2-12,</a> а на литургии - чтения дня и мученика: <a href=\"https://days.pravoslavie.ru/bible/z_deqn_10_1_16.html#z\">Деян., 24 зач., X, 1-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_15_17_0_16_0_2.html#z\">Ин., 52 зач., XV, 17 - XVI, 2.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "Деян., 43 зач., XX, 7-12.",
+        "Ин., 48 зач., XIV, 10-21"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Лк., 63 зач., XII, 2-12,",
+      "Деян., 24 зач., X, 1-16.",
+      "Ин., 52 зач., XV, 17 - XVI, 2."
+    ]
+  ],
+  "saints": [
+    "Мученик Василиск Команский",
+    "Мученик Иоанн-Владимир, князь Сербский",
+    "Праведный Иаков Боровичский",
+    "Второй Вселенский Собор.",
+    "Святитель Максим (Жижиленко), епископ Серпуховской, сщмч.",
+    "Михаил (Борисов), протоиерей, сщмч."
+  ]
+}

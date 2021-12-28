@@ -1,0 +1,28 @@
+{
+  "title": "Седмица 27-я по Пятидесятнице",
+  "glas": "1",
+  "fast": "Рождественский пост",
+  "fast_detail": "Монастырский устав: горячая пища без масла",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_1-tim_5_22_0_6_0_11.html#z\">1 Тим., 287 зач., V, 22 - VI, 11.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_20_1_8.html#z\">Лк., 99 зач., XX, 1-8.</a> Прав.: <a href=\"https://days.pravoslavie.ru/bible/z_kol_3_12_16.html#z\">Кол., 258 зач., III, 12-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_31_36.html#z\">Лк., 26 зач., VI, 31-36</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Чтения прав. Филарета читаются, если ему совершается служба. </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "1 Тим., 287 зач., V, 22 - VI, 11.",
+        "Лк., 99 зач., XX, 1-8."
+      ],
+      "Прав.": [
+        "Кол., 258 зач., III, 12-16.",
+        "Лк., 26 зач., VI, 31-36"
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Наум, пророк, из 12 малых пророков",
+    "Филарет Милостивый, Пафлагонянин",
+    "Анания Персиянин, мч."
+  ]
+}

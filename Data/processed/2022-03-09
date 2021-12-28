@@ -1,0 +1,26 @@
+{
+  "title": "Седмица 1-я Великого поста",
+  "glas": "4",
+  "fast": "Великий пост",
+  "fast_detail": "Монастырский устав: cухоядение (хлеб, овощи, фрукты)",
+  "originalTitle": "",
+  "originalReadings": "На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_is_2_3_11.html#z\">Ис. II, 3-11.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_byt_1_24_0_2_0_3.html#z\">Быт. I, 24 - II, 3.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_2_1_22.html#z\">Притч. II, 1-22.</a>",
+  "readings": {
+    "6-й час": {
+      "Рядовое": [
+        "Ис. II, 3-11."
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
+        "Быт. I, 24 - II, 3.",
+        "Притч. II, 1-22."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Пророк, Предтеча и Креститель Господень Иоанн",
+    "Еразм Печерский, прп."
+  ]
+}

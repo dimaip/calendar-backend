@@ -1,0 +1,39 @@
+{
+  "title": "Седмица 2-я по Пятидесятнице",
+  "glas": "8",
+  "fast": "Петров пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_rim_4_13_25.html#z\">Рим., 87 зач., IV, 13-25.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_7_21_23.html#z\">Мф., 23 зач., VII, 21-23.</a> Прп. (под зачало): <a href=\"https://days.pravoslavie.ru/bible/z_gal_5_22_0_6_0_2.html#z\">Гал., 213 зач., V, 22 - VI, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>. Свт.: <a href=\"https://days.pravoslavie.ru/bible/z_evr_13_7_16.html#z\">Евр., 334 зач., XIII, 7-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_5_14_19.html#z\">Мф., 11 зач., V, 14-19</a> <span class=\"DAYS_asterix\" style=\"display:none\">**</span>.</div><div class='DAYS_snoska' style='display:none'>* Чтения прп. Кирилла Белоезерского читаются, если ему совершается служба.   * * Если совершается полиелейная служба прав. Алексия Московского, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_5_14_19.html#z\">Мф., 11 зач., V, 14-19,</a> а на литургии - чтения дня и праведного: <a href=\"https://days.pravoslavie.ru/bible/z_evr_4_14_0_5_0_6.html#z\">Евр., 311 зач., IV, 14 - V, 6.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_5_14_19.html#z\">Мф., 11 зач., V, 14-19.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "Рим., 87 зач., IV, 13-25.",
+        "Мф., 23 зач., VII, 21-23.",
+        "Гал., 213 зач., V, 22 - VI, 2.",
+        "Лк., 24 зач., VI, 17-23"
+      ],
+      ". Свт.": [
+        "Евр., 334 зач., XIII, 7-16.",
+        "Мф., 11 зач., V, 14-19"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Мф., 11 зач., V, 14-19,",
+      "Евр., 311 зач., IV, 14 - V, 6.",
+      "Мф., 11 зач., V, 14-19."
+    ]
+  ],
+  "saints": [
+    "Святитель Кирилл Александрийский",
+    "Алексий (Мечев) Московский, протоиерей, прав.",
+    "Преподобный Кирилл Белоезерский",
+    "Фекла Персидская, мц.",
+    "Марфа Персидская, мц.",
+    "Мария Персидская, мц.",
+    "Александр Куштский, игумен",
+    "Рафаил (Шейченко), иеромонах, исповедник"
+  ]
+}

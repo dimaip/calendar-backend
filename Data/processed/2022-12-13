@@ -1,0 +1,31 @@
+{
+  "title": "Седмица 27-я по Пятидесятнице",
+  "glas": "1",
+  "fast": "Рождественский пост",
+  "fast_detail": "Разрешается рыба",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_mf_4_18_23.html#z\">Мф., 9 зач., IV, 18-23.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_1-tim_5_11_21.html#z\">1 Тим., 286 зач., V, 11-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_19_45_48.html#z\">Лк., 98 зач., XIX, 45-48.</a> Ап.: <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_4_9_16.html#z\">1 Кор., 131 зач., IV, 9-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_1_35_51.html#z\">Ин., 4 зач., I, 35-51.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Мф., 9 зач., IV, 18-23."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "1 Тим., 286 зач., V, 11-21.",
+        "Лк., 98 зач., XIX, 45-48."
+      ],
+      "Ап.": [
+        "1 Кор., 131 зач., IV, 9-16.",
+        "Ин., 4 зач., I, 35-51."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Апостол Андрей Первозванный",
+    "Святитель Фрументий Индийский (Эфиопский), архиепископ",
+    "Иоанн (Честнов), иерей, сщмч."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "title": "Седмица 28-я по Пятидесятнице",
+  "glas": "2",
+  "fast": "Рождественский пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16.</a> Лит. - Свт.: <a href=\"https://days.pravoslavie.ru/bible/z_evr_13_17_21.html#z\">Евр., 335 зач., XIII, 17-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 36 зач., X, 9-16."
+      ]
+    },
+    "Литургия": {
+      "Свт.": [
+        "Евр., 335 зач., XIII, 17-21.",
+        "Лк., 24 зач., VI, 17-23."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Святитель Николай Мирликийский, чудотворец"
+  ]
+}

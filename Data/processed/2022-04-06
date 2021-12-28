@@ -1,0 +1,37 @@
+{
+  "title": "Седмица 5-я Великого поста",
+  "glas": "8",
+  "fast": "Великий пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_is_41_4_14.html#z\">Ис. XLI, 4-14.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_byt_17_1_9.html#z\">Быт. XVII, 1-9.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_15_20_0_16_0_9.html#z\">Притч. XV, 20 - XVI, 9.</a> Благовещения: <a href=\"https://days.pravoslavie.ru/bible/z_byt_28_10_17.html#z\">Быт. XXVIII, 10-17.</a> <a href=\"https://days.pravoslavie.ru/bible/z_iez_43_27_0_44_0_4.html#z\">Иез. XLIII, 27 - XLIV, 4.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_9_1_11.html#z\">Притч. IX, 1-11.</a>",
+  "readings": {
+    "6-й час": {
+      "Рядовое": [
+        "Ис. XLI, 4-14."
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
+        "Быт. XVII, 1-9.",
+        "Притч. XV, 20 - XVI, 9."
+      ],
+      "Благовещения": [
+        "Быт. XXVIII, 10-17.",
+        "Иез. XLIII, 27 - XLIV, 4.",
+        "Притч. IX, 1-11."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Захария Отверстый, затворник",
+    "Святитель Артемон, епископ Селевкийский",
+    "Святитель Иаков Катанский (Сицилийский), епископ, исповедник",
+    "Преподобный Захария Постник, Печерский",
+    "Мученик Стефан Казанский",
+    "Петр Казанский, мч.",
+    "Александр (Флегинский), сщмч.",
+    "Владимир (Панькин), иерей, сщмч."
+  ]
+}

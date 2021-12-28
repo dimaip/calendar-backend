@@ -1,0 +1,43 @@
+{
+  "title": "Седмица 8-я по Пятидесятнице",
+  "glas": "6",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div>Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_12_19.html#z\">Лк., 106 зач., XXI, 12-19.</a> Лит. - Блгвв. кнн.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_15_17_0_16_0_2.html#z\">Ин., 52 зач., XV, 17 - XVI, 2.</a> Мц.: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_6_1_10.html#z\">2 Кор., 181 зач., VI, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_36_50.html#z\">Лк., 33 зач., VII, 36-50</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>. Ряд.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_13_1_10.html#z\">Рим., 111 зач., XIII, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_12_30_37.html#z\">Мф., 47 зач., XII, 30-37.</a></div><div class='DAYS_snoska' style='display:none'>* Чтения мц. Христины читаются, если ей совершается служба. </div>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 106 зач., XXI, 12-19."
+      ]
+    },
+    "Литургия": {
+      "Блгвв. кнн.": [
+        "Рим., 99 зач., VIII, 28-39.",
+        "Ин., 52 зач., XV, 17 - XVI, 2."
+      ],
+      "Мц.": [
+        "2 Кор., 181 зач., VI, 1-10.",
+        "Лк., 33 зач., VII, 36-50"
+      ],
+      ". Ряд.": [
+        "Рим., 111 зач., XIII, 1-10.",
+        "Мф., 47 зач., XII, 30-37."
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Христина Тирская, мц.",
+    "Благоверный князь Борис",
+    "Благоверный князь Глеб",
+    "Поликарп Печерский, архимандрит",
+    "Святитель Георгий (Конисский), архиепископ Могилевский",
+    "Далмат Исетский, прп.",
+    "Алфей (Корбанский), диакон, сщмч.",
+    "Иоанн (Калинин, Оленевский), иерей, исп.",
+    "Николай (Понгельский), иерей, сщмч."
+  ]
+}

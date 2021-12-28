@@ -1,0 +1,40 @@
+{
+  "title": "Седмица 7-я по Пятидесятнице",
+  "glas": "5",
+  "fast": "День постный",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_1-kor_7_12_24.html#z\">1 Кор., 137 зач., VII, 12-24.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_14_35_0_15_0_11.html#z\">Мф., 60 зач., XIV, 35 - XV, 11,</a> и за четверг (под зачало): <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_7_24_35.html#z\">1 Кор., 138 зач., VII, 24-35.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_15_12_21.html#z\">Мф., 61 зач., XV, 12-21.</a> Мчч.: <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_13_11_0_14_0_5.html#z\">1 Кор., 154 зач. (от&nbsp;полу&#769;), XIII, 11 - XIV, 5.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_19_21.html#z\">Лк., 51 зач. (от&nbsp;полу&#769;), X, 19-21</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба прп. Никодима Святогорца, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_11_27_30.html#z\">Мф., 43 зач., XI, 27-30,</a> а на литургии - чтения дня, за четверг (под зачало) и преподобного: <a href=\"https://days.pravoslavie.ru/bible/z_evr_13_17_21.html#z\">Евр., 335 зач., XIII, 17-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "1 Кор., 137 зач., VII, 12-24.",
+        "Мф., 60 зач., XIV, 35 - XV, 11,",
+        "1 Кор., 138 зач., VII, 24-35.",
+        "Мф., 61 зач., XV, 12-21."
+      ],
+      "Мчч.": [
+        "1 Кор., 154 зач. (от полу́), XIII, 11 - XIV, 5.",
+        "Лк., 51 зач. (от полу́), X, 19-21"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Мф., 43 зач., XI, 27-30,",
+      "Евр., 335 зач., XIII, 17-21.",
+      "Лк., 24 зач., VI, 17-23."
+    ]
+  ],
+  "saints": [
+    "Святой Акила, апостол от 70-ти",
+    "Иуст Римский, мч.",
+    "Онисим Магнезийский, прп., исповедник",
+    "Еллий Египетский, прп.",
+    "Преподобный Стефан Махрищский",
+    "Никодим Святогорец, прп.",
+    "Иоанн Мервский, мч.",
+    "Константин (Богоявленский), иерей, сщмч.",
+    "Николай (Порецкий), протоиерей, сщмч."
+  ]
+}

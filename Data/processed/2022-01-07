@@ -1,0 +1,25 @@
+{
+  "title": "Седмица 29-я по Пятидесятнице",
+  "glas": "3",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "Рождество Господа и Спаса нашего Иисуса Христа",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_mf_1_18_25.html#z\">Мф., 2 зач., I, 18-25.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_gal_4_4_7.html#z\">Гал., 209 зач., IV, 4-7.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_2_1_12.html#z\">Мф., 3 зач., II, 1-12.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Мф., 2 зач., I, 18-25."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Гал., 209 зач., IV, 4-7.",
+        "Мф., 3 зач., II, 1-12."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Рождество Христово"
+  ]
+}

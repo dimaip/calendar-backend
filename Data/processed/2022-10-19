@@ -1,0 +1,30 @@
+{
+  "title": "Седмица 19-я по Пятидесятнице",
+  "glas": "1",
+  "fast": "День постный",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_21_15_25.html#z\">Ин., 67 зач., XXI, 15-25.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_flp_1_12_20.html#z\">Флп., 237 зач., I, 12-20.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_46_0_7_0_1.html#z\">Лк., 28 зач., VI, 46 - VII, 1.</a> Ап.: <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_4_9_16.html#z\">1 Кор., 131 зач., IV, 9-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_20_19_31.html#z\">Ин., 65 зач., XX, 19-31.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 67 зач., XXI, 15-25."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Флп., 237 зач., I, 12-20.",
+        "Лк., 28 зач., VI, 46 - VII, 1."
+      ],
+      "Ап.": [
+        "1 Кор., 131 зач., IV, 9-16.",
+        "Ин., 65 зач., XX, 19-31."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Апостол Фома",
+    "Иоанн (Рыбин), иерей, сщмч."
+  ]
+}

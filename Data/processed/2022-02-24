@@ -1,0 +1,29 @@
+{
+  "title": "Седмица мясопустная",
+  "glas": "2",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_1-in_4_20_0_5_0_21.html#z\">1 Ин., 74 зач., IV, 20 - V, 21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_15_1_15.html#z\">Мк., 66 зач., XV, 1-15</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается служба прп. Димитрия Прилуцкого, то на литургии - чтения дня и преподобного: <a href=\"https://days.pravoslavie.ru/bible/z_gal_5_22_0_6_0_2.html#z\">Гал., 213 зач., V, 22 - VI, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "1 Ин., 74 зач., IV, 20 - V, 21.",
+        "Мк., 66 зач., XV, 1-15"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Гал., 213 зач., V, 22 - VI, 2.",
+      "Лк., 24 зач., VI, 17-23."
+    ]
+  ],
+  "saints": [
+    "Священномученик Власий, епископ Севастийский",
+    "Благоверный князь Всеволод Псковский",
+    "Преподобный Димитрий Прилуцкий, Вологодский",
+    "Кассиан Босой, Волоколамский, прп.",
+    "Феодора Греческая, царица"
+  ]
+}
