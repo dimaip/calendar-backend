@@ -5,7 +5,7 @@
   "scripts": {
     "start": "./start.sh",
     "install": "./install.sh",
-    "test": "vendor/bin/phpunit tests"
+    "test_": "vendor/bin/phpunit tests"
   },
   "author": "",
   "license": "ISC"
