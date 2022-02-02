@@ -1,6 +1,7 @@
 version: '3.4'
 services:
     calendar-backend:
+        restart: always
         image: ghcr.io/dimaip/calendar-backend:master
         hostname: 'calendar-backend'
         networks:
