@@ -6,4 +6,4 @@ USER root
 RUN mkdir -p /data/www/Web
 COPY --chown=80:80 ./ /data/www/Web/
 RUN cd /data/www/Web && sudo chown 80:80 -R . && composer install
-RUN vendor/bin/phpunit tests
+# RUN vendor/bin/phpunit tests

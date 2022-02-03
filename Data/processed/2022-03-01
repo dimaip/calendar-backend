@@ -6,10 +6,19 @@
   "originalTitle": "",
   "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_iud_1_1_10.html#z\">Иуд., 77 зач., I, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_22_39_42_22_45_0_23_0_1.html#z\">Лк., 109 зач., XXII, 39-42, 45 - XXIII, 1</a> <span class=\"DAYS_asterix\" style=\"display:none\">**</span>.</div><div class='DAYS_snoska' style='display:none'>* * Если 16 февраля совершается полиелейная служба сщмч. Ермогена, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_in_10_1_9.html#z\">Ин., 35 зач. (от&nbsp;полу&#769;), X, 1-9,</a> а на литургии - чтения дня и священномученика: <a href=\"https://days.pravoslavie.ru/bible/z_evr_13_17_21.html#z\">Евр., 335 зач., XIII, 17-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16.</a> </div>",
   "readings": {
+      "Утреня": {
+      "Свт.": [
+        "Ин., 35 зач. (от полу́), X, 1-9."
+      ]
+    },
     "Литургия": {
       "Рядовое": [
         "Иуд., 77 зач., I, 1-10.",
         "Лк., 109 зач., XXII, 39-42, 45 - XXIII, 1"
+      ],
+      "Свт.": [
+        "Евр., 335 зач., XIII, 17-21.",
+        "Ин., 36 зач., X, 9-16."
       ]
     }
   },
