@@ -7,13 +7,12 @@ services:
             - main
         ports:
             - '80'
-        deploy:
-            labels:
-                - 'traefik.enable=true'
-                - 'traefik.port=80'
-                - 'traefik.default.protocol=http'
-                - 'traefik.docker.network=main'
-                - 'traefik.frontend.rule=Host:api.c.psmb.ru'
+        labels:
+            - 'traefik.enable=true'
+            - 'traefik.port=80'
+            - 'traefik.default.protocol=http'
+            - 'traefik.docker.network=main'
+            - 'traefik.frontend.rule=Host:api.c.psmb.ru'
 networks:
     main:
         external:
