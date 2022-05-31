@@ -856,11 +856,9 @@ class Day
                 }
             }
             if (isset($staticReadings["Утреня"])) {
-                unset($readings['Утреня']);
                 $readings['Утреня'] = $staticReadings["Утреня"];
             }
             if (isset($staticReadings["Литургия"])) {
-                unset($readings['Литургия']);
                 $readings['Литургия'] = $staticReadings["Литургия"];
             }
             // $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
