@@ -6,20 +6,23 @@
   "originalTitle": "",
   "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_2-kor_2_14_0_3_0_3.html#z\">2 Кор., 172 зач., II, 14 - III, 3.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_23_23_28.html#z\">Мф., 95 зач., XXIII, 23-28</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба Собора новомучеников и исповедников Соловецких, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_16_22.html#z\">Мф., 36 зач., X, 16-22,</a> а на литургии - чтения дня и новомучеников: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_8_19.html#z\">Лк., 105-106 зач., XXI, 8-19.</a> </div>",
   "readings": {
+     "Утреня": {
+      "Новомученикам": [
+        "Мф., 36 зач., X, 16-22."
+      ]
+    },
     "Литургия": {
       "Рядовое": [
         "2 Кор., 172 зач., II, 14 - III, 3.",
         "Мф., 95 зач., XXIII, 23-28"
+      ],
+       "Новомученикам": [
+        "Рим., 99 зач., VIII, 28-39.",
+        "Лк., 105-106 зач., XXI, 8-19."
       ]
     }
   },
-  "comments": [
-    [
-      "Мф., 36 зач., X, 16-22,",
-      "Рим., 99 зач., VIII, 28-39.",
-      "Лк., 105-106 зач., XXI, 8-19."
-    ]
-  ],
+  "comments": [],
   "saints": [
     "Лаврентий Римский, архидиакон, сщмч.",
     "Святитель Сикст II Римский, папа, сщмч.",
