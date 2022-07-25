@@ -861,6 +861,18 @@ class Day
             if (isset($staticReadings["Литургия"])) {
                 $readings['Литургия'] = $staticReadings["Литургия"];
             }
+
+            // Restore sorting order
+            $readings_or['Утреня'] = $readings['Утреня'] ?? null;
+            $readings_or['1-й час'] = $readings['1-й час'] ?? null;
+            $readings_or['3-й час'] = $readings['3-й час'] ?? null;
+            $readings_or['6-й час'] = $readings['6-й час'] ?? null;
+            $readings_or['9-й час'] = $readings['9-й час'] ?? null;
+            $readings_or['Литургия'] = $readings['Литургия'] ?? null;
+            $readings_or['Вечерня'] = $readings['Вечерня'] ?? null;
+            $readings_or['На освящении воды'] = $readings['На освящении воды'] ?? null;
+            $readings = $readings_or;
+
             // $dynamicData['comment'] = preg_replace('/<a\s+href="([^"]+)"\s*>/', '<a class="reading" href="http://bible.psmb.ru/bible/book/$1/">', $staticData['comment'] ?? '');
         }
 
