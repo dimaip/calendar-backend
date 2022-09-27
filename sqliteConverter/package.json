@@ -5,6 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "lodash.groupby": "^4.6.0",
-    "sqlite3": "^5.0.2"
+    "sqlite3": "^5.0.3"
   }
 }
