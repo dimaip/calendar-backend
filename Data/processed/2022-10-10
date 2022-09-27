@@ -6,10 +6,19 @@
   "originalTitle": "",
   "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_ef_4_25_32.html#z\">Еф., 227 зач., IV, 25-32.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_4_37_44.html#z\">Лк., 16 зач., IV, 37-44</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба сщмч. Петра, митр. Крутицкого, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_16_22.html#z\">Мф., 36 зач., X, 16-22,</a> а на литургии - чтения дня и священномученика: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_12_19.html#z\">Лк., 106 зач., XXI, 12-19.</a> </div>",
   "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Мф., 36 зач., X, 16-22."
+      ]
+    },
     "Литургия": {
       "Рядовое": [
         "Еф., 227 зач., IV, 25-32.",
-        "Лк., 16 зач., IV, 37-44"
+        "Лк., 16 зач., IV, 37-44."
+      ],
+      "Сщмч.": [
+        "Рим., 99 зач., VIII, 28-39.",
+        "Лк., 106 зач., XXI, 12-19."
       ]
     }
   },
