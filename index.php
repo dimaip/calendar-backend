@@ -10,6 +10,11 @@ if (preg_match('/^\/app/', $_SERVER["REQUEST_URI"])) {
   include __DIR__ . '/app.php';
 }
 
+if (preg_match('/^\/hymns/', $_SERVER["REQUEST_URI"])) {
+  include __DIR__ . '/hymns.php';
+  echo json_encode(hymns(), JSON_PRETTY_PRINT);
+}
+
 if (preg_match('/^\/reading\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   include __DIR__ . '/bible.php';
   $explodedUrl = explode('&translation=', urldecode($matches[1]));

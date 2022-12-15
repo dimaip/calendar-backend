@@ -47,7 +47,10 @@ function getAirtable($tableId, $tableName)
     }
     return $records;
 }
-
+function getPerehod()
+{
+    return getAirtable("app9lgHrH4aDmn9IO", "Переходящие");
+}
 function getNeperehod()
 {
     return array_merge(
@@ -440,7 +443,7 @@ class Day
 
     protected function getDayData($perehod, $lang)
     {
-        $airtableData = $perehod ? getAirtable("app9lgHrH4aDmn9IO", "Переходящие") : getNeperehod();
+        $airtableData = $perehod ? getPerehod() : getNeperehod();
         foreach ($airtableData as $line) {
             if (!isset($line['Дата'])) {
                 continue;
@@ -863,31 +866,31 @@ class Day
             }
 
             // Restore sorting order
-            if ($readings['Утреня']) {
+            if (isset($readings['Утреня'])) {
                 $readings_or['Утреня'] = $readings['Утреня'];
             }
-            if ($readings['1-й час']) {
+            if (isset($readings['1-й час'])) {
                 $readings_or['1-й час'] = $readings['1-й час'];
             }
-            if ($readings['3-й час']) {
+            if (isset($readings['3-й час'])) {
                 $readings_or['3-й час'] = $readings['3-й час'];
             }
-            if ($readings['6-й час']) {
+            if (isset($readings['6-й час'])) {
                 $readings_or['6-й час'] = $readings['6-й час'];
             }
-            if ($readings['9-й час']) {
+            if (isset($readings['9-й час'])) {
                 $readings_or['9-й час'] = $readings['9-й час'];
             }
-            if ($readings['Литургия']) {
+            if (isset($readings['Литургия'])) {
                 $readings_or['Литургия'] = $readings['Литургия'];
             }
-            if ($readings['Литургия']) {
+            if (isset($readings['Литургия'])) {
                 $readings_or['Литургия'] = $readings['Литургия'];
             }
-            if ($readings['Вечерня']) {
+            if (isset($readings['Вечерня'])) {
                 $readings_or['Вечерня'] = $readings['Вечерня'];
             }
-            if ($readings['На освящении воды']) {
+            if (isset($readings['На освящении воды'])) {
                 $readings_or['На освящении воды'] = $readings['На освящении воды'];
             }
             $readings = $readings_or;
