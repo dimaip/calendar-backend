@@ -2,6 +2,8 @@
 include __DIR__ . '/day.php';
 
 function hymns() {
+    $parsedown = new Parsedown();
+
     $rows = array_merge(
         getPerehod(), 
         getNeperehod()
@@ -19,7 +21,7 @@ function hymns() {
             'Цся' => 'csj'
         ];
         $lang = $langMap[$row['Язык']];
-        $bodytext = ($row['Тропари'] ?? '').($row['Кондаки'] ?? '');
+        $bodytext = styleHtml($parsedown->text(($row['Тропари'] ?? '')) . $parsedown->text(($row['Кондаки'] ?? '')));
         if (isset($troparions[$id]["bodytext"]) && !isset($troparions[$id]["bodytext"]["$lang"])) {
             $troparions[$id]["bodytext"]["$lang"] = $bodytext;
         } else {
