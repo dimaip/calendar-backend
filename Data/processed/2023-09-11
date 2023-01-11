@@ -1,0 +1,25 @@
+{
+  "title": "Седмица 15-я по Пятидесятнице",
+  "glas": "5",
+  "fast": "Строгий пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_mf_14_1_13.html#z\">Мф., 57 зач., XIV, 1-13.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_deqn_13_25_32.html#z\">Деян., 33 зач., XIII, 25-32.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_6_14_30.html#z\">Мк., 24 зач., VI, 14-30.</a>  ",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Мф., 57 зач., XIV, 1-13."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "Деян., 33 зач., XIII, 25-32.",
+        "Мк., 24 зач., VI, 14-30."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Пророк, Предтеча и Креститель Господень Иоанн"
+  ]
+}

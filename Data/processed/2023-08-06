@@ -1,0 +1,44 @@
+{
+  "title": "Неделя 9-я по Пятидесятнице",
+  "glas": "8",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div>Утр. - Ев. 9-е, <a href=\"https://days.pravoslavie.ru/bible/z_in_20_19_31.html#z\">Ин., 65 зач., XX, 19-31.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_3_9_17.html#z\">1 Кор., 128 зач., III, 9-17.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_14_22_34.html#z\">Мф., 59 зач., XIV, 22-34.</a> Блгвв. кнн.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_28_39.html#z\">Рим., 99 зач., VIII, 28-39.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_15_17_0_16_0_2.html#z\">Ин., 52 зач., XV, 17 - XVI, 2</a> <span class=\"DAYS_asterix\" style=\"display:none\">**</span>, или мц.: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_6_1_10.html#z\">2 Кор., 181 зач., VI, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_36_50.html#z\">Лк., 33 зач., VII, 36-50</a> <span class=\"DAYS_asterix\" style=\"display:none\">***</span>.  </div><div class='DAYS_snoska' style='display:none'>* * Чтения блгвв. кнн. Бориса и Глеба читаются, если им совершается служба.   * * * Чтения мц. Христины читаются, если ей совершается служба. </div>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 65 зач., XX, 19-31."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "1 Кор., 128 зач., III, 9-17.",
+        "Мф., 59 зач., XIV, 22-34."
+      ],
+      "Блгвв. кнн.": [
+        "Рим., 99 зач., VIII, 28-39.",
+        "Ин., 52 зач., XV, 17 - XVI, 2"
+      ],
+      "или мц.": [
+        "2 Кор., 181 зач., VI, 1-10.",
+        "Лк., 33 зач., VII, 36-50"
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Христина Тирская, мц.",
+    "Благоверный князь Борис",
+    "Благоверный князь Глеб",
+    "Поликарп Печерский, архимандрит",
+    "Святитель Георгий (Конисский), архиепископ Могилевский",
+    "Далмат Исетский, прп.",
+    "Собор Смоленских святых",
+    "Алфей (Корбанский), диакон, сщмч.",
+    "Иоанн (Калинин, Оленевский), иерей, исп.",
+    "Николай (Понгельский), иерей, сщмч."
+  ]
+}

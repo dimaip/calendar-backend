@@ -1,0 +1,33 @@
+{
+  "title": "Седмица 7-я по Пасхе",
+  "glas": "6",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_deqn_21_26_32.html#z\">Деян., 46 зач., XXI, 26-32.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_16_2_13.html#z\">Ин., 53 зач., XVI, 2-13</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.</div><div class='DAYS_snoska' style='display:none'>* Если совершается полиелейная служба прп. Евфросинии, вел. кн. Московской, то на утрене читается <a href=\"https://days.pravoslavie.ru/bible/z_mf_6_1_13.html#z\">Мф., 16 зач., VI, 1-13,</a> а на литургии - чтения дня и преподобной: <a href=\"https://days.pravoslavie.ru/bible/z_gal_3_23_29.html#z\">Гал., 208 зач., III, 23-29.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_25_1_13.html#z\">Мф., 104 зач., XXV, 1-13.</a> </div>",
+  "readings": {
+    "Литургия": {
+      "Рядовое": [
+        "Деян., 46 зач., XXI, 26-32.",
+        "Ин., 53 зач., XVI, 2-13"
+      ]
+    }
+  },
+  "comments": [
+    [
+      "Мф., 16 зач., VI, 1-13,",
+      "Гал., 208 зач., III, 23-29.",
+      "Мф., 104 зач., XXV, 1-13."
+    ]
+  ],
+  "saints": [
+    "Апостол от 70-ти Андроник",
+    "Иуния (Юния)",
+    "Солохон Халкидонский, мч.",
+    "Памфамир Халкидонский",
+    "Памфалон Халкидонский, мч.",
+    "Святитель Стефан Константинопольский, патриарх",
+    "Преподобная Евфросиния Московская",
+    "Преподобный Адриан Ондрусовский"
+  ]
+}

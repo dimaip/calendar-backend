@@ -1,0 +1,29 @@
+{
+  "title": "Седмица сплошная",
+  "glas": "1",
+  "fast": "",
+  "fast_detail": "Поста нет",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_in_10_1_9.html#z\">Ин., 35 зач. (от&nbsp;полу&#769;), X, 1-9.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_1-in_1_8_0_2_0_6.html#z\">1 Ин., 69 зач., I, 8 - II, 6.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mk_13_31_0_14_0_2.html#z\">Мк., 62 зач., XIII, 31 - XIV, 2.</a> Свт.: <a href=\"https://days.pravoslavie.ru/bible/z_evr_7_26_0_8_0_2.html#z\">Евр., 318 зач., VII, 26 - VIII, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_10_9_16.html#z\">Ин., 36 зач., X, 9-16.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Ин., 35 зач. (от полу́), X, 1-9."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "1 Ин., 69 зач., I, 8 - II, 6.",
+        "Мк., 62 зач., XIII, 31 - XIV, 2."
+      ],
+      "Свт.": [
+        "Евр., 318 зач., VII, 26 - VIII, 2.",
+        "Ин., 36 зач., X, 9-16."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Святитель Иоанн Златоуст"
+  ]
+}

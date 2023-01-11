@@ -1,0 +1,36 @@
+{
+  "title": "Седмица 5-я по Пятидесятнице",
+  "glas": "3",
+  "fast": "Петров пост",
+  "fast_detail": "Разрешается рыба",
+  "originalTitle": "",
+  "originalReadings": "<div>Прмц.: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_6_1_10.html#z\">2 Кор., 181 зач., VI, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_36_50.html#z\">Лк., 33 зач., VII, 36-50</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>, или блгвв. кнн.: <a href=\"https://days.pravoslavie.ru/bible/z_gal_5_22_0_6_0_2.html#z\">Гал., 213 зач., V, 22 - VI, 2.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_4_25_0_5_0_12.html#z\">Мф., 10 зач., IV, 25 - V, 12</a> <span class=\"DAYS_asterix\" style=\"display:none\">**</span>. Ряд.: <a href=\"https://days.pravoslavie.ru/bible/z_rim_8_14_21.html#z\">Рим., 97 зач., VIII, 14-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_9_9_13.html#z\">Мф., 30 зач., IX, 9-13.</a></div><div class='DAYS_snoska' style='display:none'>* Чтения прмц. Февронии читаются, если ей совершается служба.   * * Чтения блгвв. кн. Петра и кн. Февронии читаются, если им совершается служба. </div>",
+  "readings": {
+    "Литургия": {
+      "Прмц.": [
+        "2 Кор., 181 зач., VI, 1-10.",
+        "Лк., 33 зач., VII, 36-50"
+      ],
+      "или блгвв. кнн.": [
+        "Гал., 213 зач., V, 22 - VI, 2.",
+        "Мф., 10 зач., IV, 25 - V, 12"
+      ],
+      ". Ряд.": [
+        "Рим., 97 зач., VIII, 14-21.",
+        "Мф., 30 зач., IX, 9-13."
+      ]
+    }
+  },
+  "comments": [
+    []
+  ],
+  "saints": [
+    "Феврония Сирская, дева, прмц.",
+    "Святой благоверный князь Петр Муромский",
+    "Феврония (в иночестве Евфросиния) Муромская, княгиня",
+    "Далмат Исетский, прп.",
+    "Василий (Милицын), иерей, сщмч.",
+    "Никон (Беляев) Оптинский, исповедник, прп.",
+    "Василий (Протопопов), иерей, сщмч."
+  ]
+}

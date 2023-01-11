@@ -1,0 +1,31 @@
+{
+  "title": "Седмица 28-я по Пятидесятнице",
+  "glas": "2",
+  "fast": "Рождественский пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_mf_4_18_23.html#z\">Мф., 9 зач., IV, 18-23.</a> Лит. - <a href=\"https://days.pravoslavie.ru/bible/z_2-tim_4_9_22.html#z\">2 Тим., 299 зач., IV, 9-22.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_20_1_8.html#z\">Лк., 99 зач., XX, 1-8.</a> Ап.: <a href=\"https://days.pravoslavie.ru/bible/z_1-kor_4_9_16.html#z\">1 Кор., 131 зач., IV, 9-16.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_1_35_51.html#z\">Ин., 4 зач., I, 35-51.</a>  ",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Мф., 9 зач., IV, 18-23."
+      ]
+    },
+    "Литургия": {
+      "Рядовое": [
+        "2 Тим., 299 зач., IV, 9-22.",
+        "Лк., 99 зач., XX, 1-8."
+      ],
+      "Ап.": [
+        "1 Кор., 131 зач., IV, 9-16.",
+        "Ин., 4 зач., I, 35-51."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Апостол Андрей Первозванный",
+    "Святитель Фрументий Индийский (Эфиопский), архиепископ",
+    "Иоанн (Честнов), иерей, сщмч."
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "title": "Седмица 2-я Великого поста",
+  "glas": "5",
+  "fast": "Великий пост",
+  "fast_detail": "Пища с растительным маслом",
+  "originalTitle": "",
+  "originalReadings": "Утр. - <a href=\"https://days.pravoslavie.ru/bible/z_lk_7_17_30.html#z\">Лк., 31 зач., VII, 17-30.</a> На 6-м часе: <a href=\"https://days.pravoslavie.ru/bible/z_is_6_1_12.html#z\">Ис. VI, 1-12.</a> На веч.: <a href=\"https://days.pravoslavie.ru/bible/z_byt_5_1_24.html#z\">Быт. V, 1-24.</a> <a href=\"https://days.pravoslavie.ru/bible/z_pritch_6_3_20.html#z\">Притч. VI, 3-20.</a> Лит. - Предтечи: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_4_6_15.html#z\">2 Кор., 176 зач., IV, 6-15.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_11_2_15.html#z\">Мф., 40 зач., XI, 2-15.</a>",
+  "readings": {
+    "Утреня": {
+      "Рядовое": [
+        "Лк., 31 зач., VII, 17-30."
+      ]
+    },
+    "6-й час": {
+      "Рядовое": [
+        "Ис. VI, 1-12."
+      ]
+    },
+    "Вечерня": {
+      "Рядовое": [
+        "Быт. V, 1-24.",
+        "Притч. VI, 3-20."
+      ]
+    },
+    "Литургия": {
+      "Предтечи": [
+        "2 Кор., 176 зач., IV, 6-15.",
+        "Мф., 40 зач., XI, 2-15."
+      ]
+    }
+  },
+  "comments": [],
+  "saints": [
+    "Пророк, Предтеча и Креститель Господень Иоанн",
+    "Еразм Печерский, прп."
+  ]
+}
