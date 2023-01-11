@@ -7,6 +7,10 @@
   "originalReadings": "Предтечи: <a href=\"https://days.pravoslavie.ru/bible/z_deqn_19_1_8.html#z\">Деян., 42 зач., XIX, 1-8.</a> <a href=\"https://days.pravoslavie.ru/bible/z_in_1_29_34.html#z\">Ин., 3 зач., I, 29-34.</a>  ",
   "readings": {
     "Литургия": {
+      "Рядовое": [
+        "Иак., 52 зач., II, 1-13.",
+        "Мк., 58 зач., XIII, 1-8"
+      ],
       "Предтечи": [
         "Деян., 42 зач., XIX, 1-8.",
         "Ин., 3 зач., I, 29-34."
