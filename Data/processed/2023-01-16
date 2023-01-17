@@ -7,6 +7,10 @@
   "originalReadings": "<div>Мч.: <a href=\"https://days.pravoslavie.ru/bible/z_2-tim_2_1_10.html#z\">2 Тим., 292 зач., II, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_mf_10_16_22.html#z\">Мф., 36 зач., X, 16-22</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.   </div><div class='DAYS_snoska' style='display:none'>* Рядовые чтения 3, 4, 7 и 8 января можно опустить ввиду Крещенской отступки. </div>",
   "readings": {
     "Литургия": {
+      "Рядовое": [
+        "Евр., 329 зач., XI, 17-23; 27-31.",
+        "Мк., 54 зач., XII, 13-17"
+      ],
       "Мч.": [
         "2 Тим., 292 зач., II, 1-10.",
         "Мф., 36 зач., X, 16-22"
