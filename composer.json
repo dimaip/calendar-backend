@@ -14,11 +14,9 @@
     },
     "require": {
         "sentry/sdk": "^2.1.0",
-        "erusev/parsedown": "^1.7"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^9.0",
-        "spatie/phpunit-snapshot-assertions": "^4.1"
+        "erusev/parsedown": "^1.7",
+        "parsecsv/php-parsecsv": "^1.3",
+        "firebase/php-jwt": "^6.4"
     },
     "license": "MIT"
 }
