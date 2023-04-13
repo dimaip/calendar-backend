@@ -29,13 +29,21 @@ function getAirtable($tableId, $tableName)
         $records = [];
         // Go through pagination and accumulate all records
         do {
-            $content = file_get_contents($url .  ($offset ? '&offset=' . $offset : ''), false, stream_context_create([
-                'http' => [
-                    'method' => "GET",
-                    // This is the read-only key, it's safe to expose it publicly
-                    'header' => "Authorization: Bearer keygUv0FLzqXCLjvt\r\n"
-                ]
-            ]));
+            $content = null;
+            $retryCount = 0;
+            while (!$content) {
+                $content = file_get_contents($url .  ($offset ? '&offset=' . $offset : ''), false, stream_context_create([
+                    'http' => [
+                        'method' => "GET",
+                        // This is the read-only key, it's safe to expose it publicly
+                        'header' => "Authorization: Bearer keygUv0FLzqXCLjvt\r\n"
+                    ]
+                ]));
+                if ($retryCount > 3) {
+                    throw new Exception("Could not fetch $url");
+                }
+                $retryCount++;
+            }
             $data = json_decode($content, true);
             $newRecords = array_map(function ($record) {
                 return $record['fields'];
