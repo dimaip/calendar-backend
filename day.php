@@ -25,6 +25,7 @@ function getAirtable($tableId, $tableName)
         $content = file_get_contents($filename);
         $records = json_decode($content, true);
     } else {
+        file_put_contents($filename, 'lock');
         $offset = null;
         $records = [];
         // Go through pagination and accumulate all records
