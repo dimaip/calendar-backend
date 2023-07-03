@@ -7,11 +7,11 @@
   "originalReadings": "<div><a href=\"https://days.pravoslavie.ru/bible/z_evr_4_1_13.html#z\">Евр., 310 зач., IV, 1-13.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_12_19.html#z\">Лк., 106 зач., XXI, 12-19 -</a> за вторник и за среду: <a href=\"https://days.pravoslavie.ru/bible/z_evr_5_11_0_6_0_8.html#z\">Евр., 312 зач., V, 11 - VI, 8.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_21_5_7_21_10_11_21_20_24.html#z\">Лк., 104 зач., XXI, 5-7, 10-11, 20-24.</a> Прп.: <a href=\"https://days.pravoslavie.ru/bible/z_2-kor_4_6_15.html#z\">2 Кор., 176 зач., IV, 6-15.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_6_17_23.html#z\">Лк., 24 зач., VI, 17-23</a> <span class=\"DAYS_asterix\" style=\"display:none\">*</span>.  </div><div class='DAYS_snoska' style='display:none'>* Чтения прп. Нила читаются, если ему совершается служба. </div>",
   "readings": {
     "Литургия": {
-      "Рядовое": [
+      "За вторник": [
         "Евр., 310 зач., IV, 1-13.",
-        "Лк., 106 зач., XXI, 12-19 -"
+        "Лк., 106 зач., XXI, 12-19."
       ],
-      "за вторник и за среду": [
+      "За среду": [
         "Евр., 312 зач., V, 11 - VI, 8.",
         "Лк., 104 зач., XXI, 5-7, 10-11, 20-24."
       ],
