@@ -4,3 +4,5 @@ Data/cache/
 
 /vendor/
 /.idea
+
+node_modules
