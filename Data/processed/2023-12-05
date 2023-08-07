@@ -7,9 +7,11 @@
   "originalReadings": "<a href=\"https://days.pravoslavie.ru/bible/z_1-tim_5_1_10.html#z\">1 Тим., 285 зач. (от&nbsp;полу&#769;), V, 1-10.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_17_20_25.html#z\">Лк., 86 зач., XVII, 20-25 -</a> за понедельник и за вторник (под зачало): <a href=\"https://days.pravoslavie.ru/bible/z_1-tim_5_11_21.html#z\">1 Тим., 286 зач., V, 11-21.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_17_26_37.html#z\">Лк., 87 зач., XVII, 26-37.</a> Апп.: последи&#769;' 302 зач., <a href=\"https://days.pravoslavie.ru/bible/z_flm_1_1_25.html#z\">Флм., I, 1-25.</a> <a href=\"https://days.pravoslavie.ru/bible/z_lk_10_1_15.html#z\">Лк., 50 зач., X, 1-15.</a>",
   "readings": {
     "Литургия": {
-      "Рядовое": [
+      "За понедельник": [
         "1 Тим., 285 зач. (от полу́), V, 1-10.",
-        "Лк., 86 зач., XVII, 20-25 -",
+        "Лк., 86 зач., XVII, 20-25."
+      ],
+      "За вторник": [
         "1 Тим., 286 зач., V, 11-21.",
         "Лк., 87 зач., XVII, 26-37."
       ],
