@@ -9,7 +9,7 @@ use Firebase\JWT\JWK;
  */
 function setField($key, $value)
 {
-    $host = getenv('HOST') ? getenv('HOST') : 'http://localhost:8080';
+    $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
     $bearer = getenv('PAT');
     if (!$bearer) {
         throw new Exception('PAT not defined');
@@ -63,4 +63,39 @@ function setField($key, $value)
     curl_close($curl);
 }
 
-setField($_POST["key"], $_POST["value"]);
+function getField($key)
+{
+    $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
+    $bearer = getenv('PAT');
+    if (!$bearer) {
+        throw new Exception('PAT not defined');
+    }
+
+    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        throw new Exception('Unathorised');
+    }
+    $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
+
+    if (!$key) {
+        throw new Exception('Key not passed');
+    }
+
+    // Get the keys
+    $openidConfig = file_get_contents($host . '/oauth/v2/keys');
+    $jwks = json_decode($openidConfig, true);
+    // Decode JWT and get the userId out of it
+    $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
+    $userId = $decoded->sub;
+
+    if (!$userId) {
+        throw new Exception('Couldn\'t authenticate the user');
+    }
+
+    return file_get_contents($host . '/management/v1/users/' . $userId . '/metadata/' . $key, false, stream_context_create([
+        "http" => [
+            "method" => "GET",
+            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n"
+        ]
+    ]));
+}
+

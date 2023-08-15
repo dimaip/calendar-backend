@@ -74,3 +74,49 @@ if (preg_match('/^\/day\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
   $data = $day->run($date);
   echo json_encode($data, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
 }
+
+$preferencesKey = 'PREFERENCES';
+
+if (preg_match('/^\/getSetting\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+  include __DIR__ . '/userMetadata.php';
+
+  $key = $matches[1] ?? null;
+
+  $currentValue = getField($preferencesKey) ?? [];
+  $value = $currentValue[$key] ?? null;
+
+  echo json_encode($value, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+}
+
+if (preg_match('/^\/getSettings/', $_SERVER["REQUEST_URI"], $matches)) {
+  include __DIR__ . '/userMetadata.php';
+
+  $currentValue = getField($preferencesKey) ?? null;
+
+  echo json_encode($currentValue, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+}
+
+if (preg_match('/^\/setSettings/', $_SERVER["REQUEST_URI"], $matches)) {
+  include __DIR__ . '/userMetadata.php';
+
+  $value = $_POST["value"];
+
+  setField($preferencesKey, $value);
+
+  echo json_encode(['success' => true], JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+}
+
+if (preg_match('/^\/setSetting/', $_SERVER["REQUEST_URI"], $matches)) {
+  include __DIR__ . '/userMetadata.php';
+
+  $key = $_POST["key"];
+  $value = $_POST["value"];
+
+  $currentValue = getField($preferencesKey) ?? [];
+
+  $mergedValue = array_merge((array)($currentValue ?? []), [$key => $value]);
+
+  setField($preferencesKey, $mergedValue);
+
+  echo json_encode(['success' => true], JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+}
