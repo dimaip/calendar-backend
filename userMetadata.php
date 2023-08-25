@@ -48,9 +48,7 @@ function setField($key, $value)
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS => json_encode([
-            "id" => $userId,
-            "key" => $key,
-            "value" => $value
+            "value" => base64_encode($value)
         ]),
         CURLOPT_HTTPHEADER => array(
             'accept: application/json',
@@ -91,11 +89,57 @@ function getField($key)
         throw new Exception('Couldn\'t authenticate the user');
     }
 
-    return file_get_contents($host . '/management/v1/users/' . $userId . '/metadata/' . $key, false, stream_context_create([
+    $response = file_get_contents($host . '/management/v1/users/' . $userId . '/metadata/' . $key, false, stream_context_create([
         "http" => [
             "method" => "GET",
-            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n"
+            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n",
+            "ignore_errors" => true
         ]
     ]));
+    if (!isset($response['metadata']['value'])) {
+        return [];
+    }
+    return $response['metadata']['value'] || [];
+}
+
+function getFields()
+{
+    $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
+    $bearer = getenv('PAT');
+    if (!$bearer) {
+        throw new Exception('PAT not defined');
+    }
+
+    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        throw new Exception('Unathorised');
+    }
+    $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
+
+    // Get the keys
+    $openidConfig = file_get_contents($host . '/oauth/v2/keys');
+    $jwks = json_decode($openidConfig, true);
+    // Decode JWT and get the userId out of it
+    $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
+    $userId = $decoded->sub;
+
+    if (!$userId) {
+        throw new Exception('Couldn\'t authenticate the user');
+    }
+
+    $response = file_get_contents($host . '/management/v1/users/' . $userId . '/metadata/_search', false, stream_context_create([
+        "http" => [
+            "method" => "POST",
+            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n",
+            "ignore_errors" => true
+        ]
+    ]));
+    $response = json_decode($response, true);
+    $res = [];
+    if (isset($response['result'])) {
+        foreach ($response['result'] as $i) {
+            $res[$i['key']] = json_decode(base64_decode($i['value']));
+        }
+    }
+    return $res;
 }
 
