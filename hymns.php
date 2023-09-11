@@ -21,7 +21,7 @@ function hymns() {
             'Цся' => 'csj'
         ];
         $lang = $langMap[$row['Язык']];
-        $bodytext = styleHtml($parsedown->text(($row['Тропари'] ?? '')) . $parsedown->text(($row['Кондаки'] ?? '')));
+        $bodytext = styleHtml($parsedown->text(($row['Тропари'] ?? '')) . $parsedown->text(($row['Кондаки'] ?? '')) . $parsedown->text(($row['Величания'] ?? '')));
         if (isset($troparions[$id]["bodytext"]) && !isset($troparions[$id]["bodytext"]["$lang"])) {
             $troparions[$id]["bodytext"]["$lang"] = $bodytext;
         } else {
@@ -36,5 +36,3 @@ function hymns() {
     }
     return array_values($troparions);
 }
-
-?>
