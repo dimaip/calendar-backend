@@ -58,6 +58,11 @@ function setField($key, $value)
     ));
 
     curl_exec($curl);
+    $output = curl_exec($curl);
+    if (curl_getinfo($curl, CURLINFO_HTTP_CODE) >= 400) {
+        error_log(json_encode($output));
+        throw new Exception('Request failed');
+    } 
     curl_close($curl);
 }
 
