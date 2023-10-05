@@ -8,6 +8,9 @@ services:
             - main
         ports:
             - '80'
+        environment:
+            - Z_URL
+            - PAT
         labels:
             - 'traefik.enable=true'
             - 'traefik.port=80'
