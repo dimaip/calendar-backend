@@ -5,6 +5,11 @@ header("Access-Control-Allow-Methods: *");
 header("Access-Control-Allow-Headers: *");
 header('Content-Type: application/json');
 
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+  // No further action needed for OPTIONS request
+  exit(0);
+}
+
 try {
   if (preg_match('/^\/clear-cache/', $_SERVER["REQUEST_URI"])) {
     include_once __DIR__ . '/clearCache.php';
