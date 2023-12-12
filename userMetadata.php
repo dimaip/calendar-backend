@@ -55,6 +55,7 @@ function setField($key, $value)
         $userId = getUserId();
     } catch (Exception $e) {
         error_log($e->getMessage());
+        http_response_code(401);
         return [
             "errorCode" => "jwt_expired",
             "errorMessage" => "JWT token expired"
@@ -104,6 +105,7 @@ function getField($key)
         $userId = getUserId();
     } catch (Exception $e) {
         error_log($e->getMessage());
+        http_response_code(401);
         return [
             "errorCode" => "jwt_expired",
             "errorMessage" => "JWT token expired"
@@ -123,6 +125,7 @@ function getFields()
         $userId = getUserId();
     } catch (Exception $e) {
         error_log($e->getMessage());
+        http_response_code(401);
         return [
             "errorCode" => "jwt_expired",
             "errorMessage" => "JWT token expired"
@@ -139,6 +142,7 @@ function getFields()
         }
     } catch (Exception $e) {
         error_log($e->getMessage());
+        http_response_code(400);
         return [
             "errorCode" => "zitadel_metadata_request_failed",
             "errorMessage" => "Zitadel profile call failed"
