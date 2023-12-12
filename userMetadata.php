@@ -4,7 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 
-function makeGetRequest($url, $authenticated = false, $skipDecode = false)
+function makeGetRequest($url, $method = 'GET', $authenticated = false, $skipDecode = false)
 {
     $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
     $bearer = getenv('PAT');
@@ -13,9 +13,9 @@ function makeGetRequest($url, $authenticated = false, $skipDecode = false)
     }
     $context = $authenticated ? stream_context_create([
         "http" => [
-            "method" => "GET",
+            "method" => $method,
             "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n",
-            "ignore_errors" => true
+            "ignore_errors" => false
         ]
     ]) : null;
     $content = file_get_contents($host . $url, false, $context);
@@ -30,7 +30,7 @@ function getUserId()
     $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
 
     // Get the keys
-    $jwks = makeGetRequest('/oauth/v2/keys', false, true);
+    $jwks = makeGetRequest('/oauth/v2/keys');
 
     // Decode JWT and get the userId out of it
     $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
@@ -110,7 +110,7 @@ function getField($key)
         ];
     }
 
-    $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $key, true);
+    $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $key, 'GET', true);
     if (!isset($response['metadata']['value'])) {
         return [];
     }
@@ -130,7 +130,7 @@ function getFields()
     }
 
     try {
-        $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/_search', true);
+        $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/_search', 'POST', true);
         $res = [];
         if (isset($response['result'])) {
             foreach ($response['result'] as $i) {
