@@ -4,6 +4,45 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 
+function makeGetRequest($url, $authenticated = false, $skipDecode = false)
+{
+    $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
+    $bearer = getenv('PAT');
+    if ($authenticated && !$bearer) {
+        throw new Exception('PAT not defined');
+    }
+    $context = $authenticated ? stream_context_create([
+        "http" => [
+            "method" => "GET",
+            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n",
+            "ignore_errors" => true
+        ]
+    ]) : null;
+    $content = file_get_contents($host . $url, false, $context);
+    return $skipDecode ? $content : json_decode($content, true);
+}
+
+function getUserId()
+{
+    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        throw new Exception('Unathorised');
+    }
+    $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
+
+    // Get the keys
+    $jwks = makeGetRequest('/oauth/v2/keys', false, true);
+
+    // Decode JWT and get the userId out of it
+    $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
+    $userId = $decoded->sub;
+
+    if (!$userId) {
+        error_log('Couldn\'t authenticate the user');
+        throw new Exception('Couldn\'t authenticate the user');
+    }
+    return $userId;
+}
+
 /**
  * Set a metadata field on the current authenticated user
  */
@@ -11,28 +50,15 @@ function setField($key, $value)
 {
     $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
     $bearer = getenv('PAT');
-    if (!$bearer) {
-        throw new Exception('PAT not defined');
-    }
 
-    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
-        throw new Exception('Unathorised');
-    }
-    $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
-
-    if (!$key || !$value) {
-        throw new Exception('Key or value not passed');
-    }
-
-    // Get the keys
-    $openidConfig = file_get_contents($host . '/oauth/v2/keys');
-    $jwks = json_decode($openidConfig, true);
-    // Decode JWT and get the userId out of it
-    $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
-    $userId = $decoded->sub;
-
-    if (!$userId) {
-        throw new Exception('Couldn\'t authenticate the user');
+    try {
+        $userId = getUserId();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return [
+            "errorCode" => "jwt_expired",
+            "errorMessage" => "JWT token expired"
+        ];
     }
 
     // Make the actual request using the PAT token of the service user that is allowed to make such requests
@@ -62,7 +88,7 @@ function setField($key, $value)
     if (curl_getinfo($curl, CURLINFO_HTTP_CODE) >= 400) {
         error_log(json_encode($output));
         throw new Exception('Request failed');
-    } 
+    }
     curl_close($curl);
 }
 
@@ -74,33 +100,17 @@ function getField($key)
         throw new Exception('PAT not defined');
     }
 
-    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
-        throw new Exception('Unathorised');
-    }
-    $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
-
-    if (!$key) {
-        throw new Exception('Key not passed');
-    }
-
-    // Get the keys
-    $openidConfig = file_get_contents($host . '/oauth/v2/keys');
-    $jwks = json_decode($openidConfig, true);
-    // Decode JWT and get the userId out of it
-    $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
-    $userId = $decoded->sub;
-
-    if (!$userId) {
-        throw new Exception('Couldn\'t authenticate the user');
+    try {
+        $userId = getUserId();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return [
+            "errorCode" => "jwt_expired",
+            "errorMessage" => "JWT token expired"
+        ];
     }
 
-    $response = file_get_contents($host . '/management/v1/users/' . $userId . '/metadata/' . $key, false, stream_context_create([
-        "http" => [
-            "method" => "GET",
-            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n",
-            "ignore_errors" => true
-        ]
-    ]));
+    $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $key, true);
     if (!isset($response['metadata']['value'])) {
         return [];
     }
@@ -109,42 +119,30 @@ function getField($key)
 
 function getFields()
 {
-    $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
-    $bearer = getenv('PAT');
-    if (!$bearer) {
-        throw new Exception('PAT not defined');
+    try {
+        $userId = getUserId();
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return [
+            "errorCode" => "jwt_expired",
+            "errorMessage" => "JWT token expired"
+        ];
     }
 
-    if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
-        throw new Exception('Unathorised');
-    }
-    $token = trim(substr($_SERVER['HTTP_AUTHORIZATION'], 7));
-
-    // Get the keys
-    $openidConfig = file_get_contents($host . '/oauth/v2/keys');
-    $jwks = json_decode($openidConfig, true);
-    // Decode JWT and get the userId out of it
-    $decoded = JWT::decode($token, JWK::parseKeySet($jwks));
-    $userId = $decoded->sub;
-
-    if (!$userId) {
-        throw new Exception('Couldn\'t authenticate the user');
-    }
-
-    $response = file_get_contents($host . '/management/v1/users/' . $userId . '/metadata/_search', false, stream_context_create([
-        "http" => [
-            "method" => "POST",
-            "header" => "accept: application/json\r\nContent-Type: application/json\r\nAuthorization: Bearer $bearer\r\n",
-            "ignore_errors" => true
-        ]
-    ]));
-    $response = json_decode($response, true);
-    $res = [];
-    if (isset($response['result'])) {
-        foreach ($response['result'] as $i) {
-            $res[$i['key']] = json_decode(base64_decode($i['value']));
+    try {
+        $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/_search', true);
+        $res = [];
+        if (isset($response['result'])) {
+            foreach ($response['result'] as $i) {
+                $res[$i['key']] = json_decode(base64_decode($i['value']));
+            }
         }
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        return [
+            "errorCode" => "zitadel_metadata_request_failed",
+            "errorMessage" => "Zitadel profile call failed"
+        ];
     }
     return $res;
 }
-

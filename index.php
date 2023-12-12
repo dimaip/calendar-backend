@@ -5,136 +5,144 @@ header("Access-Control-Allow-Methods: *");
 header("Access-Control-Allow-Headers: *");
 header('Content-Type: application/json');
 
-if (preg_match('/^\/clear-cache/', $_SERVER["REQUEST_URI"])) {
-  include_once __DIR__ . '/clearCache.php';
-}
-
-if (preg_match('/^\/app/', $_SERVER["REQUEST_URI"])) {
-  include_once __DIR__ . '/app.php';
-  exit();
-}
-
-if (preg_match('/^\/hymns/', $_SERVER["REQUEST_URI"])) {
-  include_once __DIR__ . '/hymns.php';
-  echo json_encode(hymns(), JSON_PRETTY_PRINT);
-  exit();
-}
-
-if (preg_match('/^\/reading\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/bible.php';
-  $explodedUrl = explode('&translation=', urldecode($matches[1]));
-  $zachalo = $explodedUrl[0];
-  if (isset($explodedUrl[1])) {
-    $translation = $explodedUrl[1];
-  } else {
-    $translation = null;
+try {
+  if (preg_match('/^\/clear-cache/', $_SERVER["REQUEST_URI"])) {
+    include_once __DIR__ . '/clearCache.php';
   }
-  if ($translation === 'default') {
-    $translation = null;
-  }
-  if (!$translation) {
-    $translation = null;
-  }
-  $bible = new Bible;
-  $data = $bible->run($zachalo, $translation);
-  echo json_encode($data, JSON_PRETTY_PRINT);
-  exit();
-}
 
-if (preg_match('/^\/readings\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/day.php';
+  if (preg_match('/^\/app/', $_SERVER["REQUEST_URI"])) {
+    include_once __DIR__ . '/app.php';
+    exit();
+  }
 
-  $day = new Day;
-  $date = $matches[1] ?? null;
-  $data = $day->run($date);
-  $readings = $data['bReadings'] ? array_merge($data['readings'], $data['bReadings']) : $data['readings'];
-  $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($readings));
-  $result = [];
-  foreach ($it as $complexVerse) {
+  if (preg_match('/^\/hymns/', $_SERVER["REQUEST_URI"])) {
+    include_once __DIR__ . '/hymns.php';
+    echo json_encode(hymns(), JSON_PRETTY_PRINT);
+    exit();
+  }
+
+  if (preg_match('/^\/reading\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/bible.php';
+    $explodedUrl = explode('&translation=', urldecode($matches[1]));
+    $zachalo = $explodedUrl[0];
+    if (isset($explodedUrl[1])) {
+      $translation = $explodedUrl[1];
+    } else {
+      $translation = null;
+    }
+    if ($translation === 'default') {
+      $translation = null;
+    }
+    if (!$translation) {
+      $translation = null;
+    }
     $bible = new Bible;
-    if ($complexVerse) {
-      $simpleVerses = explode('~', $complexVerse);
-      foreach ($simpleVerses as $simpleVerse) {
-        $result[$simpleVerse] = $bible->run($simpleVerse, null);
+    $data = $bible->run($zachalo, $translation);
+    echo json_encode($data, JSON_PRETTY_PRINT);
+    exit();
+  }
+
+  if (preg_match('/^\/readings\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/day.php';
+
+    $day = new Day;
+    $date = $matches[1] ?? null;
+    $data = $day->run($date);
+    $readings = $data['bReadings'] ? array_merge($data['readings'], $data['bReadings']) : $data['readings'];
+    $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($readings));
+    $result = [];
+    foreach ($it as $complexVerse) {
+      $bible = new Bible;
+      if ($complexVerse) {
+        $simpleVerses = explode('~', $complexVerse);
+        foreach ($simpleVerses as $simpleVerse) {
+          $result[$simpleVerse] = $bible->run($simpleVerse, null);
+        }
       }
     }
+    echo json_encode($result, JSON_PRETTY_PRINT);
+    exit();
   }
-  echo json_encode($result, JSON_PRETTY_PRINT);
-  exit();
-}
 
-if (preg_match('/^\/parts\/(.+)\/(.*)/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/day.php';
+  if (preg_match('/^\/parts\/(.+)\/(.*)/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/day.php';
 
-  $day = new Day;
-  $date = $matches[1] ?? null;
-  $lang = $matches[2] ?? 'ru';
-  $data = $day->parts($date, $lang);
-  echo json_encode($data, JSON_PRETTY_PRINT);
-  exit();
-}
+    $day = new Day;
+    $date = $matches[1] ?? null;
+    $lang = $matches[2] ?? 'ru';
+    $data = $day->parts($date, $lang);
+    echo json_encode($data, JSON_PRETTY_PRINT);
+    exit();
+  }
 
-if (preg_match('/^\/day\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/day.php';
+  if (preg_match('/^\/day\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/day.php';
 
-  $day = new Day;
-  $date = $matches[1] ?? null;
-  $data = $day->run($date);
-  echo json_encode($data, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-  exit();
-}
+    $day = new Day;
+    $date = $matches[1] ?? null;
+    $data = $day->run($date);
+    echo json_encode($data, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    exit();
+  }
 
-// $preferencesKey = 'PREFERENCES';
+  // $preferencesKey = 'PREFERENCES';
 
-if (preg_match('/^\/getSetting\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/userMetadata.php';
+  if (preg_match('/^\/getSetting\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/userMetadata.php';
 
-  $key = $matches[1];
+    $key = $matches[1];
 
-  // $currentValue = getField($key) ?? [];
-  // $value = $currentValue[$key] ?? null;
+    // $currentValue = getField($key) ?? [];
+    // $value = $currentValue[$key] ?? null;
 
-  echo json_encode(getField($key), JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-  exit();
-}
+    echo json_encode(getField($key), JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    exit();
+  }
 
-if (preg_match('/^\/getSettings/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/userMetadata.php';
+  if (preg_match('/^\/getSettings/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/userMetadata.php';
 
-  $currentValue = getFields();
+    $currentValue = getFields();
 
-  echo json_encode($currentValue, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-  exit();
-}
+    echo json_encode($currentValue, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    exit();
+  }
 
-// if (preg_match('/^\/setSettings/', $_SERVER["REQUEST_URI"], $matches)) {
-//   include_once __DIR__ . '/userMetadata.php';
+  // if (preg_match('/^\/setSettings/', $_SERVER["REQUEST_URI"], $matches)) {
+  //   include_once __DIR__ . '/userMetadata.php';
 
-//   $value = json_decode($_POST["value"]);
+  //   $value = json_decode($_POST["value"]);
 
-//   setField($preferencesKey, $value);
+  //   setField($preferencesKey, $value);
 
-//   echo json_encode(['success' => true], JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-//   exit();
-// }
+  //   echo json_encode(['success' => true], JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+  //   exit();
+  // }
 
-if (preg_match('/^\/setSetting/', $_SERVER["REQUEST_URI"], $matches)) {
-  include_once __DIR__ . '/userMetadata.php';
+  if (preg_match('/^\/setSetting/', $_SERVER["REQUEST_URI"], $matches)) {
+    include_once __DIR__ . '/userMetadata.php';
 
-  $bodyJson = file_get_contents('php://input');
+    $bodyJson = file_get_contents('php://input');
 
-  // Decode the JSON payload into a PHP associative array
-  $data = json_decode($bodyJson, true);
+    // Decode the JSON payload into a PHP associative array
+    $data = json_decode($bodyJson, true);
 
-  $key = $data["key"];
-  $value = $data["value"];
+    $key = $data["key"];
+    $value = $data["value"];
 
-  // $currentValue = getField($preferencesKey) ?? [];
+    // $currentValue = getField($preferencesKey) ?? [];
 
-  // $mergedValue = array_merge((array)($currentValue ?? []), [$key => $value]);
+    // $mergedValue = array_merge((array)($currentValue ?? []), [$key => $value]);
 
-  setField($key, json_encode($value, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE));
+    setField($key, json_encode($value, JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE));
 
-  echo json_encode(['success' => true], JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-  exit();
+    echo json_encode(['success' => true], JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+    exit();
+  }
+} catch (Exception $e) {
+  error_log($e->getMessage());
+  return [
+    "errorCode" => "generic_error",
+    "errorMessage" => $e->getMessage()
+  ];
 }
