@@ -53,7 +53,7 @@ try {
     $day = new Day;
     $date = $matches[1] ?? null;
     $data = $day->run($date);
-    $readings = $data['bReadings'] ? array_merge($data['readings'], $data['bReadings']) : $data['readings'];
+    $readings = array_merge($data['readings'] ?? [], $data['bReadings'] ?? []);
     $it = new RecursiveIteratorIterator(new RecursiveArrayIterator($readings));
     $result = [];
     foreach ($it as $complexVerse) {
