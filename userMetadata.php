@@ -4,6 +4,15 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 
+function decodeB64($string)
+{
+    $prefix = 'b64_';
+    if (substr($string, 0, strlen($prefix)) === $prefix) {
+        return base64_decode(substr($string, strlen($prefix)));
+    }
+    return $string;
+}
+
 function makeGetRequest($url, $method = 'GET', $authenticated = false, $skipDecode = false)
 {
     $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
@@ -66,7 +75,7 @@ function setField($key, $value)
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $host . '/management/v1/users/' . $userId . '/metadata/' . $key,
+        CURLOPT_URL => $host . '/management/v1/users/' . $userId . '/metadata/' . 'b64_' . base64_encode($key),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -93,31 +102,44 @@ function setField($key, $value)
     curl_close($curl);
 }
 
-function getField($key)
-{
-    $host = getenv('Z_URL') ? getenv('Z_URL') : 'http://localhost:8080';
-    $bearer = getenv('PAT');
-    if (!$bearer) {
-        throw new Exception('PAT not defined');
-    }
+// function getField($key)
+// {
+//     $bearer = getenv('PAT');
+//     if (!$bearer) {
+//         throw new Exception('PAT not defined');
+//     }
 
-    try {
-        $userId = getUserId();
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-        http_response_code(401);
-        return [
-            "errorCode" => "jwt_expired",
-            "errorMessage" => "JWT token expired"
-        ];
-    }
+//     try {
+//         $userId = getUserId();
+//     } catch (Exception $e) {
+//         error_log($e->getMessage());
+//         http_response_code(401);
+//         return [
+//             "errorCode" => "jwt_expired",
+//             "errorMessage" => "JWT token expired"
+//         ];
+//     }
 
-    $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $key, 'GET', true);
-    if (!isset($response['metadata']['value'])) {
-        return [];
-    }
-    return $response['metadata']['value'] || [];
-}
+//     $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $key, 'GET', true);
+//     if (!isset($response['metadata']['value'])) {
+//         return [];
+//     }
+//     return base64_decode($response['metadata']['value']) || [];
+// }
+
+// function getPrayer($userId, $prayerId)
+// {
+//     $bearer = getenv('PAT');
+//     if (!$bearer) {
+//         throw new Exception('PAT not defined');
+//     }
+
+//     $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $prayerId, 'GET', true);
+//     if (!isset($response['metadata']['value'])) {
+//         return [];
+//     }
+//     return base64_decode($response['metadata']['value']) || [];
+// }
 
 function getFields()
 {
@@ -137,7 +159,8 @@ function getFields()
         $res = [];
         if (isset($response['result'])) {
             foreach ($response['result'] as $i) {
-                $res[$i['key']] = json_decode(base64_decode($i['value']));
+                $key = decodeB64($i['key']);
+                $res[$key] = json_decode(base64_decode($i['value']));
             }
         }
     } catch (Exception $e) {

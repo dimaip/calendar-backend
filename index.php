@@ -92,17 +92,27 @@ try {
 
   // $preferencesKey = 'PREFERENCES';
 
-  if (preg_match('/^\/getSetting\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
-    include_once __DIR__ . '/userMetadata.php';
+  // if (preg_match('/^\/getSetting\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+  //   include_once __DIR__ . '/userMetadata.php';
 
-    $key = $matches[1];
+  //   $key = $matches[1];
 
-    // $currentValue = getField($key) ?? [];
-    // $value = $currentValue[$key] ?? null;
+  //   // $currentValue = getField($key) ?? [];
+  //   // $value = $currentValue[$key] ?? null;
 
-    echo json_encode(getField($key), JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
-    exit();
-  }
+  //   echo json_encode(getField($key), JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+  //   exit();
+  // }
+
+  // if (preg_match('/^\/getPrayer\/(.+)\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
+  //   include_once __DIR__ . '/userMetadata.php';
+
+  //   $user = $matches[1];
+  //   $prayer = $matches[2];
+
+  //   echo json_encode(getField($key), JSON_PRETTY_PRINT | JSON_INVALID_UTF8_SUBSTITUTE);
+  //   exit();
+  // }
 
   if (preg_match('/^\/getSettings/', $_SERVER["REQUEST_URI"], $matches)) {
     include_once __DIR__ . '/userMetadata.php';
