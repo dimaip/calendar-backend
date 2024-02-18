@@ -141,6 +141,28 @@ function setField($key, $value)
 //     return base64_decode($response['metadata']['value']) || [];
 // }
 
+function getFieldsForUser($userId)
+{
+    try {
+        $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/_search', 'POST', true);
+        $res = [];
+        if (isset($response['result'])) {
+            foreach ($response['result'] as $i) {
+                $key = decodeB64($i['key']);
+                $res[$key] = json_decode(base64_decode($i['value']), true);
+            }
+        }
+    } catch (Exception $e) {
+        error_log($e->getMessage());
+        http_response_code(400);
+        return [
+            "errorCode" => "zitadel_metadata_request_failed",
+            "errorMessage" => "Zitadel profile call failed"
+        ];
+    }
+    return $res;
+}
+
 function getFields()
 {
     try {
@@ -154,22 +176,59 @@ function getFields()
         ];
     }
 
-    try {
-        $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/_search', 'POST', true);
-        $res = [];
-        if (isset($response['result'])) {
-            foreach ($response['result'] as $i) {
-                $key = decodeB64($i['key']);
-                $res[$key] = json_decode(base64_decode($i['value']));
-            }
+    return getFieldsForUser($userId);
+}
+
+function compileServiceStructure($userId, $serviceId, $versionId)
+{
+    $state = getFieldsForUser($userId);
+
+    // Extract script version details based on versionId
+    $scriptVersions = array_values(array_filter(
+        $state["scriptVersions__\"$serviceId\""] ?? [],
+        function ($version) use ($versionId) {
+            return $version['id'] == $versionId;
         }
-    } catch (Exception $e) {
-        error_log($e->getMessage());
-        http_response_code(400);
-        return [
-            "errorCode" => "zitadel_metadata_request_failed",
-            "errorMessage" => "Zitadel profile call failed"
-        ];
+    ));
+    $scriptVersion = reset($scriptVersions);
+
+    // Prepare the initial structure
+    $structure = [
+        'scriptVersionId' => $scriptVersion['id'] ?? '',
+        'scriptVersionName' => $scriptVersion['name'] ?? '',
+        'service' => $serviceId,
+        'customPrayers' => $state["customPrayers__\"$serviceId\""] ?? [],
+        'disabledPrayers' => [],
+        'extraPrayers' => []
+    ];
+
+    // Filter disabled prayers
+    if (!empty($state['disabledPrayers'])) {
+        $structure['disabledPrayers'] = array_values(array_filter(
+            $state['disabledPrayers'],
+            function ($prayer) use ($serviceId, $versionId) {
+                return strpos($prayer, $serviceId) !== false && strpos($prayer, (string)$versionId) !== false;
+            }
+        ));
     }
-    return $res;
+
+    // Extract extra prayers
+    $extraPrayerKeys = array_values(array_filter(
+        array_keys($state),
+        function ($key) use ($serviceId, $versionId) {
+            return strpos($key, "extraPrayers__") !== false &&
+                strpos($key, "$serviceId-$versionId") !== false;
+        }
+    ));
+    foreach ($extraPrayerKeys as $key) {
+        $structure['extraPrayers'][substr($key, 15, -1)] = $state[$key];
+    }
+
+    $extraPrayerIds = array_merge(...array_values($structure['extraPrayers'] ?? []));
+
+    $structure['customPrayers'] = array_values(array_filter($state["customPrayers__\"Sugubaja\""], function ($prayer) use ($extraPrayerIds) {
+        return in_array($prayer['id'], $extraPrayerIds);
+    }));
+
+    return $structure;
 }
