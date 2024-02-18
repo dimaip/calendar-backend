@@ -4,11 +4,21 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\JWK;
 
+function base64_url_encode($input)
+{
+    return strtr(base64_encode($input), '+/=', '-_.');
+}
+
+function base64_url_decode($input)
+{
+    return base64_decode(strtr($input, '-_.', '+/='));
+}
+
 function decodeB64($string)
 {
     $prefix = 'b64_';
     if (substr($string, 0, strlen($prefix)) === $prefix) {
-        return base64_decode(substr($string, strlen($prefix)));
+        return base64_url_decode(substr($string, strlen($prefix)));
     }
     return $string;
 }
@@ -75,7 +85,7 @@ function setField($key, $value)
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => $host . '/management/v1/users/' . $userId . '/metadata/' . 'b64_' . base64_encode($key),
+        CURLOPT_URL => $host . '/management/v1/users/' . $userId . '/metadata/' . 'b64_' . base64_url_encode($key),
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -84,7 +94,7 @@ function setField($key, $value)
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS => json_encode([
-            "value" => base64_encode($value)
+            "value" => base64_url_encode($value)
         ]),
         CURLOPT_HTTPHEADER => array(
             'accept: application/json',
@@ -102,45 +112,6 @@ function setField($key, $value)
     curl_close($curl);
 }
 
-// function getField($key)
-// {
-//     $bearer = getenv('PAT');
-//     if (!$bearer) {
-//         throw new Exception('PAT not defined');
-//     }
-
-//     try {
-//         $userId = getUserId();
-//     } catch (Exception $e) {
-//         error_log($e->getMessage());
-//         http_response_code(401);
-//         return [
-//             "errorCode" => "jwt_expired",
-//             "errorMessage" => "JWT token expired"
-//         ];
-//     }
-
-//     $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $key, 'GET', true);
-//     if (!isset($response['metadata']['value'])) {
-//         return [];
-//     }
-//     return base64_decode($response['metadata']['value']) || [];
-// }
-
-// function getPrayer($userId, $prayerId)
-// {
-//     $bearer = getenv('PAT');
-//     if (!$bearer) {
-//         throw new Exception('PAT not defined');
-//     }
-
-//     $response = makeGetRequest('/management/v1/users/' . $userId . '/metadata/' . $prayerId, 'GET', true);
-//     if (!isset($response['metadata']['value'])) {
-//         return [];
-//     }
-//     return base64_decode($response['metadata']['value']) || [];
-// }
-
 function getFieldsForUser($userId)
 {
     try {
@@ -149,7 +120,7 @@ function getFieldsForUser($userId)
         if (isset($response['result'])) {
             foreach ($response['result'] as $i) {
                 $key = decodeB64($i['key']);
-                $res[$key] = json_decode(base64_decode($i['value']), true);
+                $res[$key] = json_decode(base64_url_decode($i['value']), true);
             }
         }
     } catch (Exception $e) {
