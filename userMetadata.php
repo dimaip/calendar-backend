@@ -94,7 +94,7 @@ function setField($key, $value)
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS => json_encode([
-            "value" => base64_url_encode($value)
+            "value" => base64_encode($value)
         ]),
         CURLOPT_HTTPHEADER => array(
             'accept: application/json',
@@ -120,7 +120,7 @@ function getFieldsForUser($userId)
         if (isset($response['result'])) {
             foreach ($response['result'] as $i) {
                 $key = decodeB64($i['key']);
-                $res[$key] = json_decode(base64_url_decode($i['value']), true);
+                $res[$key] = json_decode(base64_decode($i['value']), true);
             }
         }
     } catch (Exception $e) {
