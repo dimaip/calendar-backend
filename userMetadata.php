@@ -165,6 +165,7 @@ function compileServiceStructure($userId, $serviceId, $versionId)
 
     // Prepare the initial structure
     $structure = [
+        'userId' => $userId,
         'scriptVersionId' => $scriptVersion['id'] ?? '',
         'scriptVersionName' => $scriptVersion['name'] ?? '',
         'service' => $serviceId,
