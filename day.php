@@ -37,7 +37,7 @@ function getAirtable($tableId, $tableName)
                     'http' => [
                         'method' => "GET",
                         // This is the read-only key, it's safe to expose it publicly
-                        'header' => "Authorization: Bearer keygUv0FLzqXCLjvt\r\n"
+                        'header' => "Authorization: Bearer patVQ2ONx3NyvrTl8.d918549ba9b1caee42474af09fff67e68f49f5b81885ea9b0e6d748d29de788b\r\n"
                     ]
                 ]));
                 if ($retryCount > 3) {
