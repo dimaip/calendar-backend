@@ -120,7 +120,13 @@ function getFieldsForUser($userId)
         if (isset($response['result'])) {
             foreach ($response['result'] as $i) {
                 $key = decodeB64($i['key']);
-                $res[$key] = json_decode(base64_decode($i['value']), true);
+                if (
+                    !isset($res[$key]) ||
+                    // If decoded value is different, it's B64, we should always prefer it
+                    $key !== $i['key']
+                ) {
+                    $res[$key] = json_decode(base64_decode($i['value']), true);
+                }
             }
         }
     } catch (Exception $e) {
