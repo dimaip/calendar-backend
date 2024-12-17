@@ -41,7 +41,7 @@ try {
       ? $params['translation']
       : null;
 
-    $translationPriority = isset($params['translationPriority']) ? $params['translationPriority'] : [];
+    $translationPriority = isset($params['translationPriority']) ? explode(',', $params['translationPriority']) : [];
 
     $explodedUrl = explode('&translation=', urldecode($matches[1]));
     $zachalo = $explodedUrl[0];
