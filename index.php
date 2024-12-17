@@ -29,12 +29,12 @@ try {
   if (preg_match('/^\/reading\/(.+)/', $_SERVER["REQUEST_URI"], $matches)) {
     include_once __DIR__ . '/bible.php';
 
-    $parsedUrl = parse_url($_SERVER["REQUEST_URI"]);
+    $match = urldecode($matches[1]);
 
     $params = [];
 
-    if (isset($parsedUrl['query'])) {
-      parse_str($parsedUrl['query'], $params);
+    if ($match) {
+      parse_str($match, $params);
     }
 
     $translation = isset($params['translation']) && $params['translation'] !== 'default'
@@ -43,13 +43,9 @@ try {
 
     $translationPriority = isset($params['translationPriority']) ? explode(',', $params['translationPriority']) : [];
 
-    $explodedUrl = explode('&translation=', urldecode($matches[1]));
+    $explodedUrl = explode('&translation=', $match);
     $zachalo = $explodedUrl[0];
-    if (isset($explodedUrl[1])) {
-      $translation = $explodedUrl[1];
-    } else {
-      $translation = null;
-    }
+
     if ($translation === 'default') {
       $translation = null;
     }
