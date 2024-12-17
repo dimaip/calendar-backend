@@ -302,7 +302,6 @@ class Bible
                 }
             }
         }
-        var_dump($trans);
 
         $settings = file($this->getBibleFilePath($trans . "/bibleqt.ini"));
 
