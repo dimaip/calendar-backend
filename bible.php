@@ -221,7 +221,7 @@ class Bible
      * @param string $trans
      * @return string
      */
-    public function run($zachalo = 'Притч. XV, 20 - XVI, 9.', $trans = null)
+    public function run($zachalo = 'Притч. XV, 20 - XVI, 9.', $trans = null, $translationPriority = [])
     {
         $zachalo = str_replace('–', '-', $zachalo);
         $zachalo = str_replace('—', '-', $zachalo);
@@ -286,8 +286,19 @@ class Bible
 
         $avail_trans = $this->availTrans($bookKey, $trans);
 
-        $trans = $trans ? $trans : $avail_trans['0']['id'];
-        $this->activeTransName = $this->activeTransName ? $this->activeTransName : $avail_trans['0']['name'];
+        if (!$trans) {
+            $availableIds = array_column($avail_trans, 'id');
+            $intersection = array_intersect($translationPriority, $availableIds);
+            $trans = !empty($intersection) ? reset($intersection) : null;
+            if ($trans) {
+                foreach ($avail_trans as $transItem) {
+                    if ($transItem['id'] === $trans) {
+                        $this->activeTransName = $transItem['name'];
+                        break;
+                    }
+                }
+            }
+        }
 
         $settings = file($this->getBibleFilePath($trans . "/bibleqt.ini"));
 
