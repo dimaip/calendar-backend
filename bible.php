@@ -290,6 +290,9 @@ class Bible
             $availableIds = array_column($avail_trans, 'id');
             $intersection = array_intersect($translationPriority, $availableIds);
             $trans = !empty($intersection) ? reset($intersection) : null;
+            if (!$trans) {
+                $trans = reset($availableIds);
+            }
             if ($trans) {
                 foreach ($avail_trans as $transItem) {
                     if ($transItem['id'] === $trans) {
@@ -299,6 +302,7 @@ class Bible
                 }
             }
         }
+        var_dump($trans);
 
         $settings = file($this->getBibleFilePath($trans . "/bibleqt.ini"));
 
