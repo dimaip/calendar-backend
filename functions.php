@@ -141,7 +141,7 @@ function smartMerge($data = [], $htmlFields = [], $stringFields = [])
 		foreach ($dataEntry as $key => $value) {
 			if ($value) {
 				if (in_array($key, $htmlFields)) {
-					if ($mergedData[$key]) {
+					if ($mergedData[$key] && $value !== '#SR' && $value !== '#NSR') {
 						$mergedData[$key] .= "<br/>";
 					}
 					$mergedData[$key] .= trim($value);
