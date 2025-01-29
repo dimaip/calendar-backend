@@ -728,7 +728,7 @@ class Day
         //glass
         $glas = (($weekOld - 1) % 8);
         $glas = $glas ? $glas : 8;
-        if (($weekOld == 1) || ($week == 50)) {
+        if (($weekOld == 1) || ($weekOld == 8) || ($week == 50)) {
             $glas = null;
         }
 
