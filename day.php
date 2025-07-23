@@ -911,6 +911,7 @@ class Day
             "title" => $this->processWeekTitle($dayData['week_title'], $week, $weekOld) ?? null,
             "glas" => $glas ?? null,
             "lent" => $fast ?? null,
+            "matinsGospelKey" => $matins_key ?? null,
             "readings" => $readings ?? null,
             'bReadings' => $this->getBReadings($dateStamp),
             "saints" => $this->processSaints($dayData['saints'], $dateStamp) ?? null,
