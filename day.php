@@ -16,6 +16,55 @@ function styleHtml($text)
     );
 }
 
+// Ensure Airtable requests are rate-limited across parallel PHP processes.
+// Airtable allows 5 requests/second; we schedule starts >= ~210ms apart globally.
+function airtable_rate_limit_schedule($minIntervalSeconds = 0.21)
+{
+    $scheduleFile = 'Data/cache/airtable_rate_limit.schedule';
+    $fp = fopen($scheduleFile, 'c+');
+    if (!$fp) {
+        // If we cannot open the schedule file, fall back to a conservative sleep.
+        usleep((int)($minIntervalSeconds * 1000000));
+        return;
+    }
+    // Acquire exclusive lock to coordinate between processes
+    if (!flock($fp, LOCK_EX)) {
+        fclose($fp);
+        usleep((int)($minIntervalSeconds * 1000000));
+        return;
+    }
+    // Read last scheduled start time
+    rewind($fp);
+    $raw = stream_get_contents($fp);
+    $lastScheduled = 0.0;
+    if ($raw !== false) {
+        $raw = trim($raw);
+        if ($raw !== '') {
+            $lastScheduled = (float)$raw;
+        }
+    }
+    $now = microtime(true);
+    $earliestStart = max($now, $lastScheduled + $minIntervalSeconds);
+    // Write back the new scheduled time
+    rewind($fp);
+    ftruncate($fp, 0);
+    fwrite($fp, sprintf('%.6F', $earliestStart));
+    fflush($fp);
+    flock($fp, LOCK_UN);
+    fclose($fp);
+    // Sleep until our scheduled slot
+    $sleepSeconds = $earliestStart - $now;
+    if ($sleepSeconds > 0) {
+        usleep((int)($sleepSeconds * 1000000));
+    }
+}
+
+function rate_limited_get_contents($url, $context = null)
+{
+    airtable_rate_limit_schedule();
+    return file_get_contents($url, false, $context);
+}
+
 function getAirtable($tableId, $tableName)
 {
     $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
@@ -36,13 +85,15 @@ function getAirtable($tableId, $tableName)
             $content = null;
             $retryCount = 0;
             while (!$content) {
-                $content = file_get_contents($url .  ($offset ? '&offset=' . $offset : ''), false, stream_context_create([
+                $requestUrl = $url . ($offset ? '&offset=' . $offset : '');
+                $context = stream_context_create([
                     'http' => [
                         'method' => "GET",
                         // This is the read-only key, it's safe to expose it publicly
                         'header' => "Authorization: Bearer patVQ2ONx3NyvrTl8.d918549ba9b1caee42474af09fff67e68f49f5b81885ea9b0e6d748d29de788b\r\n"
                     ]
-                ]));
+                ]);
+                $content = rate_limited_get_contents($requestUrl, $context);
                 if ($retryCount > 3) {
                     throw new Exception("Could not fetch $url");
                 }
