@@ -167,14 +167,13 @@ function getAirtable($tableId, $tableName)
     $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
     $filename = 'Data/cache/' . md5($url);
     $globalLock = 'Data/cache/airtable_global.lock';
-    $isWarming = defined('AIRTABLE_WARMING') && AIRTABLE_WARMING;
-    $deadline = defined('AIRTABLE_DEADLINE') ? AIRTABLE_DEADLINE : null;
+    $isWarming = defined('AIRTABLE_WARMING') ? (bool)constant('AIRTABLE_WARMING') : false;
     // If a global lock is present and we're not in warming mode, return empty immediately
     if (!$isWarming && file_exists($globalLock)) {
         return [];
     }
 
-    if (file_exists($filename)) {
+    if (file_exists($filename) && !$isWarming) {
         $content = file_get_contents($filename);
         if ($content == 'lock') {
             // If lock is stale, clear it; always return empty quickly to avoid blocking web workers
@@ -207,10 +206,6 @@ function getAirtable($tableId, $tableName)
         }
         // Go through pagination and accumulate all records
         do {
-            // Respect deadline if set
-            if ($deadline && microtime(true) > $deadline) {
-                break;
-            }
             $requestUrl = $url . ($offset ? '&offset=' . $offset : '');
             $timeout = $nonBlocking ? 2 : 10;
             $context = stream_context_create([
