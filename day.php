@@ -115,8 +115,13 @@ function set_airtable_backoff_until($secondsFromNow)
     @file_put_contents($backoffFile, sprintf('%.6F', $until));
 }
 
-function rate_limited_get_contents($url, $context = null)
+function rate_limited_get_contents($url, $context = null, $options = [])
 {
+    $nonBlocking = isset($options['non_blocking']) ? (bool)$options['non_blocking'] : false;
+    if ($nonBlocking) {
+        // Single quick attempt, no scheduling, no backoff
+        return @file_get_contents($url, false, $context);
+    }
     $maxAttempts = 8;
     for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
         airtable_rate_limit_schedule();
@@ -161,10 +166,22 @@ function getAirtable($tableId, $tableName)
 {
     $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
     $filename = 'Data/cache/' . md5($url);
+    $globalLock = 'Data/cache/airtable_global.lock';
+    $isWarming = defined('AIRTABLE_WARMING') && AIRTABLE_WARMING;
+    $deadline = defined('AIRTABLE_DEADLINE') ? AIRTABLE_DEADLINE : null;
+    // If a global lock is present and we're not in warming mode, return empty immediately
+    if (!$isWarming && file_exists($globalLock)) {
+        return [];
+    }
 
     if (file_exists($filename)) {
         $content = file_get_contents($filename);
         if ($content == 'lock') {
+            // If lock is stale, clear it; always return empty quickly to avoid blocking web workers
+            $mtime = @filemtime($filename);
+            if ($mtime && (time() - $mtime) > 120) {
+                @unlink($filename);
+            }
             return [];
         }
         $records = json_decode($content, true);
@@ -172,33 +189,82 @@ function getAirtable($tableId, $tableName)
         file_put_contents($filename, 'lock');
         $offset = null;
         $records = [];
+        $nonBlocking = !$isWarming;
+        // Resumable warming support
+        $tmpFile = $filename . '.tmp';
+        $cursorFile = $filename . '.cursor';
+        if ($isWarming) {
+            if (file_exists($tmpFile)) {
+                $tmpContent = @file_get_contents($tmpFile);
+                if ($tmpContent) {
+                    $records = json_decode($tmpContent, true) ?: [];
+                }
+            }
+            if (file_exists($cursorFile)) {
+                $saved = trim((string)@file_get_contents($cursorFile));
+                $offset = $saved !== '' ? $saved : null;
+            }
+        }
         // Go through pagination and accumulate all records
         do {
-            $content = null;
-            $retryCount = 0;
-            while (!$content) {
-                $requestUrl = $url . ($offset ? '&offset=' . $offset : '');
-                $context = stream_context_create([
-                    'http' => [
-                        'method' => "GET",
-                        // This is the read-only key, it's safe to expose it publicly
-                        'header' => "Authorization: Bearer patVQ2ONx3NyvrTl8.d918549ba9b1caee42474af09fff67e68f49f5b81885ea9b0e6d748d29de788b\r\n"
-                    ]
-                ]);
-                $content = rate_limited_get_contents($requestUrl, $context);
-                if ($retryCount > 8) {
-                    throw new Exception("Could not fetch $url");
+            // Respect deadline if set
+            if ($deadline && microtime(true) > $deadline) {
+                break;
+            }
+            $requestUrl = $url . ($offset ? '&offset=' . $offset : '');
+            $timeout = $nonBlocking ? 2 : 10;
+            $context = stream_context_create([
+                'http' => [
+                    'method' => "GET",
+                    'timeout' => $timeout,
+                    // This is the read-only key, it's safe to expose it publicly
+                    'header' => "Authorization: Bearer patVQ2ONx3NyvrTl8.d918549ba9b1caee42474af09fff67e68f49f5b81885ea9b0e6d748d29de788b\r\n"
+                ]
+            ]);
+            $content = rate_limited_get_contents($requestUrl, $context, ['non_blocking' => $nonBlocking]);
+            if ($content === false) {
+                if ($isWarming) {
+                    // Save progress and exit early
+                    if ($isWarming) {
+                        @file_put_contents($tmpFile, json_encode($records));
+                        @file_put_contents($cursorFile, (string)($offset ?? ''));
+                    }
+                } else {
+                    @unlink($filename);
                 }
-                $retryCount++;
+                return [];
             }
             $data = json_decode($content, true);
+            if (!isset($data['records'])) {
+                if ($isWarming) {
+                    @file_put_contents($tmpFile, json_encode($records));
+                    @file_put_contents($cursorFile, (string)($offset ?? ''));
+                } else {
+                    @unlink($filename);
+                }
+                return [];
+            }
             $newRecords = array_map(function ($record) {
                 return $record['fields'];
             }, $data['records']);
             $records = array_merge($records, $newRecords);
             $offset = $data['offset'] ?? null;
+            if ($isWarming) {
+                @file_put_contents($tmpFile, json_encode($records));
+                @file_put_contents($cursorFile, (string)($offset ?? ''));
+            }
         } while ($offset);
-        file_put_contents($filename, json_encode($records));
+        // If we finished fetching all pages
+        if (!$offset) {
+            file_put_contents($filename, json_encode($records));
+            if ($isWarming) {
+                @unlink($tmpFile);
+                @unlink($cursorFile);
+            }
+        } else {
+            // Incomplete due to deadline or transient error; leave lock for warming to continue
+            return [];
+        }
     }
     return $records;
 }
