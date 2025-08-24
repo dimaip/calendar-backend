@@ -17,13 +17,23 @@ function styleHtml($text)
 }
 
 // Ensure Airtable requests are rate-limited across parallel PHP processes.
-// Airtable allows 5 requests/second; we schedule starts >= ~210ms apart globally.
-function airtable_rate_limit_schedule($minIntervalSeconds = 0.21)
+// Airtable allows 5 requests/second; we schedule starts >= ~300ms apart globally
+// and honor Retry-After via a shared backoff file when 429s occur.
+function airtable_rate_limit_schedule($minIntervalSeconds = 0.30)
 {
     $scheduleFile = 'Data/cache/airtable_rate_limit.schedule';
+    $backoffFile = 'Data/cache/airtable_rate_limit.backoff';
     $fp = fopen($scheduleFile, 'c+');
     if (!$fp) {
         // If we cannot open the schedule file, fall back to a conservative sleep.
+        // Also respect any backoff file if present.
+        if (file_exists($backoffFile)) {
+            $until = (float)trim(@file_get_contents($backoffFile));
+            $now = microtime(true);
+            if ($until > $now) {
+                usleep((int)(($until - $now) * 1000000));
+            }
+        }
         usleep((int)($minIntervalSeconds * 1000000));
         return;
     }
@@ -32,6 +42,22 @@ function airtable_rate_limit_schedule($minIntervalSeconds = 0.21)
         fclose($fp);
         usleep((int)($minIntervalSeconds * 1000000));
         return;
+    }
+    // If there is a backoff-until timestamp, sleep until then
+    if (file_exists($backoffFile)) {
+        $until = (float)trim(@file_get_contents($backoffFile));
+        $now = microtime(true);
+        if ($until > $now) {
+            $sleepSeconds = $until - $now;
+            flock($fp, LOCK_UN);
+            fclose($fp);
+            usleep((int)($sleepSeconds * 1000000));
+            // Re-open and re-lock to proceed with scheduling after backoff
+            $fp = fopen($scheduleFile, 'c+');
+            if ($fp && flock($fp, LOCK_EX)) {
+                // proceed
+            }
+        }
     }
     // Read last scheduled start time
     rewind($fp);
@@ -59,10 +85,76 @@ function airtable_rate_limit_schedule($minIntervalSeconds = 0.21)
     }
 }
 
+function parse_http_status_code($headers)
+{
+    if (!is_array($headers) || count($headers) === 0) return null;
+    // Example: HTTP/1.1 200 OK
+    $first = $headers[0];
+    if (preg_match('#HTTP/\S+\s+(\d{3})#', $first, $m)) {
+        return (int)$m[1];
+    }
+    return null;
+}
+
+function get_header_value($headers, $name)
+{
+    $lname = strtolower($name);
+    foreach ((array)$headers as $h) {
+        $parts = explode(':', $h, 2);
+        if (count($parts) === 2 && strtolower(trim($parts[0])) === $lname) {
+            return trim($parts[1]);
+        }
+    }
+    return null;
+}
+
+function set_airtable_backoff_until($secondsFromNow)
+{
+    $backoffFile = 'Data/cache/airtable_rate_limit.backoff';
+    $until = microtime(true) + max(0.0, (float)$secondsFromNow);
+    @file_put_contents($backoffFile, sprintf('%.6F', $until));
+}
+
 function rate_limited_get_contents($url, $context = null)
 {
-    airtable_rate_limit_schedule();
-    return file_get_contents($url, false, $context);
+    $maxAttempts = 8;
+    for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+        airtable_rate_limit_schedule();
+        $content = @file_get_contents($url, false, $context);
+        $headers = isset($http_response_header) ? $http_response_header : [];
+        $status = parse_http_status_code($headers);
+        if ($content !== false && ($status === null || ($status >= 200 && $status < 300))) {
+            return $content;
+        }
+        // Handle 429 with Retry-After backoff
+        if ($status === 429) {
+            $retryAfterHeader = get_header_value($headers, 'Retry-After');
+            $retrySeconds = 2.0; // default fallback
+            if ($retryAfterHeader) {
+                if (is_numeric($retryAfterHeader)) {
+                    $retrySeconds = max(1.0, (float)$retryAfterHeader);
+                } else {
+                    $retryTime = strtotime($retryAfterHeader);
+                    if ($retryTime) {
+                        $retrySeconds = max(1.0, $retryTime - time());
+                    }
+                }
+            }
+            // Set shared backoff and sleep locally as well
+            set_airtable_backoff_until($retrySeconds + 0.1);
+            usleep((int)(($retrySeconds + 0.1) * 1000000));
+            continue;
+        }
+        // Retry on 5xx with exponential backoff + jitter
+        if ($status !== null && $status >= 500) {
+            $sleep = min(10.0, (0.5 * pow(2, $attempt)) + (mt_rand(0, 100) / 1000.0));
+            usleep((int)($sleep * 1000000));
+            continue;
+        }
+        // Other failures: short sleep then retry a bit
+        usleep((int)(0.25 * 1000000));
+    }
+    return false;
 }
 
 function getAirtable($tableId, $tableName)
@@ -94,7 +186,7 @@ function getAirtable($tableId, $tableName)
                     ]
                 ]);
                 $content = rate_limited_get_contents($requestUrl, $context);
-                if ($retryCount > 3) {
+                if ($retryCount > 8) {
                     throw new Exception("Could not fetch $url");
                 }
                 $retryCount++;
