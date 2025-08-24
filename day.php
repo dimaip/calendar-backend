@@ -2,6 +2,7 @@
 require_once('init.php');
 require_once('functions.php');
 require_once('bible.php');
+require_once('airtable_config.php');
 
 if (!file_exists('Data/cache')) {
     mkdir('Data/cache', 0755, true);
@@ -16,273 +17,45 @@ function styleHtml($text)
     );
 }
 
-// Ensure Airtable requests are rate-limited across parallel PHP processes.
-// Airtable allows 5 requests/second; we schedule starts >= ~300ms apart globally
-// and honor Retry-After via a shared backoff file when 429s occur.
-function airtable_rate_limit_schedule($minIntervalSeconds = 0.30)
-{
-    $scheduleFile = 'Data/cache/airtable_rate_limit.schedule';
-    $backoffFile = 'Data/cache/airtable_rate_limit.backoff';
-    $fp = fopen($scheduleFile, 'c+');
-    if (!$fp) {
-        // If we cannot open the schedule file, fall back to a conservative sleep.
-        // Also respect any backoff file if present.
-        if (file_exists($backoffFile)) {
-            $until = (float)trim(@file_get_contents($backoffFile));
-            $now = microtime(true);
-            if ($until > $now) {
-                usleep((int)(($until - $now) * 1000000));
-            }
-        }
-        usleep((int)($minIntervalSeconds * 1000000));
-        return;
-    }
-    // Acquire exclusive lock to coordinate between processes
-    if (!flock($fp, LOCK_EX)) {
-        fclose($fp);
-        usleep((int)($minIntervalSeconds * 1000000));
-        return;
-    }
-    // If there is a backoff-until timestamp, sleep until then
-    if (file_exists($backoffFile)) {
-        $until = (float)trim(@file_get_contents($backoffFile));
-        $now = microtime(true);
-        if ($until > $now) {
-            $sleepSeconds = $until - $now;
-            flock($fp, LOCK_UN);
-            fclose($fp);
-            usleep((int)($sleepSeconds * 1000000));
-            // Re-open and re-lock to proceed with scheduling after backoff
-            $fp = fopen($scheduleFile, 'c+');
-            if ($fp && flock($fp, LOCK_EX)) {
-                // proceed
-            }
-        }
-    }
-    // Read last scheduled start time
-    rewind($fp);
-    $raw = stream_get_contents($fp);
-    $lastScheduled = 0.0;
-    if ($raw !== false) {
-        $raw = trim($raw);
-        if ($raw !== '') {
-            $lastScheduled = (float)$raw;
-        }
-    }
-    $now = microtime(true);
-    $earliestStart = max($now, $lastScheduled + $minIntervalSeconds);
-    // Write back the new scheduled time
-    rewind($fp);
-    ftruncate($fp, 0);
-    fwrite($fp, sprintf('%.6F', $earliestStart));
-    fflush($fp);
-    flock($fp, LOCK_UN);
-    fclose($fp);
-    // Sleep until our scheduled slot
-    $sleepSeconds = $earliestStart - $now;
-    if ($sleepSeconds > 0) {
-        usleep((int)($sleepSeconds * 1000000));
-    }
-}
-
-function parse_http_status_code($headers)
-{
-    if (!is_array($headers) || count($headers) === 0) return null;
-    // Example: HTTP/1.1 200 OK
-    $first = $headers[0];
-    if (preg_match('#HTTP/\S+\s+(\d{3})#', $first, $m)) {
-        return (int)$m[1];
-    }
-    return null;
-}
-
-function get_header_value($headers, $name)
-{
-    $lname = strtolower($name);
-    foreach ((array)$headers as $h) {
-        $parts = explode(':', $h, 2);
-        if (count($parts) === 2 && strtolower(trim($parts[0])) === $lname) {
-            return trim($parts[1]);
-        }
-    }
-    return null;
-}
-
-function set_airtable_backoff_until($secondsFromNow)
-{
-    $backoffFile = 'Data/cache/airtable_rate_limit.backoff';
-    $until = microtime(true) + max(0.0, (float)$secondsFromNow);
-    @file_put_contents($backoffFile, sprintf('%.6F', $until));
-}
-
-function rate_limited_get_contents($url, $context = null, $options = [])
-{
-    $nonBlocking = isset($options['non_blocking']) ? (bool)$options['non_blocking'] : false;
-    if ($nonBlocking) {
-        // Single quick attempt, no scheduling, no backoff
-        return @file_get_contents($url, false, $context);
-    }
-    $maxAttempts = 8;
-    for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
-        airtable_rate_limit_schedule();
-        $content = @file_get_contents($url, false, $context);
-        $headers = isset($http_response_header) ? $http_response_header : [];
-        $status = parse_http_status_code($headers);
-        if ($content !== false && ($status === null || ($status >= 200 && $status < 300))) {
-            return $content;
-        }
-        // Handle 429 with Retry-After backoff
-        if ($status === 429) {
-            $retryAfterHeader = get_header_value($headers, 'Retry-After');
-            $retrySeconds = 2.0; // default fallback
-            if ($retryAfterHeader) {
-                if (is_numeric($retryAfterHeader)) {
-                    $retrySeconds = max(1.0, (float)$retryAfterHeader);
-                } else {
-                    $retryTime = strtotime($retryAfterHeader);
-                    if ($retryTime) {
-                        $retrySeconds = max(1.0, $retryTime - time());
-                    }
-                }
-            }
-            // Set shared backoff and sleep locally as well
-            set_airtable_backoff_until($retrySeconds + 0.1);
-            usleep((int)(($retrySeconds + 0.1) * 1000000));
-            continue;
-        }
-        // Retry on 5xx with exponential backoff + jitter
-        if ($status !== null && $status >= 500) {
-            $sleep = min(10.0, (0.5 * pow(2, $attempt)) + (mt_rand(0, 100) / 1000.0));
-            usleep((int)($sleep * 1000000));
-            continue;
-        }
-        // Other failures: short sleep then retry a bit
-        usleep((int)(0.25 * 1000000));
-    }
-    return false;
-}
+// No Airtable network requests here; caching is handled by the background warmer
 
 function getAirtable($tableId, $tableName)
 {
     $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
     $filename = 'Data/cache/' . md5($url);
     $globalLock = 'Data/cache/airtable_global.lock';
-    $isWarming = defined('AIRTABLE_WARMING') ? (bool)constant('AIRTABLE_WARMING') : false;
-    // If a global lock is present and we're not in warming mode, return empty immediately
-    if (!$isWarming && file_exists($globalLock)) {
+    // If a global lock is present, return empty immediately (warming in progress)
+    if (file_exists($globalLock)) {
         return [];
     }
-
-    if (file_exists($filename) && !$isWarming) {
-        $content = file_get_contents($filename);
-        if ($content == 'lock') {
-            // If lock is stale, clear it; always return empty quickly to avoid blocking web workers
-            $mtime = @filemtime($filename);
-            if ($mtime && (time() - $mtime) > 120) {
-                @unlink($filename);
-            }
-            return [];
-        }
-        $records = json_decode($content, true);
-    } else {
-        file_put_contents($filename, 'lock');
-        $offset = null;
-        $records = [];
-        $nonBlocking = !$isWarming;
-        // Resumable warming support
-        $tmpFile = $filename . '.tmp';
-        $cursorFile = $filename . '.cursor';
-        if ($isWarming) {
-            if (file_exists($tmpFile)) {
-                $tmpContent = @file_get_contents($tmpFile);
-                if ($tmpContent) {
-                    $records = json_decode($tmpContent, true) ?: [];
-                }
-            }
-            if (file_exists($cursorFile)) {
-                $saved = trim((string)@file_get_contents($cursorFile));
-                $offset = $saved !== '' ? $saved : null;
-            }
-        }
-        // Go through pagination and accumulate all records
-        do {
-            $requestUrl = $url . ($offset ? '&offset=' . $offset : '');
-            $timeout = $nonBlocking ? 2 : 10;
-            $context = stream_context_create([
-                'http' => [
-                    'method' => "GET",
-                    'timeout' => $timeout,
-                    // This is the read-only key, it's safe to expose it publicly
-                    'header' => "Authorization: Bearer patVQ2ONx3NyvrTl8.d918549ba9b1caee42474af09fff67e68f49f5b81885ea9b0e6d748d29de788b\r\n"
-                ]
-            ]);
-            $content = rate_limited_get_contents($requestUrl, $context, ['non_blocking' => $nonBlocking]);
-            if ($content === false) {
-                if ($isWarming) {
-                    // Save progress and exit early
-                    if ($isWarming) {
-                        @file_put_contents($tmpFile, json_encode($records));
-                        @file_put_contents($cursorFile, (string)($offset ?? ''));
-                    }
-                } else {
-                    @unlink($filename);
-                }
-                return [];
-            }
-            $data = json_decode($content, true);
-            if (!isset($data['records'])) {
-                if ($isWarming) {
-                    @file_put_contents($tmpFile, json_encode($records));
-                    @file_put_contents($cursorFile, (string)($offset ?? ''));
-                } else {
-                    @unlink($filename);
-                }
-                return [];
-            }
-            $newRecords = array_map(function ($record) {
-                return $record['fields'];
-            }, $data['records']);
-            $records = array_merge($records, $newRecords);
-            $offset = $data['offset'] ?? null;
-            if ($isWarming) {
-                @file_put_contents($tmpFile, json_encode($records));
-                @file_put_contents($cursorFile, (string)($offset ?? ''));
-            }
-        } while ($offset);
-        // If we finished fetching all pages
-        if (!$offset) {
-            file_put_contents($filename, json_encode($records));
-            if ($isWarming) {
-                @unlink($tmpFile);
-                @unlink($cursorFile);
-            }
-        } else {
-            // Incomplete due to deadline or transient error; leave lock for warming to continue
-            return [];
-        }
+    if (!file_exists($filename)) {
+        return [];
     }
-    return $records;
+    $content = @file_get_contents($filename);
+    if ($content === false || $content === 'lock') {
+        return [];
+    }
+    $records = json_decode($content, true);
+    return is_array($records) ? $records : [];
 }
 function getPerehod()
 {
-    return getAirtable("app9lgHrH4aDmn9IO", "Переходящие");
+    foreach (airtable_sources() as $src) {
+        if ($src['tableName'] === 'Переходящие') {
+            return getAirtable($src['tableId'], $src['tableName']);
+        }
+    }
+    return [];
 }
 function getNeperehod()
 {
-    return array_merge(
-        getAirtable('app1fn7GFDSwVrrt3', 'Непереходящие'),
-        getAirtable('app2EOfdT7MF0CHkv', 'Непереходящие'),
-        getAirtable('appWJJXEUjVHOiHZB', 'Непереходящие'),
-        getAirtable('appaU3RHAHFfAGOiU', 'Непереходящие'),
-        getAirtable('appFCqIS9Fd69qatx', 'Непереходящие'),
-        getAirtable('appp9Lr7kOrNHAdkj', 'Непереходящие'),
-        getAirtable('appv2WDra6MYIJ8d8', 'Непереходящие'),
-        getAirtable('appKxcdLuiWPqcA4K', 'Непереходящие'),
-        getAirtable('appu454eFmvMCPd0B', 'Непереходящие'),
-        getAirtable('appkM6kjC92rWqdtq', 'Непереходящие'),
-        getAirtable('appldjhytU1iITQl3', 'Непереходящие'),
-        getAirtable('app0Y6GpYy1JRQuvc', 'Непереходящие'),
-    );
+    $result = [];
+    foreach (airtable_sources() as $src) {
+        if ($src['tableName'] === 'Непереходящие') {
+            $result = array_merge($result, getAirtable($src['tableId'], $src['tableName']));
+        }
+    }
+    return $result;
 }
 
 class Day

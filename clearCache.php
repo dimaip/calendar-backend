@@ -1,6 +1,7 @@
 <?php
 require_once('init.php');
 include __DIR__ . '/day.php';
+include __DIR__ . '/airtable_config.php';
 
 exec('rm -f ' . dirname(__FILE__) . '/Data/cache_*');
 
