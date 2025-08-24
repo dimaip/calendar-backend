@@ -23,6 +23,9 @@ function getAirtable($tableId, $tableName)
 
     if (file_exists($filename)) {
         $content = file_get_contents($filename);
+        if ($content == 'lock') {
+            return [];
+        }
         $records = json_decode($content, true);
     } else {
         file_put_contents($filename, 'lock');
