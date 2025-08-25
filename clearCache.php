@@ -21,8 +21,6 @@ if ($envPhp && @is_executable($envPhp)) {
 }
 if (!$phpBinary) {
     $phpCandidates = array_filter([
-        (defined('PHP_BINARY') ? PHP_BINARY : null),
-        (defined('PHP_BINDIR') ? (PHP_BINDIR . '/php') : null),
         '/usr/local/bin/php',
         '/usr/bin/php',
         '/opt/homebrew/bin/php',
