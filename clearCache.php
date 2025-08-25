@@ -9,21 +9,36 @@ $globalLock = $cacheDir . '/airtable_global.lock';
 if (!file_exists($cacheDir)) {
     @mkdir($cacheDir, 0755, true);
 }
-// Detect a PHP CLI binary to run the warmer
-$phpCandidates = array_filter([
-    (defined('PHP_BINARY') ? PHP_BINARY : null),
-    (defined('PHP_BINDIR') ? (PHP_BINDIR . '/php') : null),
-    '/usr/bin/php',
-    '/opt/homebrew/bin/php',
-    '/usr/local/bin/php',
-]);
-foreach ($phpCandidates as $candidate) {
-    if ($candidate && @is_executable($candidate)) {
-        $phpBinary = $candidate;
-        break;
+// Detect a PHP CLI binary to run the warmer (avoid php-fpm)
+$phpBinary = null;
+$envPhp = getenv('PHP_CLI');
+if ($envPhp && @is_executable($envPhp)) {
+    @exec(escapeshellarg($envPhp) . ' -v 2>&1', $out, $code);
+    $ver = strtolower(implode("\n", $out ?? []));
+    if (strpos($ver, 'cli') !== false && strpos($ver, 'fpm') === false) {
+        $phpBinary = $envPhp;
     }
 }
-if (!isset($phpBinary)) {
+if (!$phpBinary) {
+    $phpCandidates = array_filter([
+        (defined('PHP_BINARY') ? PHP_BINARY : null),
+        (defined('PHP_BINDIR') ? (PHP_BINDIR . '/php') : null),
+        '/usr/local/bin/php',
+        '/usr/bin/php',
+        '/opt/homebrew/bin/php',
+    ]);
+    foreach ($phpCandidates as $candidate) {
+        if (!$candidate || !@is_executable($candidate)) continue;
+        @exec(escapeshellarg($candidate) . ' -v 2>&1', $out, $code);
+        $ver = strtolower(implode("\n", $out ?? []));
+        if (strpos($ver, 'cli') !== false && strpos($ver, 'fpm') === false) {
+            $phpBinary = $candidate;
+            break;
+        }
+    }
+}
+if (!$phpBinary) {
+    // Last resort: hope PATH resolves to a CLI php
     $phpBinary = '/usr/bin/env php';
 }
 $warmLogFile = $cacheDir . '/warm.log';
