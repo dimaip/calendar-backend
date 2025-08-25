@@ -23,11 +23,7 @@ function getAirtable($tableId, $tableName)
 {
     $url = "https://api.airtable.com/v0/" . $tableId . "/" . urlencode($tableName) . "?view=Grid%20view&maxRecords=3000";
     $filename = 'Data/cache/' . md5($url);
-    $globalLock = 'Data/cache/airtable_global.lock';
-    // If a global lock is present, return empty immediately (warming in progress)
-    if (file_exists($globalLock)) {
-        return [];
-    }
+
     if (!file_exists($filename)) {
         return [];
     }

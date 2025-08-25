@@ -1,13 +1,12 @@
 <?php
 require_once __DIR__ . '/init.php';
-include __DIR__ . '/day.php';
-include __DIR__ . '/airtable_config.php';
+require_once __DIR__ . '/airtable_config.php';
 
 ignore_user_abort(true);
 @set_time_limit(0);
 // In this script we perform Airtable fetching and write caches directly
 
-function airtable_simple_rate_limit($minIntervalSeconds = 0.25)
+function airtableSimpleRateLimit($minIntervalSeconds = 0.25)
 {
     static $lastStart = 0.0;
     $now = microtime(true);
@@ -19,7 +18,7 @@ function airtable_simple_rate_limit($minIntervalSeconds = 0.25)
     $lastStart = $now;
 }
 
-function warm_airtable_table($tableId, $tableName)
+function warmAirtableTable($tableId, $tableName)
 {
     $baseUrl = 'https://api.airtable.com/v0/';
     $url = $baseUrl . $tableId . '/' . urlencode($tableName) . '?view=Grid%20view&maxRecords=3000';
@@ -49,8 +48,11 @@ function warm_airtable_table($tableId, $tableName)
         ]);
         $content = false;
         for ($attempt = 0; $attempt < 5; $attempt++) {
-            airtable_simple_rate_limit();
+            airtableSimpleRateLimit();
             $content = @file_get_contents($requestUrl, false, $context);
+            if ($content !== false) {
+                incrementAirtableCounter(1);
+            }
             if ($content !== false) break;
             usleep(250000);
         }
@@ -81,11 +83,78 @@ function warm_airtable_table($tableId, $tableName)
     return true;
 }
 
-// Warm all required tables
-$allOk = true;
-foreach (airtable_sources() as $src) {
-    $allOk = warm_airtable_table($src['tableId'], $src['tableName']) && $allOk;
+// Logging helper
+$cacheDir = __DIR__ . '/Data/cache';
+if (!file_exists($cacheDir)) {
+    @mkdir($cacheDir, 0755, true);
+}
+$logFile = $cacheDir . '/warm.log';
+$log = function ($message) use ($logFile) {
+    @file_put_contents($logFile, date('c') . ' ' . $message . "\n", FILE_APPEND);
+};
+
+// Monthly Airtable request counter
+function getAirtableCounterPath()
+{
+    return __DIR__ . '/Data/cache/airtable_requests.json';
+}
+function loadAirtableCounter()
+{
+    $path = getAirtableCounterPath();
+    if (!file_exists($path)) {
+        return ['yearMonth' => date('Y-m'), 'count' => 0];
+    }
+    $raw = @file_get_contents($path);
+    $data = @json_decode($raw, true);
+    if (!is_array($data)) {
+        return ['yearMonth' => date('Y-m'), 'count' => 0];
+    }
+    if (!isset($data['yearMonth']) || !isset($data['count'])) {
+        $data = ['yearMonth' => date('Y-m'), 'count' => 0];
+    }
+    return $data;
+}
+function saveAirtableCounter($data)
+{
+    @file_put_contents(getAirtableCounterPath(), json_encode($data));
+}
+function ensureCounterCurrentMonth(&$data)
+{
+    $currentYm = date('Y-m');
+    if (!isset($data['yearMonth']) || $data['yearMonth'] !== $currentYm) {
+        $data['yearMonth'] = $currentYm;
+        $data['count'] = 0;
+    }
+}
+function incrementAirtableCounter($by = 1)
+{
+    $data = loadAirtableCounter();
+    ensureCounterCurrentMonth($data);
+    $data['count'] = (int)$data['count'] + $by;
+    saveAirtableCounter($data);
 }
 
-// Release global lock
-@unlink(__DIR__ . '/Data/cache/airtable_global.lock');
+// Optional single-table warm via CLI args: --tableId=... --tableName=...
+$args = getopt('', ['tableId::', 'tableName::']);
+$singleTableId = isset($args['tableId']) ? (string)$args['tableId'] : null;
+$singleTableName = isset($args['tableName']) ? (string)$args['tableName'] : null;
+
+try {
+    $allOk = true;
+    if ($singleTableId && $singleTableName) {
+        $log('Warm start single table: ' . $singleTableId . ' / ' . $singleTableName);
+        $allOk = warmAirtableTable($singleTableId, $singleTableName) && $allOk;
+    } else {
+        $log('Warm start all tables');
+        foreach (airtable_sources() as $src) {
+            $log('Warming table: ' . $src['tableId'] . ' / ' . $src['tableName']);
+            $allOk = warmAirtableTable($src['tableId'], $src['tableName']) && $allOk;
+        }
+    }
+    $log('Warm finished, success=' . ($allOk ? 'true' : 'false'));
+} catch (Throwable $e) {
+    $log('Warm error: ' . $e->getMessage());
+} finally {
+    // Release global lock even if something failed
+    @unlink(__DIR__ . '/Data/cache/airtable_global.lock');
+}
