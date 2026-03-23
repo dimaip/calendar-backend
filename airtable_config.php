@@ -18,3 +18,4 @@ function airtable_sources()
         ['tableId' => 'app0Y6GpYy1JRQuvc', 'tableName' => 'Непереходящие', 'label' => 'Декабрь']
     ];
 }
+

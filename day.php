@@ -173,7 +173,7 @@ class Day
         }
     }
 
-    protected function getKey($key, $d_stamp)
+    protected function getKey($key, $d_stamp, $week = null, $dayOfWeekNumber = null)
     {
         $d_Y = date('Y', $d_stamp); //YEAR, OC
 
@@ -185,7 +185,7 @@ class Day
             if (date('m', $d_stamp) == '12') //if december
                 $d_Y++;
         }
-        if (preg_match("/(\d\d\/\d\d)(.)?(\!?\w)?#?(\d)?/u", $key, $out)) {
+        if (preg_match("/(\d\d\/\d\d)(.)?(\!?[\w;]+)?#?(\d)?/u", $key, $out)) {
             $shDateO = str_replace("/", "-", $out['1']) . "-" . $d_Y; //date, OC, with slashes
             $sh_sign = $out['2'] ?? null; //operation sign
             $shDayn = $out['3'] ?? null; //day number,0 - sunday
@@ -204,25 +204,38 @@ class Day
                     $res_key = date('d/m', strtotime('-13 days', $this->getDayNearest($shDate, $shDayn))); //OC, key
                     break;
                 case '=':
-                    $dayOfWeekNumber = date('w', $shDateStamp);
-                    // Negation
-                    if (isset($shDayn[0]) && $shDayn[0] === '!') {
-                        if ($shDayn[1] === 'w' ?
-                            // Not work day
-                            ($dayOfWeekNumber === '6' || $dayOfWeekNumber === '0') :
-                            // Not day number
-                            $dayOfWeekNumber !== $shDayn[1]
-                        ) {
+                    if ($shDayn !== null && strpos($shDayn, ';') !== false) {
+                        // Perehod condition: "49;0" or "!49;0"
+                        $negate = ($shDayn[0] === '!');
+                        $perehodKey = $negate ? substr($shDayn, 1) : $shDayn;
+                        [$condWeek, $condDay] = explode(';', $perehodKey);
+                        $matches = ($week !== null && (int)$week === (int)$condWeek && (int)$dayOfWeekNumber === (int)$condDay);
+                        if ($negate) $matches = !$matches;
+                        if ($matches) {
                             $res_key = date('d/m', strtotime($shDateO)); //OC, key
                         }
                     } else {
-                        if ($shDayn === 'w' ?
-                            // Work day
-                            ($dayOfWeekNumber !== '6' && $dayOfWeekNumber !== '0') :
-                            // Day number
-                            $dayOfWeekNumber === $shDayn
-                        ) {
-                            $res_key = date('d/m', strtotime($shDateO)); //OC, key
+                        // Day-of-week condition
+                        $dow = date('w', $shDateStamp);
+                        // Negation
+                        if (isset($shDayn[0]) && $shDayn[0] === '!') {
+                            if ($shDayn[1] === 'w' ?
+                                // Not work day
+                                ($dow === '6' || $dow === '0') :
+                                // Not day number
+                                $dow !== $shDayn[1]
+                            ) {
+                                $res_key = date('d/m', strtotime($shDateO)); //OC, key
+                            }
+                        } else {
+                            if ($shDayn === 'w' ?
+                                // Work day
+                                ($dow !== '6' && $dow !== '0') :
+                                // Day number
+                                $dow === $shDayn
+                            ) {
+                                $res_key = date('d/m', strtotime($shDateO)); //OC, key
+                            }
                         }
                     }
                     break;
@@ -234,7 +247,7 @@ class Day
         }
     }
 
-    protected function getNeperehod($dateStamp)
+    protected function getNeperehod($dateStamp, $week = null, $dayOfWeekNumber = null)
     {
         $reading_array = [];
         $d_stamp = strtotime('-13days', $dateStamp); //date stamp, OC
@@ -242,7 +255,7 @@ class Day
             return [];
         }
         foreach ($this->neperehod as $key => $value) {
-            $res_key = $this->getKey($key, $d_stamp);
+            $res_key = $this->getKey($key, $d_stamp, $week, $dayOfWeekNumber);
             if ($res_key && $res_key == date('d/m', $d_stamp)) {
                 foreach ($value as $v) {
                     $reading_array[] = $v;
@@ -739,7 +752,7 @@ class Day
         }
 
         // Merge perehod and neperehod data entries for given day
-        $neperehodArray = $this->getNeperehod($dateStamp);
+        $neperehodArray = $this->getNeperehod($dateStamp, $week, $this->dayOfWeekNumber);
         if (!$perehods) {
             $dayDataEntries = $neperehodArray;
         } else if (!$neperehodArray) {
