@@ -302,7 +302,10 @@ class Day
         if (!isset($this->perehod[$dayweek])) {
             return [];
         }
-        $perehods = $this->perehod[$dayweek];
+        $perehods = $this->filterPerehodConditions($this->perehod[$dayweek], $dateStampO);
+        if (empty($perehods)) {
+            return [];
+        }
         $ap = explode(';', $perehods[0]['readings']['Литургия']);
         $ap = explode(';', $perehods[0]['readings']['Литургия']);
         $manyReads = $ap[2] ?? null;
@@ -314,6 +317,21 @@ class Day
         }
 
         return $perehods;
+    }
+
+    protected function filterPerehodConditions($perehods, $dateStampO)
+    {
+        $currentDateOC = date('d/m', $dateStampO);
+        return array_values(array_filter($perehods, function ($entry) use ($currentDateOC) {
+            if (!isset($entry['_condition'])) {
+                return true;
+            }
+            $condition = $entry['_condition'];
+            $negate = ($condition[0] === '!');
+            $dateKey = $negate ? substr($condition, 1) : $condition;
+            $matches = ($currentDateOC === $dateKey);
+            return $negate ? !$matches : $matches;
+        }));
     }
 
     protected function processWeekTitle($week_title, $week,  $weekOld)
@@ -480,7 +498,13 @@ class Day
                 }
             }
             foreach (explode(',', $line['Дата']) as $weekday) {
-                if ($perehod) {
+                $weekday = trim($weekday);
+                if ($perehod && strpos($weekday, '=') !== false) {
+                    // Perehod condition: "49;0=!15/04" -> base="49;0", condition="!15/04"
+                    [$baseKey, $condition] = explode('=', $weekday, 2);
+                    $data['_condition'] = $condition;
+                    $this->perehod[$baseKey][] = $data;
+                } else if ($perehod) {
                     $this->perehod[$weekday][] = $data;
                 } else {
                     $this->neperehod[$weekday][] = $data;

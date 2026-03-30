@@ -14,6 +14,11 @@ class TestableDay extends Day
     {
         return $this->getKey($key, $d_stamp, $week, $dayOfWeekNumber);
     }
+
+    public function testFilterPerehodConditions($perehods, $dateStampO)
+    {
+        return $this->filterPerehodConditions($perehods, $dateStampO);
+    }
 }
 
 class GetKeyTest extends TestCase
@@ -205,5 +210,94 @@ class GetKeyTest extends TestCase
         $resultWithout = $this->day->testGetKey('25/12=0', $d_stamp);
         $resultWith = $this->day->testGetKey('25/12=0', $d_stamp, 49, 0);
         $this->assertEquals($resultWithout, $resultWith);
+    }
+
+    // === Perehod condition filter tests ===
+
+    public function testPerehodFilterNoCondition()
+    {
+        // Entries without _condition pass through unchanged
+        $dateStampO = strtotime('15-04-2025');
+        $perehods = [
+            ['readings' => ['Литургия' => 'some reading']],
+            ['readings' => ['Литургия' => 'other reading']],
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(2, $result);
+    }
+
+    public function testPerehodFilterNegatedDateMatches()
+    {
+        // "49;0=!15/04" -> condition "!15/04", on Apr 15 OC -> should be filtered out
+        $dateStampO = strtotime('15-04-2025'); // Apr 15 OC
+        $perehods = [
+            ['readings' => ['Литургия' => 'reading'], '_condition' => '!15/04'],
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(0, $result);
+    }
+
+    public function testPerehodFilterNegatedDateNoMatch()
+    {
+        // "49;0=!15/04" -> condition "!15/04", on Apr 16 OC -> should pass
+        $dateStampO = strtotime('16-04-2025'); // Apr 16 OC
+        $perehods = [
+            ['readings' => ['Литургия' => 'reading'], '_condition' => '!15/04'],
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(1, $result);
+    }
+
+    public function testPerehodFilterPositiveDateMatches()
+    {
+        // "49;0=15/04" -> condition "15/04", on Apr 15 OC -> should pass
+        $dateStampO = strtotime('15-04-2025');
+        $perehods = [
+            ['readings' => ['Литургия' => 'reading'], '_condition' => '15/04'],
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(1, $result);
+    }
+
+    public function testPerehodFilterPositiveDateNoMatch()
+    {
+        // "49;0=15/04" -> condition "15/04", on Apr 16 OC -> should be filtered out
+        $dateStampO = strtotime('16-04-2025');
+        $perehods = [
+            ['readings' => ['Литургия' => 'reading'], '_condition' => '15/04'],
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(0, $result);
+    }
+
+    public function testPerehodFilterMixed()
+    {
+        // Mix of conditional and unconditional entries
+        $dateStampO = strtotime('15-04-2025'); // Apr 15 OC
+        $perehods = [
+            ['readings' => ['Литургия' => 'normal entry']],                      // no condition -> passes
+            ['readings' => ['Литургия' => 'excluded'], '_condition' => '!15/04'], // negated, date matches -> filtered out
+            ['readings' => ['Литургия' => 'included'], '_condition' => '15/04'],  // positive, date matches -> passes
+            ['readings' => ['Литургия' => 'also ok'], '_condition' => '!20/04'],  // negated, date doesn't match -> passes
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(3, $result);
+        $this->assertEquals('normal entry', $result[0]['readings']['Литургия']);
+        $this->assertEquals('included', $result[1]['readings']['Литургия']);
+        $this->assertEquals('also ok', $result[2]['readings']['Литургия']);
+    }
+
+    public function testPerehodFilterReindexes()
+    {
+        // After filtering, array should be re-indexed from 0
+        $dateStampO = strtotime('15-04-2025');
+        $perehods = [
+            ['readings' => ['Литургия' => 'filtered out'], '_condition' => '!15/04'],
+            ['readings' => ['Литургия' => 'kept']],
+        ];
+        $result = $this->day->testFilterPerehodConditions($perehods, $dateStampO);
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey(0, $result);
+        $this->assertEquals('kept', $result[0]['readings']['Литургия']);
     }
 }
