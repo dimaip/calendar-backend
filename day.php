@@ -2,6 +2,7 @@
 require_once('init.php');
 require_once('functions.php');
 require_once('bible.php');
+require_once('csvCache.php');
 require_once('airtable_config.php');
 
 if (!file_exists('Data/cache')) {
@@ -418,10 +419,11 @@ class Day
                                 } else {
                                     $reading = $reading_ex[0];
                                 }
-                                if (isset($this->zachala[$reading])) {
-                                    $readingFound = true;
-                                    $fragments[] = trim($this->zachala[$reading]);
+                                if (!isset($this->zachala[$reading]) || trim($this->zachala[$reading]) === '') {
+                                    throw new RuntimeException('Unresolved reading reference: ' . $reading);
                                 }
+                                $readingFound = true;
+                                $fragments[] = trim($this->zachala[$reading]);
                             }
                         } else { //this is verse: Мих. IV, 2-3; 5; VI, 2-5; 8; V, 4
                             $fragments[] = trim($readings);
@@ -523,48 +525,19 @@ class Day
         $this->getDayData(true, $lang);
         $this->getDayData(false, $lang);
 
-        $filename = 'Data/cache_zachala_apostol.csv';
-        $gid = 3;
-        if ($this->isDebug) {
-            unlink($filename);
-        }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
+        foreach (loadCsvCache('Data/cache_zachala_apostol.csv', $googleUrl . 3, $this->isDebug) as $line) {
             $key = $line[0];
             $reading = $line[1];
             $this->zachala[$key] = $reading;
         }
-        fclose($file);
 
-        $filename = 'Data/cache_zachala_gospel.csv';
-        $gid = 18;
-        if ($this->isDebug) {
-            unlink($filename);
-        }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
+        foreach (loadCsvCache('Data/cache_zachala_gospel.csv', $googleUrl . 18, $this->isDebug) as $line) {
             $key = $line[0];
             $reading = $line[1];
             $this->zachala[$key] = $reading;
         }
-        fclose($file);
 
-        $filename = 'Data/cache_bReadings.csv';
-        $gid = 19;
-        if ($this->isDebug) {
-            unlink($filename);
-        }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
+        foreach (loadCsvCache('Data/cache_bReadings.csv', $googleUrl . 19, $this->isDebug) as $line) {
             $date = $line[0];
             if ($line[1]) {
                 $this->bReadings[$date][$weekToEaster > -7 && !($this->dayOfWeekNumber === 6 || $this->dayOfWeekNumber === 0) ? 'На 6-м часе' : 'Утром']['unnamed'][] = $line[1];
@@ -573,7 +546,6 @@ class Day
                 $this->bReadings[$date]['Вечером']['unnamed'][] = $line[2];
             }
         }
-        fclose($file);
 
         $file = fopen('Data/static_sunday_matins_gospels.csv', 'r');
         while (($line = fgetcsv($file)) !== FALSE) {
@@ -581,16 +553,10 @@ class Day
         }
         fclose($file);
 
-        $filename = 'Data/cache_saints.csv';
-        $gid = 5;
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
+        foreach (loadCsvCache('Data/cache_saints.csv', $googleUrl . 5, $this->isDebug) as $line) {
             $this->saints[$line[0]] = $line[1];
         }
-        fclose($file);
+
     }
 
     // Flatten $dayDataEntries
@@ -677,7 +643,6 @@ class Day
             $fast = "Петров пост";
         }
 
-
         $sunday_after_krest = $this->getDayAfter('27-09-' . $year, 0);
         $mondayAfterSundayAfterKrest = strtotime("+1 day", $sunday_after_krest);
         $week_after_krest = datediff('ww', $easterStamp, $mondayAfterSundayAfterKrest, true) + 1;
@@ -724,7 +689,6 @@ class Day
         $debug .= "<br/>Неделя по пасхе: " . $week;
         $debug .= "<br/>Недель до следующей пасхи: " . $weekToEaster;
 
-
         //matins sunday
         $matinsZachalo = null;
         $matins_key = null;
@@ -746,7 +710,6 @@ class Day
         }
 
         $perehods = $this->processPerehods($week, $this->dayOfWeekNumber, $gospelShift, $weekOld, $dateStampO, $year, $easterStamp);
-
 
         if ($week + $gospelShift == 36 && $this->dayOfWeekNumber == 0) {
             $debug .= "gospel shifted from praotez";
@@ -792,7 +755,6 @@ class Day
             $dayData['saints'] .= "<br/>";
         }
         $dayData['saints'] .= $saintsThisDay;
-
 
         $this->skipRjadovoe = $this->check_skipRjadovoe($dayData['saints']);
 

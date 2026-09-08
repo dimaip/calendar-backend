@@ -1,5 +1,6 @@
 <?php
 require_once('init.php');
+require_once('csvCache.php');
 
 function arabic($roman)
 {
@@ -56,21 +57,11 @@ class Bible
         $text = '';
         $googleUrl = 'https://docs.google.com/spreadsheet/pub?hl=en&hl=en&key=0AnIrRiVoiOUSdENKckd0Vm1RbVhUMGVOQWNIZUNBUmc&single=true&output=csv&gid=';
 
-        $filename = 'Data/cache_texts.csv';
-        $gid = 134408876;
-        // if ($this->isDebug) {
-        //     unlink($filename);
-        // }
-        if (!file_exists($filename)) {
-            file_put_contents($filename, file_get_contents($googleUrl . $gid));
-        }
-        $file = fopen($filename, 'r');
-        while (($line = fgetcsv($file)) !== FALSE) {
+        foreach (loadCsvCache('Data/cache_texts.csv', $googleUrl . 134408876) as $line) {
             if ($line[0] === $title) {
                 $text = $line[1];
             }
         }
-        fclose($file);
 
         $verses = explode(PHP_EOL, $text);
         $verses = array_values(array_filter($verses, function ($i) {
@@ -214,7 +205,6 @@ class Bible
         }
         return $result;
     }
-
 
     /**
      * @param string $zachalo
@@ -458,7 +448,6 @@ class Bible
             }
 
             $chapter['type'] = $chapIdxsChapterRegular ? 'regular' : 'hidden';
-
 
             if ($chapter['type'] !== 'hidden' || $this->returnHidden) {
                 $fragments[] = $chapter;
